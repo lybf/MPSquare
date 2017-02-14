@@ -1,0 +1,41 @@
+package net.lybf.chat.util;
+import cn.bmob.v3.BmobQuery;
+import net.lybf.chat.bmob.Comment;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.CountListener;
+
+public class CommentCount
+  {
+	private String id;
+	private  CommentCountListener listener;
+	public interface  CommentCountListener
+	  {
+		public void done(int i,BmobException e);
+	  }
+	public CommentCount setPostID(String postid){
+		id=postid;
+		return this;
+	  }
+
+	public void count(CommentCountListener listene){
+		this.listener=listene;
+		BmobQuery<Comment> bmobQuery= new BmobQuery<Comment>();
+		bmobQuery.addWhereEqualTo("parent",id);
+		bmobQuery.count(Comment.class,new CountListener(){
+			@Override
+			public void done(Integer p1,BmobException p2){
+				if(p2==null){
+					print(String.format("帖子id:%s评论数:%s\n",id,p1));
+					listener.done(p1,null);
+					}else{
+					print(String.format("帖子id:%s评论数:%s\n",id,p1));
+					listener.done(0,p2);
+				  }
+			  }
+		  });
+	  }
+	  
+	  private void print(Object o){
+		System.out.println(o);
+	  }
+  }

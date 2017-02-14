@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:toolbar="http://schemas.android.com/apk/res-auto"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<android.support.design.widget.AppBarLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:fitsSystemWindows="true">
+
+		<android.support.v7.widget.Toolbar
+			android:id="@+id/toolbar_sign"
+			toolbar:title="@string/sign_title"
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize"
+		     android:theme="@style/AppTheme.AppBarOverlay"
+			app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+	</android.support.design.widget.AppBarLayout>
+
+	<ScrollView
+		android:layout_height="match_parent"
+		android:layout_width="match_parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+
+			<net.lybf.chat.widget.CircleImageView
+				android:layout_gravity="center"
+				android:layout_width="70dp"
+				android:src="@drawable/ic_launcher"
+				android:layout_height="70dp"
+				android:background="@drawable/ic_launcher"/>
+
+			<android.support.design.widget.TextInputLayout
+				android:id="@+id/tip_sign_name"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp">
+
+				<EditText
+					android:id="@+id/sign_name"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:maxLength="10"
+					android:hint="@string/sign_name"/>
+
+			</android.support.design.widget.TextInputLayout>
+
+			<android.support.design.widget.TextInputLayout
+				android:id="@+id/tip_sign_email"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp">
+
+				<EditText
+					android:id="@+id/sign_email"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="@string/sign_email"
+					android:inputType="textEmailAddress"/>
+
+			</android.support.design.widget.TextInputLayout>
+
+			<View
+				android:layout_height="5dp"
+				android:layout_width="match_parent"/>
+
+			<android.support.design.widget.TextInputLayout
+				android:id="@+id/tip_sign_password"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp">
+
+				<EditText
+					android:id="@+id/sign_Password"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="@string/sign_Password"
+          android:maxLength="18"
+					android:inputType="textPassword"/>
+
+			</android.support.design.widget.TextInputLayout>
+
+			<View
+				android:layout_height="5dp"
+				android:layout_width="match_parent"/>
+
+			<android.support.design.widget.TextInputLayout
+				android:id="@+id/tip_sign_aginInputPassword"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp">
+
+				<EditText
+					android:id="@+id/sign_aginInpuPassword"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+            android:maxLength="18"
+					android:hint="@string/sign_aginEnterPassword"
+					android:inputType="textPassword"/>
+
+			</android.support.design.widget.TextInputLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="40dp"/>
+
+			<com.gc.materialdesign.views.ButtonRectangle
+				android:layout_height="50dp"
+				android:text="@string/signup"
+				android:layout_width="match_parent"
+				android:id="@+id/sign_register"
+				android:layout_marginTop="8dp"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"/>
+
+		</LinearLayout>
+
+	</ScrollView>
+
+</LinearLayout>
+

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content">
+
+	<LinearLayout
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:layout_marginBottom="50dp">
+
+		<android.support.design.widget.AppBarLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<android.support.v7.widget.Toolbar
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/toolbar_sendtie"
+				app:popupTheme="@style/AppTheme.PopupOverlay"
+				app:theme="@style/AppTheme.AppBarOverlay"
+				android:title="发布贴子"/>
+
+		</android.support.design.widget.AppBarLayout>
+
+		<EditText
+			android:layout_height="50dp"
+			android:ems="10"
+			android:layout_width="match_parent"
+			android:id="@+id/post_title"
+			android:hint="你的标题"
+			android:maxLength="10"
+			android:gravity="top|left"/>
+
+		<View
+			android:layout_height="1dp"
+			android:background="?android:attr/dividerVertical"
+			android:layout_width="match_parent"/>
+
+		<ScrollView
+			android:layout_height="match_parent"
+			android:layout_width="match_parent">
+
+			<EditText
+				android:layout_height="match_parent"
+				android:ems="10"
+				android:layout_width="match_parent"
+				android:id="@+id/post_writeContent"
+				android:hint="你的内容"
+				android:maxLength="3000"
+				android:gravity="top|left"
+				android:minHeight="400dp"/>
+
+		</ScrollView>
+
+	</LinearLayout>
+
+	<com.gc.materialdesign.views.ButtonRectangle
+		android:layout_height="50dp"
+		style="?android:attr/buttonStyleSmall"
+		android:text="发送"
+		android:layout_width="match_parent"
+		android:layout_gravity="right"
+		android:id="@+id/post_writePost"
+		android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
+

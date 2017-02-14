@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:id="@+id/weidenlu"
+		android:layout_height="165dp"
+		android:layout_alignParentTop="true"
+		android:background="@drawable/ic_background_min"
+		android:layout_width="match_parent">
+
+		<net.lybf.chat.widget.CircleImageView
+			android:layout_gravity="center"
+			android:id="@+id/main_nav_header"
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:layout_centerInParent="true"
+			android:src="@drawable/ic_user_header"
+			android:layout_marginTop="50dp"/>
+
+		<TextView
+			android:layout_gravity="center_vertical"
+			android:id="@+id/main_nav_name"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="未登录，点击头像登录"
+			android:gravity="bottom|center"
+			android:layout_margin="5dp"
+			android:textSize="20sp"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent"
+	android:orientation="vertical"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<android.support.design.widget.CoordinatorLayout
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<android.support.design.widget.AppBarLayout
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:theme="@style/AppTheme.AppBarOverlay"
+			app:popupTheme="@style/AppTheme.PopupOverlay"
+			android:clipToPadding="true">
+
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/toolbar_comment"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				android:theme="@style/AppTheme.AppBarOverlay"
+				app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+		</android.support.design.widget.AppBarLayout>
+
+		<include
+			app:layout_behavior="@string/appbar_scrolling_view_behavior"
+			layout="@layout/content_post_content"
+			android:layout_width="match_parent"/>
+
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/comment_writeComment"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="bottom|right|end"
+			android:layout_margin="16dp"
+			android:src="@drawable/ic_edit"
+			app:backgroundTint="#F44336"
+			app:elevation="6dp"
+			app:fabSize="normal"
+			app:pressedTranslationZ="12dp"
+			app:rippleColor="#448AFF"/>
+
+	</android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>
+

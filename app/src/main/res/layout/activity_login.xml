@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	android:id="@+id/login_root_Background">
+
+	<LinearLayout
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="#66000000">
+
+		<android.support.design.widget.AppBarLayout
+			android:layout_gravity="center_horizontal"
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<android.support.v7.widget.Toolbar
+				xmlns:toolbar="http://schemas.android.com/apk/res-auto"
+				toolbar:title="登录"
+				app:layout_collapseMode="pin"
+				android:id="@+id/toolbar_login"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				android:theme="@style/AppTheme.AppBarOverlay"
+				app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+		</android.support.design.widget.AppBarLayout>
+
+		<View
+			android:layout_height="10dp"
+			android:layout_width="match_parent"/>
+
+		<net.lybf.chat.widget.CircleImageView
+			android:layout_gravity="center"
+			android:layout_width="70dp"
+			android:src="@drawable/ic_launcher"
+			android:layout_height="70dp"
+			android:id="@+id/login_imageview_header"/>
+
+		<View
+			android:layout_height="10dp"
+			android:layout_width="match_parent"/>
+
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:orientation="vertical">
+
+			<android.support.design.widget.TextInputLayout
+				android:id="@+id/tip_login_name"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_margin="20dp">
+
+				<EditText
+					android:layout_gravity="center_horizontal"
+					android:id="@+id/login_name"
+					android:layout_width="match_parent"
+					android:maxLength="10"
+					android:layout_height="wrap_content"
+					android:hint="账号"/>
+
+			</android.support.design.widget.TextInputLayout>
+
+			<View
+				android:layout_height="10dp"
+				android:layout_width="match_parent"/>
+
+			<RelativeLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_margin="20dp">
+
+				<android.support.design.widget.TextInputLayout
+					android:id="@+id/tip_login_password"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginRight="30dp">
+
+					<EditText
+						android:layout_gravity="center_horizontal"
+						android:id="@+id/login_password"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="输入密码"
+						android:maxLength="18"
+						android:inputType="textPassword"/>
+
+				</android.support.design.widget.TextInputLayout>
+
+				<CheckBox
+					android:layout_height="30dp"
+					android:layout_width="30dp"
+					android:id="@+id/canseepassword"
+					android:layout_alignParentRight="true"/>
+
+			</RelativeLayout>
+
+		</LinearLayout>
+
+		<com.gc.materialdesign.views.ButtonRectangle
+			android:layout_height="50dp"
+			style="?android:attr/buttonStyleSmall"
+			android:text="@string/login"
+			android:gravity="center"
+			android:layout_width="320dp"
+			android:id="@+id/login"
+			android:layout_marginRight="12dp"
+			android:layout_marginLeft="12dp"
+			android:layout_marginTop="50dp"/>
+
+	</LinearLayout>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:layout_width="wrap_content"
+		android:text="@string/signup"
+		android:id="@+id/login_signup"
+		android:layout_gravity="bottom|right"
+		android:textColor="@color/blue"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentRight="true"
+		android:layout_marginBottom="10dp"
+		android:layout_marginRight="10dp"/>
+
+</RelativeLayout>
+

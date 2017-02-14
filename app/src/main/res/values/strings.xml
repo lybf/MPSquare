@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">冒泡广场</string>
+	<string name="open">打开</string>
+    <string name="close">关闭</string>
+	<string name="Error">停止运行</string>
+	<string name="error">很抱歉，《冒泡社区》在运行时出现了严重的错误，如果方便，请输入错误原因，并发送错误报告，以便我们处理该异常。感谢您的支持！</string>
+	<string name="user_describe">这个人很懒，什么也没留下</string>
+
+    <!--注册 signup Activity-->
+	<string name="sign_title">注册</string>
+	<string name="sign_name">输入你想要的昵称</string>
+	<string name="sign_email">输入你的邮箱</string>
+	<string name="sign_Password">请输入你的密码</string>
+	<string name="sign_aginEnterPassword">再次输入你的密码</string>
+
+    <string name="signup">注册</string>
+    <string name="login">登陆</string>
+
+    <string name="settings">设置</string>
+</resources>
