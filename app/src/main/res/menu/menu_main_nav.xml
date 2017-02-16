@@ -6,24 +6,24 @@
 						<item
 								android:id="@+id/检查更新"
 								android:icon="@drawable/ic_nav_up"
-								android:title="检查更新"/>
+								android:title="@string/check_update"/>
 						<item
 								android:id="@+id/关于"
 								android:icon="@drawable/ic_nav_about"
-								android:title="关于"/>
+								android:title="@string/about"/>
 						<item
 								android:id="@+id/反馈"
 								android:icon="@drawable/ic_nav_feedback"
-								android:title="反馈"/>
+								android:title="@string/feedback"/>
 						<item
 								android:id="@+id/退出登录"
 								android:icon="@drawable/ic_nav_close"
-								android:title="退出登录"/>
+								android:title="@string/log_out"/>
 				</group>
 				</menu>
 		</item>
     <item 
         android:id="@+id/设置"
         android:icon="@drawable/ic_settings"
-        android:title="设置"/>
+        android:title="@string/settings"/>
 </menu>

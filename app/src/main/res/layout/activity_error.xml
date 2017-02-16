@@ -84,7 +84,7 @@
 
         <com.gc.materialdesign.views.ButtonRectangle
             android:layout_height="45dp"
-            android:text="发送"
+            android:text="@string/send"
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"/>
 

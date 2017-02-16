@@ -14,7 +14,7 @@
 
         <android.support.v7.widget.Toolbar
             xmlns:toolbar="http://schemas.android.com/apk/res-auto"
-            toolbar:title="设置"
+            toolbar:title="@string/settings_title"
             app:layout_collapseMode="pin"
             android:id="@+id/toolbar_settings"
             android:layout_width="match_parent"

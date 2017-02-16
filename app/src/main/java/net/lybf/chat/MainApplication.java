@@ -12,14 +12,12 @@ import net.lybf.chat.util.CrashHandler;
 public class MainApplication extends Application
   {
     private static String APPID ="4eaad1f155b7ed751472ed23e05bf084";
-	private static Application mApplication;
 	private static Context mContext;
 
 	private CrashHandler crash;
 	@Override
     public void onCreate(){
         Bmob.initialize(this,APPID);
-		mApplication=this;
 		mContext=this;
         super.onCreate();
         crash=new CrashHandler(this);
@@ -32,7 +30,7 @@ public class MainApplication extends Application
 	  }
 
 	public Application getApplication(){
-		return mApplication;
+		return this;
 	  }
 
 

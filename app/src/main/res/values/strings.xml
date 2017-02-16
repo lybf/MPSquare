@@ -4,6 +4,15 @@
 	<string name="open">打开</string>
     <string name="close">关闭</string>
 	<string name="Error">停止运行</string>
+	<string name="send">发送</string>
+	<string name="login">登录</string>
+	<string name="password">密码</string>
+	<string name="settings">设置</string>
+	<string name="settings_title">设置</string>
+	<string name="check_update">检查更新</string>
+	<string name="feedback">反馈</string>
+	<string name="about">关于</string>
+	<string name="log_out">退出登录</string>
 	<string name="error">很抱歉，《冒泡社区》在运行时出现了严重的错误，如果方便，请输入错误原因，并发送错误报告，以便我们处理该异常。感谢您的支持！</string>
 	<string name="user_describe">这个人很懒，什么也没留下</string>
 

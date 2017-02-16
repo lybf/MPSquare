@@ -127,13 +127,15 @@ public class MainActivity extends AppCompatActivity
 	private RecyclerView mRecyclerview;
 
 	private MainPagerAdaptet mViewPagerAdapter;
+
+	private boolean FIRST_READ=true;;
     @Override
     public void onCreate(Bundle save){
         super.onCreate(save);
 		//getSupportActionBar().hide();
 		ctx=this;
         set=new settings();
-        if(set.isDark()){
+		if(set.isDark()){
 			setTheme(R.style.DarkTheme);
 		  }else{
 			setTheme(R.style.LightTheme);
@@ -690,8 +692,13 @@ public class MainActivity extends AppCompatActivity
           }else{
             boolean isCache = query.hasCachedResult(Post.class);
             if(isCache){
+			  if(FIRST_READ){
+				query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
+				FIRST_READ=false;
+				}
+				else
                 query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK); // 先从缓存取数据，如果没有的话，再从网络取。
-              }else{
+		       }else{
                 query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE); // 如果没有缓存的话，则先从网络中取
               }
           }
