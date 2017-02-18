@@ -69,6 +69,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import net.lybf.chat.adapter.MainPagerAdaptet;
 import net.lybf.chat.util.CommentCount;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity
   {
@@ -129,6 +130,8 @@ public class MainActivity extends AppCompatActivity
 	private MainPagerAdaptet mViewPagerAdapter;
 
 	private boolean FIRST_READ=true;;
+
+	private boolean REFRESH_HINT=true;
     @Override
     public void onCreate(Bundle save){
         super.onCreate(save);
@@ -541,14 +544,13 @@ public class MainActivity extends AppCompatActivity
       }
 
 
-    private void showerror(boolean b){
-        if(!b){
-            new AlertDialog.Builder(this)
-            .setTitle("错误了")
-            .setMessage("没有网络连接，下拉刷新")
-            .setPositiveButton("哦",null)
-            .show();
-          }
+    private AlertDialog.Builder showError(String title,String msg){
+		AlertDialog.Builder build=new AlertDialog.Builder(this);
+		if(title!=null)
+		  build .setTitle(title);
+		if(msg!=null)
+		  build.setMessage(msg);
+		return build;
       }
 
 
@@ -564,12 +566,16 @@ public class MainActivity extends AppCompatActivity
                 read(true);    
               }else{
                 read(false);
-                refresh.setRefreshing(false);
-                new AlertDialog.Builder(ctx)
-                .setTitle("没网了")
-                .setMessage("你必须连接网络才能刷新最新数据，无网将从缓存读取(不耗流量)")
-                .setPositiveButton("知道了",null)
-                .setNegativeButton("设置网络",new setNetWork())  .show();
+				refresh.setRefreshing(false);
+				if(REFRESH_HINT){
+					new AlertDialog.Builder(ctx)
+					.setTitle("没网了")
+					.setMessage("你必须连接网络才能刷新最新数据，无网将从缓存读取(不耗流量)")
+					.setPositiveButton("知道了",null)
+					.setNegativeButton("设置网络",new setNetWork())  .show();
+				  }else{
+					REFRESH_HINT=false;
+				  }
               }
           }    
       }
@@ -582,7 +588,7 @@ public class MainActivity extends AppCompatActivity
             i++;
             if(i==5&&refresh.isRefreshing()&&refresh!=null){
                 refresh.setRefreshing(false);
-                showerror(net.isNetWork());
+                showError(null,"未知错误:刷新时间超过5秒，请检查您的网络连接").show();
               }		
             if(refresh.isRefreshing()&&i<=5)
               refreshing.postDelayed(this,1000);
@@ -687,22 +693,27 @@ public class MainActivity extends AppCompatActivity
 		 query.include("image2");
 		 query.include("image3");*/
         query.setLimit(加载信息条数);
-        if(!b){
-            query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-          }else{
-            boolean isCache = query.hasCachedResult(Post.class);
-            if(isCache){
-			  if(FIRST_READ){
-				query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
+		boolean isCache = query.hasCachedResult(Post.class);
+		if(!b||!net.isNetWork()){//离线阅读
+			if(isCache){
+				query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+			  }else{
+				showError(null,"无缓存").show();//提示无缓存，为何isCache为false？
+			  }
+		  }else{
+			if(FIRST_READ|!b){
 				FIRST_READ=false;
-				}
-				else
-                query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK); // 先从缓存取数据，如果没有的话，再从网络取。
-		       }else{
-                query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE); // 如果没有缓存的话，则先从网络中取
-              }
-          }
-        query.findObjects(new FindListener<Post>() {
+				if(isCache){
+					query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+				  }else{
+					query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+				  }
+			  }else{
+				query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+			  }
+		  }
+		
+		query.findObjects(new FindListener<Post>() {
             @Override
             public void done(List<Post> obj,BmobException er){
                 if(er==null){

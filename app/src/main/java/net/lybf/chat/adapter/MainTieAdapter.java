@@ -171,9 +171,9 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
 
         MyUser user=m.getUser();
         viewHolder.name.setText(""+user.getUsername());
-		int ct =comments.get(m.getObjectId());
+		String ct =""+comments.get(m.getObjectId());
 		viewHolder.comments.setText(""+ct);
-		viewHolder.lookAllComments.setText(ct!=0?"查看全部(共"+ct+"条)":"");
+		viewHolder.lookAllComments.setText(!ct.equals("")||!ct.equals("null")?"查看全部(共"+ct+"条)":"");
         SimpleDateFormat dat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Date d = null;
