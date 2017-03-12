@@ -8,6 +8,7 @@ public class ChatException extends Exception
 	private String msg;
 
 	public ChatException(int code,String message){
+		super(message);
 		this.code=code;
 		this.msg=message;
 	  }
@@ -15,7 +16,7 @@ public class ChatException extends Exception
 	public int getCode(){
 		return code;
 	  }
-	
+
 	public String getMessage(){
 		return msg;
 	  }

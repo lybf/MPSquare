@@ -40,6 +40,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import net.lybf.chat.system.settings;
 import android.support.v7.app.ActionBar;
+import net.lybf.chat.system.Utils;
 public class LoginActivity extends AppCompatActivity
   {
     private Toolbar bar;
@@ -202,6 +203,6 @@ public class LoginActivity extends AppCompatActivity
 
 
     private void print(Object o){
-        System.out.println(o);
+	  new Utils().print(this.getClass(),o);
       }
   }

@@ -3,6 +3,7 @@ import cn.bmob.v3.BmobQuery;
 import net.lybf.chat.bmob.Comment;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CountListener;
+import net.lybf.chat.system.Utils;
 
 public class CommentCount
   {
@@ -25,17 +26,14 @@ public class CommentCount
 			@Override
 			public void done(Integer p1,BmobException p2){
 				if(p2==null){
-					print(String.format("帖子id:%s评论数:%s\n",id,p1));
+					new Utils().	print(String.format("帖子id:%s评论数:%s\n",id,p1));
 					listener.done(p1,null);
-					}else{
-					print(String.format("帖子id:%s评论数:%s\n",id,p1));
+				  }else{
+					new Utils().print(String.format("帖子id:%s评论数:%s\n",id,p1));
 					listener.done(0,p2);
 				  }
 			  }
 		  });
 	  }
-	  
-	  private void print(Object o){
-		System.out.println(o);
-	  }
+
   }

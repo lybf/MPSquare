@@ -172,8 +172,7 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         MyUser user=m.getUser();
         viewHolder.name.setText(""+user.getUsername());
 		String ct =""+comments.get(m.getObjectId());
-		viewHolder.comments.setText(""+ct);
-		viewHolder.lookAllComments.setText(!ct.equals("")||!ct.equals("null")?"查看全部(共"+ct+"条)":"");
+		viewHolder.lookAllComments.setText(!ct.equals("")||!ct.equals("null")||ct.equals("0")?"共"+ct+"条评论":"");
         SimpleDateFormat dat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Date d = null;
@@ -227,10 +226,10 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
     public  class ViewHolder extends RecyclerView.ViewHolder
       {
 		/*
-		 名称，时间，标题，内容，评论数，查看评论
+		 名称，时间，标题，内容，查看评论
 		 */
 
-        public TextView name,date,title,message,comments,lookAllComments;
+        public TextView name,date,title,message,lookAllComments;
 		public RelativeLayout go;
         public ImageButton hader;
         public ViewHolder(View view){
@@ -241,8 +240,7 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
             name=(TextView)view.findViewById(R.id.item_post_name);
 			lookAllComments=(TextView)view.findViewById(R.id.item_post_lookAllComments);
 			go=(RelativeLayout)view.findViewById(R.id.item_post_go);
-			comments=(TextView)view.findViewById(R.id.item_post_comment_number);
-            hader=(ImageButton)view.findViewById(R.id.item_post_header);
+		    hader=(ImageButton)view.findViewById(R.id.item_post_header);
           }
       }
   }

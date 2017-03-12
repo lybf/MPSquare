@@ -2,7 +2,6 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:gravity="center_horizontal"
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
@@ -25,36 +24,61 @@
 
 	</android.support.design.widget.AppBarLayout>
 
-	<net.lybf.chat.widget.CircleImageView
-		android:layout_width="100dp"
-		android:layout_height="100dp"
-		android:src="@drawable/ic_launcher"
-		android:id="@+id/user_header"
-		app:civ_border_width="2dp"
-		android:onClick="设置头像"
-		android:layout_alignParentRight="true"
-		android:layout_margin="10dp"
-		android:layout_marginTop="20dp"/>
-
-	<TextView
+	<RelativeLayout
 		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:layout_width="wrap_content"
-		android:layout_gravity="center"
-		android:id="@+id/user_name"
-		android:layout_alignParentRight="true"
-		android:layout_centerVertical="true"
-		android:layout_margin="10dp"/>
+		android:layout_width="wrap_content">
 
-	<TextView
+		<net.lybf.chat.widget.CircleImageView
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:src="@drawable/ic_launcher"
+			android:id="@+id/user_header"
+			app:civ_border_width="2dp"
+			android:onClick="设置头像"/>
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_width="wrap_content"
+			android:layout_gravity="center"
+			android:id="@+id/user_name"
+			android:layout_centerVertical="true"
+			android:layout_margin="10dp"
+			android:layout_toRightOf="@id/user_header"
+			android:layout_alignParentTop="true"/>
+
+	</RelativeLayout>
+
+	<LinearLayout
 		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:layout_width="wrap_content"
-		android:layout_gravity="center"
-		android:id="@+id/user_email"
-		android:layout_alignParentRight="true"
-		android:layout_centerVertical="true"
-		android:layout_margin="10dp"/>
+		android:layout_width="match_parent"
+		android:orientation="horizontal">
+
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:orientation="vertical">
+
+			<TextView
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:layout_width="wrap_content"
+				android:text="邮箱:"/>
+
+			<CheckBox
+				android:layout_height="25dp"
+				android:layout_width="wrap_content"
+				android:id="@+id/user_emailVerify"/>
+
+		</LinearLayout>
+
+		<TextView
+			android:layout_height="40dp"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:layout_width="match_parent"
+			android:id="@+id/user_email"/>
+
+	</LinearLayout>
 
 	<TextView
 		android:layout_height="wrap_content"

@@ -53,6 +53,7 @@ import cn.bmob.v3.listener.DownloadFileListener;
 import android.view.MenuItem;
 import net.lybf.chat.system.settings;
 import com.squareup.picasso.Picasso;
+import net.lybf.chat.system.Utils;
 
 public class PostActivity extends AppCompatActivity
   {
@@ -157,7 +158,7 @@ public class PostActivity extends AppCompatActivity
             listview.setFastScrollEnabled(true);
 
             refresh=(SwipeRefreshLayout)findViewById(R.id.comment_refresh);
-            refresh.setProgressViewOffset(false,0,new CommonUtil(this).dip2px(100f));
+            refresh.setProgressViewOffset(false,0,new CommonUtil().dip2px(100f));
 
 			refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
                 @Override
@@ -202,8 +203,12 @@ public class PostActivity extends AppCompatActivity
                     post=p1;
                     bar.setTitle(""+post.getTitle());
                     user=p1.getUser();
-                    mData.add(new Comment());
+					Comment c=new Comment();
+					c.setParent("try");
+                    mData.add(c);
+					adapter.notifyDataSetChanged();
                     read();
+					
                   }else{
                     if(net.isNetWork()){
                         ErrorMessage error=new ErrorMessage();
@@ -359,7 +364,7 @@ public class PostActivity extends AppCompatActivity
 
 
     private void print(Object p){
-        System.out.println(p);
+		new Utils().print(this.getClass(),p);
       }
 
 

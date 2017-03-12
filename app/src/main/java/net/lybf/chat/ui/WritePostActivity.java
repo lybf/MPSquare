@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import android.content.Context;
 import net.lybf.chat.system.settings;
+import net.lybf.chat.system.Utils;
 
 public class WritePostActivity extends AppCompatActivity
   {
@@ -156,6 +157,6 @@ public class WritePostActivity extends AppCompatActivity
       }
 
     private void print(Object o){
-        System.out.println(o);
+		new Utils().print(this.getClass(),o);
       }
   }

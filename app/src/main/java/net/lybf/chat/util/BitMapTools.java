@@ -29,7 +29,7 @@ public class BitMapTools
 			is.close();
 			return bitmap;
 		  }catch(Exception e){
-			print(e);
+			new CommonUtil().print(this.getClass(),e);
 		  }
 		return bitmap;
 	  }
@@ -108,8 +108,5 @@ public class BitMapTools
 		return backgroundBm;
 	  }
 
-	private void print(Object o){
-		System.out.println("Bitmap.class:"+o);
-	  }
 
   }

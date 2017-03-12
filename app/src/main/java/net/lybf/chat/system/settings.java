@@ -19,7 +19,7 @@ public class settings
 	//文件
     private File file;
 	//设置文件路径
-    private String path="/sdcard/lybf/MPSquare/.settings/main.json";
+    private String path=Paths.SETTINGS_PATH;
 	//Assets-main.json
     private String res="settings/main.json";
 
@@ -33,7 +33,7 @@ public class settings
 
 
     private void init(){
-        file=new File("/sdcard/lybf/MPSquare/.settings/main.json");
+        file=new File(path);
         if(!file.getParentFile().exists())
           file.getParentFile().mkdirs();
         if(!file.exists()){
@@ -83,7 +83,7 @@ public class settings
       }
 
 
-	public void refresh(){
+    public void refresh(){
 		init();
 	  }
 
@@ -91,14 +91,13 @@ public class settings
     public void save(){
         try{
             FileOutputStream out=new FileOutputStream(file);
-            out.write(root.toString().getBytes());
+            out.write((""+root).getBytes());
           }catch(Exception e){
 			print(e);
        	  }
       }
 
-
-	public interface SaveListener
+    public interface SaveListener
 	  {
 		public void done(Exception e);
 	  }
@@ -108,14 +107,14 @@ public class settings
 		savelistener=listener;
 		try{
             FileOutputStream out=new FileOutputStream(file);
-            out.write(root.toString().getBytes());
+            out.write((""+root).getBytes());
 			savelistener.done(null);
           }catch(Exception e){
 			print(e);
 			savelistener.done(e);
 		  }
 	  }
-	private void print(Object obj){
-		System.out.println("settinsg.class:"+obj);
+	private void print(Object o){
+		new Utils().print(this.getClass(),o);
 	  }
   }

@@ -171,8 +171,7 @@ public class SignUpActivity extends AppCompatActivity
             public void done(MyUser p1,BmobException p2){
                 print(p2);
                 if(p2==null){
-                    Snackbar.make(reg,"注册成功，赶紧登录吧",Snackbar.LENGTH_SHORT).show();
-
+                    Snackbar.make(reg,"验证邮箱邮件已发送，验证后享受更多功能(包括邮箱重置密码)",Snackbar.LENGTH_SHORT).show();
                   }else{
                     String m=null;
                     ErrorMessage msg=new ErrorMessage();

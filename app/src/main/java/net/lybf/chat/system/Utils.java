@@ -3,6 +3,7 @@ import android.os.Build;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.io.File;
+import android.util.Log;
 
 public class Utils
   {
@@ -36,20 +37,20 @@ public class Utils
         sb.append("\n源码控制版本号:"+Build.VERSION.INCREMENTAL);
        	String[][] des={
        		{"os.version","OS版本号"}
-       		 ,{"os.name","OS名称"}
-       		 ,{"os.arch","OS架构"}
-       		 ,{"user.dir","dir属性"}
-       		 ,{"path.separator","路径分隔符"}
-       		 ,{"line.separator","行文分隔符"}
-       		 ,{"file.separator","文件分隔符"}
-       		 ,{"java.version","Java 版本"}
+		  ,{"os.name","OS名称"}
+		  ,{"os.arch","OS架构"}
+		  ,{"user.dir","dir属性"}
+		  ,{"path.separator","路径分隔符"}
+		  ,{"line.separator","行文分隔符"}
+		  ,{"file.separator","文件分隔符"}
+		  ,{"java.version","Java 版本"}
 		  };
 
 		try{
 			for(String[] s:des)
-				sb.append("\n"+s[1]+":"+System.getProperty(s[0]));
+			  sb.append("\n"+s[1]+":"+System.getProperty(s[0]));
 		  }catch(Exception e){
-		     print(e);
+			print(e);
 		  }
         return sb.toString();
 	  }
@@ -72,9 +73,25 @@ public class Utils
 		  }
 		return root;
 	  }
-	  
-	  
-	public void print(Object o){
-		System.out.println("Utils.class:"+o);
+
+	
+
+	public void print(Object obj){
+		System.out.println(obj);
 	  }
+
+	public void print(String classname,Object msg){
+		System.out.println(String.format("\n%s.class:%s\n",classname,msg.toString()));
+	  }
+
+	public void print(java.lang.Class mclass,Object obj){
+		System.out.println(String.format("\n%s.class :%s\n",mclass.toString(),obj));
+	  }
+
+
+	public void logE(String tag,String msg){
+		Log.e(tag,msg);
+
+	  }
+
   }

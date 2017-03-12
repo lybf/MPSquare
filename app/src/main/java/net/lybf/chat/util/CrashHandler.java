@@ -4,6 +4,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Process;
+import net.lybf.chat.system.Utils;
 public class CrashHandler implements UncaughtExceptionHandler
   {
 	private Thread.UncaughtExceptionHandler mDefaultHandler;
@@ -24,36 +25,31 @@ public class CrashHandler implements UncaughtExceptionHandler
 	  }
 
 	private boolean handleException(Throwable ex){
-		if(ex==null) 
-		  return false;
-		else
-		  try{
-			  print("ErrorMessage:"+ex.toString());
-			  Intent i=new Intent(m,Class.forName("net.lybf.chat.ui.ErrorActivity"));
-			  i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			  Bundle b=new Bundle();
-			  StringBuilder builder=new StringBuilder();
-			  builder.append(ex.toString());
+		if(ex==null){
+			return false;
+		  }else{
+			StackTraceMessage msg=new StackTraceMessage();
+			msg.init(ex);
+			StringBuilder builder=msg.getMessage();
 
-			  for(StackTraceElement stack:ex.getStackTrace()){
-				  builder.append("\n    at "+stack.getClassName()
-				  +"."+stack.getMethodName()
-				  +"("+stack.getFileName()
-				  +"."+stack.getLineNumber()+")");
+			try{
+				new Utils().print("ErrorMessage:"+ex.toString());
+				Intent i=new Intent(m,Class.forName("net.lybf.chat.ui.ErrorActivity"));
+				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				Bundle b=new Bundle();
 
-				}
-
-			  b.putString("error",builder.toString());
-			  i.putExtra("Error",b);
-			  m.startActivity(i);
-			  Process.killProcess(Process.myPid());
-			}catch(Exception e){
-			  print(e);
-			}
-		return true;
+				b.putString("error",builder.toString());
+				i.putExtra("Error",b);
+				m.startActivity(i);
+				Process.killProcess(Process.myPid());
+			  }catch(Exception e){
+				new Utils().print(this.getClass(),e);
+			  }
+			if(builder.toString().length()>1)
+			  return true;
+			else
+			  return false;
+		  }
 	  }	
-
-	private void print(Object o){
-		System.out.println("CrashHandler.class:"+o);
-	  }
+	
   }

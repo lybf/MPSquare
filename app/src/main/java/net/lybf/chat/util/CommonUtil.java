@@ -1,11 +1,35 @@
 package net.lybf.chat.util;
 import android.content.Context;
+import net.lybf.chat.MainApplication;
+import android.util.Log;
 
 public class CommonUtil
   {
 	private Context ctx;
-	public CommonUtil(Context c){
-		ctx=c;
+
+	private MainApplication mApplication;
+
+	public CommonUtil(){
+		mApplication=new MainApplication();
+		ctx=mApplication.getContext();
+	  }
+
+	public void print(Object obj){
+		System.out.println(obj);
+	  }
+	  
+	public void print(String classname,Object msg){
+		System.out.println(String.format("\n%s.class:%s\n",classname,msg.toString()));
+	  }
+	  
+	public void print(java.lang.Class mclass,Object obj){
+		System.out.println(String.format("\n%s.class :%s\n",mclass.toString(),obj));
+	  }
+
+
+	public void logE(String tag,String msg){
+		Log.e(tag,msg);
+
 	  }
 	public  int dip2px(float dpValue){
 		final float scale = ctx.getResources().getDisplayMetrics().density;

@@ -34,6 +34,17 @@ import java.security.PrivateKey;
 import net.lybf.chat.system.settings;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import cn.bmob.v3.listener.DownloadFileListener;
+import net.lybf.chat.system.Utils;
+import android.widget.CheckBox;
+import android.view.View.OnClickListener;
+import android.content.Context;
+import android.content.DialogInterface;
+import com.gc.materialdesign.widgets.SnackBar;
+import android.support.design.widget.Snackbar;
+import net.lybf.chat.bmob.ErrorMessage;
+import android.view.MenuInflater;
+import android.view.Menu;
+import net.lybf.chat.system.ActivityResultCode;
 
 public class UserActivity extends AppCompatActivity
   {
@@ -42,10 +53,16 @@ public class UserActivity extends AppCompatActivity
 
 	private ImageButton UserHeader;
 
+	private CheckBox EmailVerify;
+
+	private Context ctx;
+
+	private boolean UserInfoChange=false;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         set=new settings();
+		ctx=this;
 		if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{
@@ -55,12 +72,76 @@ public class UserActivity extends AppCompatActivity
         initView();
       }
 
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.menu_user,menu);
+        return true;
+      }
+
+	@Override
+	public void onBackPressed(){
+		if(UserInfoChange)
+		  setResult(ActivityResultCode.USER_REFRESH);
+		finish();
+		super.onBackPressed();
+	  }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case android.R.id.home:
-              finish();
+			  if(UserInfoChange){
+				  use=null;
+				  setResult(ActivityResultCode.USER_REFRESH);
+				}
+              this.finish();
               break;
+
+			case R.id.user_refresh:
+			  if(use!=null)
+				use.update(new UpdateListener(){
+					@Override
+					public void done(BmobException p1){
+						if(p1==null){
+							refreshData();
+							Snackbar.make(UserEmail,"刷新成功",Snackbar.LENGTH_SHORT).show();
+						  }else{
+							ErrorMessage msg=new ErrorMessage();
+							new AlertDialog.Builder(ctx).setMessage(msg.getMessage(p1.getErrorCode()))
+							.setPositiveButton("确定",null)
+							.show();
+						  }
+					  }
+				  });
+			  break;
+			case R.id.user_logout:
+			  new AlertDialog.Builder(ctx)
+			  .setTitle("退出登录？")
+			  .setMessage("你确定要退出登录？")
+			  .setPositiveButton("是",new DialogInterface.OnClickListener(){
+				  @Override
+				  public void onClick(DialogInterface p1,int p2){
+
+					  use.logOut();
+					  use=null;
+					  UserInfoChange=true;
+					  final Snackbar snackbar = Snackbar.make(UserEmail,"退出成功",Snackbar.LENGTH_LONG); 
+					  snackbar.setAction("关闭",new View.OnClickListener() { 
+						  @Override public void onClick(View v){ 
+							  snackbar.dismiss();
+							} 
+						}
+					  );  
+					  snackbar.show();
+					  refreshData();
+					}
+				}
+			  )
+			  .setNegativeButton("否",null)
+			  .setCancelable(false)
+			  .show();
+			  break;
           }
         return super.onOptionsItemSelected(item);
       }
@@ -80,9 +161,12 @@ public class UserActivity extends AppCompatActivity
         UserEmail=(TextView)findViewById(R.id.user_email);
 
 		UserDescribe=(TextView)findViewById(R.id.user_describe);
+
         bar=(Toolbar)findViewById(R.id.toolbar_user);
         setSupportActionBar(bar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		EmailVerify=(CheckBox)findViewById(R.id.user_emailVerify);
         refreshData();
       }
 
@@ -95,35 +179,88 @@ public class UserActivity extends AppCompatActivity
 				UserName.setText(use.getUsername());
 				UserEmail.setText(use.getEmail());
 				UserDescribe.setText(use.getdescribe());
-			  }
+				if(use.getEmailVerified()){
+					EmailVerify.setChecked(true);
+					EmailVerify.setEnabled(false);
+				  }else{
+					EmailVerify.setEnabled(false);
+					UserEmail.setOnClickListener(new OnClickListener(){
+						@Override
+						public void onClick(View p1){
+							AlertDialog.Builder dialog=new AlertDialog.Builder(ctx);
+							dialog.setMessage("邮箱:"+use.getEmail()+"没有验证成功，是否重新验证？\n验证后享受更好的体验，如:\n邮箱+密码登录\n邮箱重置密码等");
+							dialog.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+								@Override
+								public void onClick(DialogInterface p1,int p2){
+									use.requestEmailVerify(use.getEmail(),new UpdateListener(){
+										@Override
+										public void done(BmobException p1){
+											if(p1==null){
+												Snackbar.make(UserEmail,"已发送邮件，请查收",Snackbar.LENGTH_SHORT).show();
+											  }else{
+												ErrorMessage msg=new ErrorMessage();
+												new AlertDialog.Builder(ctx).setMessage(msg.getMessage(p1.getErrorCode()))
+												.setPositiveButton("确定",null)
+												.show();
 
-			BmobFile icon=use.getIcon();
-			final String ic=icon.getFilename();
-			print("图片名:"+ic);
-			final File f=new File("/sdcard/lybf/MPSquare/.user/"+use.getObjectId()+"/"+ic);
-			print("文件路径:"+f.getAbsolutePath());
-			if(!f.getParentFile().exists())
-			  f.getParentFile().mkdirs();
-			if(f.exists()){
-				UserHeader.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
-			  }else{
-				icon.download(f.getAbsoluteFile(),new DownloadFileListener(){
-					@Override
-					public void done(String p1,BmobException p2){
-						if(p2==null){
-							UserHeader.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
-						  }else{
-							System.out. println("下载失败:"+p2);
+											  }
+										  }
+									  }
+									);
+
+								  }			
+							  }
+							);
+
+							dialog.setNegativeButton("关闭",null);
+							dialog.show();
 						  }
 					  }
-					@Override
-					public void onProgress(Integer p1,long p2){
-						print("下载:"+ic+"到:"+f.getAbsolutePath()+"   进度:"+p1);
-					  }   
-				  });
+
+
+					);
+				  }
+
+
+				BmobFile icon=use.getIcon();
+				final String ic=icon.getFilename();
+				new Utils().print("图片名:"+ic);
+				final File f=new File("/sdcard/lybf/MPSquare/.user/"+use.getObjectId()+"/"+ic);
+				new Utils().print("文件路径:"+f.getAbsolutePath());
+				if(!f.getParentFile().exists())
+				  f.getParentFile().mkdirs();
+				if(f.exists()){
+					UserHeader.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
+				  }else{
+					icon.download(f.getAbsoluteFile(),new DownloadFileListener(){
+						@Override
+						public void done(String p1,BmobException p2){
+							if(p2==null){
+								UserHeader.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
+							  }else{
+								System.out. println("下载失败:"+p2);
+							  }
+						  }
+						@Override
+						public void onProgress(Integer p1,long p2){
+							new Utils().print("下载:"+ic+"到:"+f.getAbsolutePath()+"   进度:"+p1);
+						  }   
+					  });
+				  }
+			  }else{
+				UserName.setText("未登录");
+				UserEmail.setText("");
+				UserDescribe.setText("");
+				EmailVerify.setChecked(false);
+				EmailVerify.setEnabled(false);
+				UserHeader.setImageBitmap(		
+				BitmapFactory.decodeResource(getResources(),
+				R.drawable.ic_launcher
+				));
 			  }
+
 		  }catch(Exception e){
-			print("错误。"+e);
+			new Utils().print("错误。"+e);
 		  }
 	  }
 
@@ -170,7 +307,7 @@ public class UserActivity extends AppCompatActivity
                 @Override
                 public void done(BmobException p){
                     if(p==null){
-                        print("成功");
+						new Utils().print(this.getClass(),"成功");
                       }else{
                         alert("错误","状态码："+p.getErrorCode()+"\n错误信息:\n"+p.getMessage());
                       }
@@ -181,9 +318,6 @@ public class UserActivity extends AppCompatActivity
       }
 
 
-    private void print(Object o){
-        System.out.println(o);
-      }
 
     private void alert(String st,String str){
         new AlertDialog.Builder(this)
@@ -200,7 +334,7 @@ public class UserActivity extends AppCompatActivity
         image.compress(Bitmap.CompressFormat.JPEG,100,baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         int options = 100;
         while(baos.toByteArray().length/1024>100){
-            print("压图操作:百分比:"+options+"%");
+            new Utils().print(this.getClass(),"压图操作:百分比:"+options+"%");
             //循环判断如果压缩后图片是否大于100kb,大于继续压缩        
             baos.reset();//重置baos即清空baos
             options-=10;//每次都减少10

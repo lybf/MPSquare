@@ -28,6 +28,8 @@
 		android:layout_margin="4dp"
 		android:src="@drawable/ic_edit"
 		android:layout_gravity="bottom|right"
+		app:layout_anchor="@id/main_post_listview"
+		app:layout_anchorGravity="bottom|right|end"
 		app:elevation="6dp"
 		app:fabSize="normal"
 		app:pressedTranslationZ="8dp"

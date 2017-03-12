@@ -70,6 +70,7 @@ import android.support.v4.view.PagerAdapter;
 import net.lybf.chat.adapter.MainPagerAdaptet;
 import net.lybf.chat.util.CommentCount;
 import org.json.JSONObject;
+import net.lybf.chat.system.ActivityResultCode;
 
 public class MainActivity extends AppCompatActivity
   {
@@ -216,7 +217,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onActivityResult(int requestCode,int resultCode,Intent data){
         read(true);
-        if(requestCode==0&&resultCode==9999){
+        if(requestCode==0&&resultCode==ActivityResultCode.USER_REFRESH){
+			use=null;
             refreshUser();
           }
         super.onActivityResult(requestCode,resultCode,data);
@@ -234,7 +236,7 @@ public class MainActivity extends AppCompatActivity
     private void 详情(){
         try{
             if(use!=null&&use.getUsername()!=null)
-              startActivity(new Intent(this,UserActivity.class));
+              startActivityForResult(new Intent(this,UserActivity.class),0);
             else
               startActivityForResult(new Intent(this,LoginActivity.class),0);
           }catch(Exception e){
@@ -289,11 +291,13 @@ public class MainActivity extends AppCompatActivity
                 else
                   print("名字为空");
               }else{
-                if(nv_name!=null)
-                  nv_name.setText("未登录，点击头像以登录");
-                else
-                  print("啊哦，控件空指针了");
+                if(nv_name!=null){
+					nv_name.setText("未登录，点击头像以登录");
+					nv_header.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.ic_user_header));
+				  }
               }
+
+
           }catch(Exception e){
             print(e);
           }
@@ -473,7 +477,7 @@ public class MainActivity extends AppCompatActivity
 
 
             refresh=(SwipeRefreshLayout)Post.findViewById(R.id.main_refresh);	
-            refresh.setProgressViewOffset(false,0,new CommonUtil(this).dip2px(24f));
+            refresh.setProgressViewOffset(false,0,new CommonUtil().dip2px(24f));
             refresh.setOnRefreshListener(new SwipeRefresh());
             //refresh.setProgressBackgronv_namedColor(0xFFFFFFFF);
             refresh.setColorSchemeResources(R.color.orange,R.color.green,R.color.blue); 
@@ -636,32 +640,6 @@ public class MainActivity extends AppCompatActivity
 
 					  //
 
-					case R.id.退出登录:
-					  new AlertDialog.Builder(ctx)
-					  .setTitle("退出登录？")
-					  .setMessage("你确定要退出登录？")
-					  .setPositiveButton("是",new DialogInterface.OnClickListener(){
-						  @Override
-						  public void onClick(DialogInterface p1,int p2){
-
-							  use.logOut();
-							  final Snackbar snackbar = Snackbar.make(fab,"退出成功",Snackbar.LENGTH_LONG); 
-							  snackbar.setAction("关闭",new View.OnClickListener() { 
-								  @Override public void onClick(View v){ 
-									  snackbar.dismiss();
-									} 
-								}
-							  );  
-							  snackbar.show();
-							  refreshUser();
-							}
-						}
-					  )
-					  .setNegativeButton("否",null)
-					  .setCancelable(false)
-					  .show();
-					  break;
-
 					case R.id.设置:
 					  startActivity(new Intent(ctx,SettingsActivity.class));
 					  break;
@@ -696,8 +674,10 @@ public class MainActivity extends AppCompatActivity
 		boolean isCache = query.hasCachedResult(Post.class);
 		if(!b||!net.isNetWork()){//离线阅读
 			if(isCache){
-				query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+				//	query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+				query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
 			  }else{
+				query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
 				showError(null,"无缓存").show();//提示无缓存，为何isCache为false？
 			  }
 		  }else{
@@ -712,7 +692,7 @@ public class MainActivity extends AppCompatActivity
 				query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
 			  }
 		  }
-		
+
 		query.findObjects(new FindListener<Post>() {
             @Override
             public void done(List<Post> obj,BmobException er){
@@ -729,7 +709,6 @@ public class MainActivity extends AppCompatActivity
 									MTA.addPostCommentCount(m.getObjectId(),i);
 									MTA.additem(m);
 									print("增加数据:"+m.getObjectId());           
-
 								  }else{
 									MTA.additem(m);
 									print("增加数据:"+m.getObjectId());           
@@ -754,7 +733,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private void print(Object o){
-		System.out.println(o);
+		new Utils().print(this.getClass(),o);
 	  }
 
 

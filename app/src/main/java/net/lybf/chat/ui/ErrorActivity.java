@@ -64,10 +64,11 @@ public class ErrorActivity extends AppCompatActivity
               print(u.getDeviceInfo());
             }
       }
+	  
+	  public void print(Object o){
+		new Utils().print(this.getClass(),o);
+	  }
 
 
 
-    private void print(Object o){	
-        System.out.println("ErrorActivity.class:"+o);
-      }
   }
