@@ -15,7 +15,9 @@ public class Comment extends BmobObject
 
 	//获取内容
     public String getMessage(){
-        return content;
+		if(content!=null)
+		  return content;
+		return null;
       }
 
 	//修改内容(设置内容)
@@ -48,7 +50,9 @@ public class Comment extends BmobObject
 
 	//获取所属贴子ID
 	public String getParent(){
-		return parent;
+		if(parent!=null)
+		  return parent;
+		return null;
 	  }
 
 	//设置所属贴子ID
@@ -58,7 +62,9 @@ public class Comment extends BmobObject
 
 	//获取图片1
     public images getImage(){
-        return image;
+		if(image!=null)
+		  return image;
+		return null;
       }
 	//设置图1
     public void setImage(images f){

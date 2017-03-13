@@ -41,6 +41,7 @@ import android.graphics.BitmapFactory;
 import net.lybf.chat.system.settings;
 import android.support.v7.app.ActionBar;
 import net.lybf.chat.system.Utils;
+import android.text.TextUtils;
 public class LoginActivity extends AppCompatActivity
   {
     private Toolbar bar;
@@ -108,10 +109,10 @@ public class LoginActivity extends AppCompatActivity
                 public void onClick(View v){
                     String name=Name.getText().toString();
                     String pass=Pass.getText().toString();
-                    if(pass==null&&pass.equals("")){
+                    if(TextUtils.isEmpty(pass)){
                         mtextInputlayout.setError("密码不能为空");
                         mtextInputlayout.setErrorEnabled(true);
-                      }else if(name==null&&name.equals("")){
+                      }else if(TextUtils.isEmpty(name)){
                         mtextInputlayout.setErrorEnabled(false);
                         mname.setErrorEnabled(true);
                         mname.setError("用户名不能为空");
@@ -140,7 +141,7 @@ public class LoginActivity extends AppCompatActivity
             mtextInputlayout.setCounterEnabled(true);
 
             mname=(TextInputLayout)findViewById(R.id.tip_login_name);
-            mname.setCounterMaxLength(10);
+            mname.setCounterMaxLength(8);
             mname.setCounterEnabled(true);
 
             ((CheckBox)findViewById(R.id.canseepassword)).setOnCheckedChangeListener(new OnCheckedChangeListener(){
@@ -203,6 +204,6 @@ public class LoginActivity extends AppCompatActivity
 
 
     private void print(Object o){
-	  new Utils().print(this.getClass(),o);
+		new Utils().print(this.getClass(),o);
       }
   }

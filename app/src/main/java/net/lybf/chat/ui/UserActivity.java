@@ -45,6 +45,9 @@ import net.lybf.chat.bmob.ErrorMessage;
 import android.view.MenuInflater;
 import android.view.Menu;
 import net.lybf.chat.system.ActivityResultCode;
+import android.support.design.widget.TextInputEditText;
+import android.widget.EditText;
+import android.support.design.widget.TextInputLayout;
 
 public class UserActivity extends AppCompatActivity
   {
@@ -179,46 +182,84 @@ public class UserActivity extends AppCompatActivity
 				UserName.setText(use.getUsername());
 				UserEmail.setText(use.getEmail());
 				UserDescribe.setText(use.getdescribe());
-				if(use.getEmailVerified()){
-					EmailVerify.setChecked(true);
-					EmailVerify.setEnabled(false);
+
+				if(use.getEmail()!=null&&!use.getEmail().equals("")){
+					boolean emailverify = false;
+					try{
+						emailverify=use.getEmailVerified();
+					  }catch(Exception e){
+						new Utils().print(this.getClass(),e);
+					  }
+					if(emailverify){
+						EmailVerify.setChecked(true);
+						EmailVerify.setEnabled(false);
+					  }else{
+						EmailVerify.setEnabled(false);
+						UserEmail.setOnClickListener(new OnClickListener(){
+							@Override
+							public void onClick(View p1){
+								AlertDialog.Builder dialog=new AlertDialog.Builder(ctx);
+								dialog.setMessage("邮箱:"+use.getEmail()+"没有验证成功，是否重新验证？\n验证后享受更好的体验，如:\n邮箱+密码登录\n邮箱重置密码等");
+								dialog.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+									@Override
+									public void onClick(DialogInterface p1,int p2){
+										use.requestEmailVerify(use.getEmail(),new UpdateListener(){
+											@Override
+											public void done(BmobException p1){
+												if(p1==null){
+													Snackbar.make(UserEmail,"已发送邮件，请查收",Snackbar.LENGTH_SHORT).show();
+												  }else{
+													ErrorMessage msg=new ErrorMessage();
+													new AlertDialog.Builder(ctx).setMessage(msg.getMessage(p1.getErrorCode()))
+													.setPositiveButton("确定",null)
+													.show();
+
+												  }
+											  }
+										  });
+
+									  }			
+								  });
+
+								dialog.setNegativeButton("关闭",null);
+								dialog.show();
+							  }
+						  });
+
+					  }
+
 				  }else{
-					EmailVerify.setEnabled(false);
+					UserEmail.setText("未绑定邮箱，点击绑定");
 					UserEmail.setOnClickListener(new OnClickListener(){
 						@Override
 						public void onClick(View p1){
-							AlertDialog.Builder dialog=new AlertDialog.Builder(ctx);
-							dialog.setMessage("邮箱:"+use.getEmail()+"没有验证成功，是否重新验证？\n验证后享受更好的体验，如:\n邮箱+密码登录\n邮箱重置密码等");
-							dialog.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+							TextInputLayout til=new TextInputLayout(ctx);
+							til.setHint("输入您的邮箱");
+							final EditText in=new EditText(ctx);
+							til.addView(in);
+							//in.setHint("输入您的邮箱");
+							new AlertDialog.Builder(ctx)
+							.setView(til)
+							.setPositiveButton("确定",new DialogInterface.OnClickListener(){
 								@Override
 								public void onClick(DialogInterface p1,int p2){
-									use.requestEmailVerify(use.getEmail(),new UpdateListener(){
+									use.requestEmailVerify(in.getText().toString(),new UpdateListener(){
 										@Override
 										public void done(BmobException p1){
 											if(p1==null){
-												Snackbar.make(UserEmail,"已发送邮件，请查收",Snackbar.LENGTH_SHORT).show();
+												Snackbar.make(UserEmail,"请查收邮件",Snackbar.LENGTH_SHORT).show();
 											  }else{
-												ErrorMessage msg=new ErrorMessage();
-												new AlertDialog.Builder(ctx).setMessage(msg.getMessage(p1.getErrorCode()))
+												new AlertDialog.Builder(ctx).setMessage("错误信息:"+new ErrorMessage().getMessage(p1.getErrorCode()))
 												.setPositiveButton("确定",null)
 												.show();
-
 											  }
-										  }
-									  }
-									);
-
-								  }			
-							  }
-							);
-
-							dialog.setNegativeButton("关闭",null);
-							dialog.show();
+										  }  
+									  });
+								  }
+							  }).show();
 						  }
-					  }
+					  });
 
-
-					);
 				  }
 
 

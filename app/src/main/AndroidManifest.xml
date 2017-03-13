@@ -45,6 +45,10 @@
             android:name=".ui.SettingsActivity"/>
         <activity 
             android:name=".ui.PhotosPickerActivity"/>
+		<activity
+			android:name=".ui.AboutActivity"/>
+		<activity
+			android:name=".ui.UpdateLogActivity"/>
     </application>
 	<user-permission android:name="android.permission.READ_PHONE_STATE"/>
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>

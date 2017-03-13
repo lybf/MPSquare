@@ -23,6 +23,7 @@ import android.widget.Toast;
 import android.support.design.widget.Snackbar;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.system.settings;
+import android.text.TextUtils;
 
 public class SignUpActivity extends AppCompatActivity
   {
@@ -66,7 +67,7 @@ public class SignUpActivity extends AppCompatActivity
     private void init(){
 
         Name=(TextInputLayout)findViewById(R.id.tip_sign_name);
-        Name.setCounterMaxLength(10);
+        Name.setCounterMaxLength(8);
         Name.setCounterEnabled(true);
         Email=(TextInputLayout)findViewById(R.id.tip_sign_email);
 
@@ -118,8 +119,8 @@ public class SignUpActivity extends AppCompatActivity
         String agin=""+e4.getText().toString();
 
         boolean NAME= false,EMAIL= false,password = false,password2=false;
-        if(name.length()<2){
-            Name.setError("名称不可小于2个字符");
+        if(name.length()<4){
+            Name.setError("用户名不能少于1个字符");
             Name.setErrorEnabled(true);
           }else{
             NAME=true;
@@ -135,11 +136,11 @@ public class SignUpActivity extends AppCompatActivity
             Email.setErrorEnabled(true);
           }
 
-        if(pass!=null&&pass.length()>0){
-            if(pass.length()>6){
+        if(!TextUtils.isEmpty(pass)){
+		    if(pass.length()>7){
                 password=true;
                 Pa.setErrorEnabled(false);
-                if((""+pass).equals(agin)){
+                if((pass).equals(agin)||!TextUtils.isEmpty(agin)){
                     password2=true;
                     Pa.setErrorEnabled(false);
                     Apa.setErrorEnabled(false);
@@ -147,7 +148,7 @@ public class SignUpActivity extends AppCompatActivity
                     Apa.setError("两次输入的密码不一致");
                     Apa.setErrorEnabled(true);}
               }else{
-                Pa.setError("密码长度少于5个字符");
+                Pa.setError("密码长度少于7个字符");
                 Pa.setErrorEnabled(true);}
           }else{
             Pa.setError("密码不能为空");
@@ -156,7 +157,6 @@ public class SignUpActivity extends AppCompatActivity
 
         if((NAME==EMAIL==password==password2)!=false)
           signup(name,email,pass);
-
       }
 
 

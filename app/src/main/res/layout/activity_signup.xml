@@ -49,7 +49,7 @@
 					android:id="@+id/sign_name"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:maxLength="10"
+					android:maxLength="8"
 					android:hint="@string/sign_name"/>
 
 			</android.support.design.widget.TextInputLayout>

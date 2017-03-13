@@ -20,7 +20,7 @@
 			android:layout_width="80dp"
 			android:layout_height="80dp"
 			android:src="@drawable/ic_user_header"
-			android:layout_marginBottom="20dp"/>
+			android:layout_margin="20dp"/>
 
 		<TextView
 			android:layout_gravity="center_vertical"
@@ -28,7 +28,6 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="未登录，点击头像登录"
-			android:gravity="bottom|center"
 			android:layout_margin="5dp"
 			android:textSize="20sp"
 			android:layout_toRightOf="@id/main_nav_header"

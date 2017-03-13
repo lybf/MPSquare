@@ -18,60 +18,70 @@
 			android:minWidth="320dp">
 
 			<ImageButton
-				android:layout_height="150dp"
-				android:layout_width="150dp"
+				android:layout_height="100dp"
+				android:layout_width="100dp"
 				android:background="@drawable/ic_launcher"
 				android:layout_gravity="center"/>
 
 			<TextView
 				android:layout_height="wrap_content"
 				android:text="冒泡广场"
-				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:layout_width="match_parent"
-				android:gravity="center"/>
+				android:gravity="center"
+				android:layout_margin="8dp"
+				android:id="@+id/about_name"/>
 
-			<View
-				android:layout_height="1dp"
-				android:background="?android:attr/dividerVertical"
-				android:layout_width="match_parent"/>
+			<TextView
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:layout_width="wrap_content"
+				android:text="没有观众也要前行"
+				android:layout_gravity="center"
+				android:layout_marginBottom="50dp"
+				android:id="@+id/about_describe"/>
 
 			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:orientation="vertical">
+				android:layout_height="match_parent"
+				android:layout_width="match_parent"
+				android:orientation="vertical"
+				android:gravity="center">
+
+				<Button
+					style="?android:attr/buttonStyleSmall"
+					android:layout_height="wrap_content"
+					android:layout_width="150dp"
+					android:text="更新记录"
+					android:id="@+id/about_updatelog"/>
+
+				<Button
+					style="?android:attr/buttonStyleSmall"
+					android:layout_height="wrap_content"
+					android:layout_width="150dp"
+					android:text="检查更新"
+					android:id="@+id/about_checkupdate"/>
+
+				<Button
+					style="?android:attr/buttonStyleSmall"
+					android:layout_height="wrap_content"
+					android:layout_width="150dp"
+					android:text="特别鸣谢"
+					android:id="@+id/about_thanks"/>
 
 				<TextView
 					android:layout_height="wrap_content"
-					android:text="作者："
-					android:textAppearance="?android:attr/textAppearanceMedium"
-					android:layout_width="wrap_content"/>
-
-				<TextView
-					android:layout_height="wrap_content"
-					android:text="lybf"
-					android:textAppearance="?android:attr/textAppearanceMedium"
-					android:layout_width="wrap_content"
-					android:textColor="#4970EB"/>
-
-			</LinearLayout>
-
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:orientation="vertical">
-
-				<TextView
-					android:layout_height="wrap_content"
-					android:text="QQ："
-					android:textAppearance="?android:attr/textAppearanceMedium"
-					android:layout_width="wrap_content"/>
-
-				<TextView
-					android:layout_height="wrap_content"
-					android:text="1438071241"
 					android:textAppearance="?android:attr/textAppearanceMedium"
 					android:layout_width="wrap_content"
-					android:textColor="#4369E2"/>
+					android:text="@string/allright"
+					android:layout_marginTop="50dp"
+					android:gravity="center"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:layout_width="wrap_content"
+					android:text="开源相关"
+					android:id="@+id/about_aboutopen"/>
 
 			</LinearLayout>
 

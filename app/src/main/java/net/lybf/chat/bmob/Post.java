@@ -29,6 +29,8 @@ public class Post extends BmobObject
 	  }
 
 	public String getMessage(){
+		if(content==null)
+		  return null;
 		return content;
       }
 
@@ -40,6 +42,8 @@ public class Post extends BmobObject
 
 
 	public String getTitle(){
+		if(title==null)
+		  return null;
 		return title;
       }
 
@@ -49,6 +53,8 @@ public class Post extends BmobObject
 
 
 	public MyUser getUser(){
+		if(user==null)
+		  return null;
 		return user;
       }
 

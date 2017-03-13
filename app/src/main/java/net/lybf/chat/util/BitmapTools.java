@@ -13,7 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.ByteArrayOutputStream;
 
-public class BitMapTools
+public class BitmapTools
   {
 
 	public Bitmap download(String url){

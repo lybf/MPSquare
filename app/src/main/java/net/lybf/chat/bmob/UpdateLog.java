@@ -5,7 +5,7 @@ import cn.bmob.v3.BmobObject;
 public class UpdateLog extends BmobObject
   {
 	//版本号
-	private Integer versionCode;
+	private Number versionCode;
 	//版本名
 	private String versionName;
 	//安装包地址
@@ -20,18 +20,24 @@ public class UpdateLog extends BmobObject
 	 3:强烈交易升级
 	 4:非常强烈滴升级
 	 5:强制升级*/
-	private Integer level;
+	private Number level;
+
+	private Number showType;
+	
+	public Number getShowType(){
+		return this.showType;
+	  }
 
 	//获取版本名
 	public String getVersionName(){
 		return versionName;
 	  }
 	 //获取更新级别
-	public Integer getLevel(){
+	public Number getLevel(){
 		return level==-1?0:level;
 	  }
-	 //获取版本好
-	public Integer getVersionCode(){
+	 //获取版本号
+	public Number getVersionCode(){
 		return versionCode;
 	  }
 	//获取下载地址

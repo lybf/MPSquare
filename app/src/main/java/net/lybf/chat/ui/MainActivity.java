@@ -58,7 +58,7 @@ import net.lybf.chat.system.settings;
 import net.lybf.chat.system.update;
 import net.lybf.chat.ui.MainActivity;
 import net.lybf.chat.ui.SettingsActivity;
-import net.lybf.chat.util.BitMapTools;
+import net.lybf.chat.util.BitmapTools;
 import net.lybf.chat.util.CommonUtil;
 import net.lybf.chat.util.Network;
 import net.lybf.chat.widget.CircleImageView;
@@ -305,78 +305,6 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    private void update(){
-        if(net.isNetWork()){
-            print("\n检测更新中\n");
-            BmobQuery<UpdateLog> q = new BmobQuery<UpdateLog>();
-            q.order("-createdAt");
-            q.setLimit(50);   
-            q.findObjects(new FindListener<UpdateLog>() {
-                @Override
-                public void done(List<UpdateLog> object,BmobException er){
-                    if(er==null){
-                        print("\n检测更新成功\n");
-                        UpdateLog u=object.get(object.size()-1);
-                        if(u!=null){
-                            Integer n=u.getVersionCode();
-                            String name=u.getVersionName();
-                            String title=u.getTile();
-                            String msg=u.getMessage();
-                            String ApkF=u.getApkFile();
-                            try{
-                                PackageManager pm = ctx.getPackageManager();  
-                                PackageInfo pi = pm.getPackageInfo(ctx.getPackageName(),0);  
-
-                                int i=pi.versionCode;
-                                String ii=pi.versionName;
-                                if(i-n<0){
-                                    final String m=u.getCreatedAt()
-                                    +":\n当前版本号:"+i
-                                    +"\n最新版本:"+n+
-                                    "\n----------\n当前版本名:"+ii
-                                    +"\n最新版本:"+name
-                                    +"\n----------\n更新详情:"+msg
-                                    +"\n----------\n下载地址:"+ApkF;
-                                    showAppUpdateMessage(title,m);
-                                  }
-                              }catch(Exception e){
-                                print(e);
-                              }
-                          }
-
-                      }
-                  }
-              }
-            );
-          }else{
-
-          }
-      }
-
-
-    private void showAppUpdateMessage(String title,String message){
-        new AlertDialog.Builder(ctx)
-        .setTitle(title)
-        .setMessage((downloadMessage=message))
-        .setPositiveButton("下载",null)
-        .setNegativeButton("复制",new DownloadApp()
-        )
-		.setNeutralButton("关闭",null)
-        .show();
-
-      }
-
-    private String downloadMessage;
-    private class DownloadApp implements DialogInterface.OnClickListener
-      {
-        @Override
-        public void onClick(DialogInterface p1,int p2){
-            ClipboardManager clip=(ClipboardManager)getSystemService(ctx.CLIPBOARD_SERVICE);
-            clip.setText(downloadMessage);
-          }
-      }
-
-
 
 
     private void updateApp(String title,String text,String ApkFile){
@@ -610,13 +538,11 @@ public class MainActivity extends AppCompatActivity
 			@Override
 			public boolean onNavigationItemSelected(MenuItem p1){
 				switch(p1.getItemId()){
-					case R.id.检查更新:
-					  update();
-					  break;
-
-					  //
-
+			
 					case R.id.关于:
+					  startActivity(new Intent(ctx,AboutActivity.class));
+					//  new Intent()
+					/*
 					  new AlertDialog.Builder(ctx)
 					  .setPositiveButton("加入群",new DialogInterface.OnClickListener(){
 						  @Override
@@ -630,7 +556,7 @@ public class MainActivity extends AppCompatActivity
 					  .setNegativeButton("关闭",null)
 					  .setView(R.layout.content_about)
 					  .setCancelable(false)
-					  .show();
+					  .show();*/
 					  break;
 
 					  //

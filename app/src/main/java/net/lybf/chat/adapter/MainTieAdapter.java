@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import net.lybf.chat.util.DateTools;
 import net.lybf.chat.R;
-import net.lybf.chat.util.BitMapTools;
+import net.lybf.chat.util.BitmapTools;
 import net.lybf.chat.ui.PostActivity;
 import net.lybf.chat.bmob.Post;
 import net.lybf.chat.bmob.MyUser;
@@ -46,7 +46,7 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
 	private HashMap<String,Object> comments=new HashMap<String,Object>();
 	private Context ctx;
 
-    private BitMapTools BMT;
+    private BitmapTools BMT;
 
 	private RecyclerView mRecyclerview;
 	public MainTieAdapter(Context ctx){
@@ -59,7 +59,7 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
 	  }
 
     private void init(){
-        BMT=new BitMapTools();
+        BMT=new BitmapTools();
       }
 
     public void clearAll(){
