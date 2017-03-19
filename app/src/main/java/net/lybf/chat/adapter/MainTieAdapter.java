@@ -34,6 +34,7 @@ import android.widget.RelativeLayout;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 import android.support.v7.widget.LinearLayoutManager;
+import net.lybf.chat.system.BmobUtils;
 
 public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHolder>
   {
@@ -48,29 +49,33 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
 
     private BitmapTools BMT;
 
-	private RecyclerView mRecyclerview;
+	private DateTools DTL;
+
 	public MainTieAdapter(Context ctx){
 		this.ctx=ctx;
 		init();
 	  }
 
-	public void addPostCommentCount(String objectId,int i){
+	public MainTieAdapter addPostCommentCount(String objectId,int i){
 		comments.put(objectId,i);
+		return this;
 	  }
 
     private void init(){
         BMT=new BitmapTools();
+		DTL=new DateTools();
       }
 
-    public void clearAll(){
+    public MainTieAdapter clearAll(){
         mData.clear();
 		userIcon.clear();
 		comments.clear();
+		return this;
       }
 
 
-    public void addItem(final int position,Post post){
-        final MyUser user=post.getUser();
+    public MainTieAdapter addItem(final int position,Post post){
+	    final MyUser user=post.getUser();
         BmobFile icon=user.getIcon();
         String ic=icon.getFilename();
         final File f=new File("/sdcard/lybf/MPSquare/.user/"+user.getObjectId()+"/"+icon.getFilename());
@@ -97,10 +102,22 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
 
         mData.add(position,post);
         notifyItemInserted(position);
+		return this;
       }
 
-    public void additem(Post post){
-
+    public MainTieAdapter additem(Post post){
+		int j=count();
+		for(int i=0;i<j;i++){
+			Post p=mData.get(i);
+			if(post.getObjectId().equals(p.getObjectId())){
+				Date dt=DTL.String2Date(post.getUpdatedAt(),BmobUtils.BMOB_DATE_TYPE);
+				Date dt2=DTL.String2Date(p.getUpdatedAt(),BmobUtils.BMOB_DATE_TYPE);
+				if(dt.getTime()-dt2.getTime()>0){
+					mData.set(i,post);
+				  }
+				mData.set(i,post);
+			  }
+		  }
         final MyUser user=post.getUser();
         BmobFile icon=user.getIcon();
         String ic=icon.getFilename();
@@ -128,24 +145,28 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
 		mData.add(post);
 		//notifyItemChanged(mData.size()-1);
 		notifyItemInserted(mData.size()-1);
+		return this;
       }
 
 
-    public void removeItem(int position){
+    public MainTieAdapter removeItem(int position){
         mData.remove(position);
         notifyItemRemoved(position);
+		return this;
       }
 
-    public void updateitem(int i,Post hm){
+    public MainTieAdapter updateitem(int i,Post hm){
 		if(mData.get(i)!=hm){
 			mData.set(i,hm);
 			notifyItemChanged(i);
 		  }
+		return this;
       }
 
-    public void updateComments(int i,String postid,int num){
+    public MainTieAdapter updateComments(int i,String postid,int num){
         comments.put(postid,num);
         notifyItemChanged(i);
+		return this;
       }
 
 
@@ -157,6 +178,20 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         return hm;
       }
 
+
+	public MainTieAdapter sort(){
+		return this;
+	  }
+
+	public MainTieAdapter insert(int index){
+		notifyItemInserted(index);
+		return this;
+	  }
+
+	public MainTieAdapter removed(int index){
+		notifyItemRemoved(index);
+		return this;
+	  }
     //创建新View，被LayoutManager所调用
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup,int viewType){
@@ -173,7 +208,7 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         viewHolder.name.setText(""+user.getUsername());
 		String ct =""+comments.get(m.getObjectId());
 		viewHolder.lookAllComments.setText(!ct.equals("")||!ct.equals("null")||ct.equals("0")?"共"+ct+"条评论":"");
-        SimpleDateFormat dat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dat=new SimpleDateFormat(BmobUtils.BMOB_DATE_TYPE);
 
         Date d = null;
         try{
@@ -216,6 +251,9 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         return mData.size();
       }
 
+	public int count(){
+		return mData.size();
+	  }
 	private void print(Object... obj){
 		for(Object o:obj){
 			System.out.println("MainTieAdapter.class:"+o+"\n");
@@ -232,6 +270,16 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         public TextView name,date,title,message,lookAllComments;
 		public RelativeLayout go;
         public ImageButton hader;
+
+		public int Position;
+
+		public int ItemViewType;
+
+		public int LayoutPosition;
+
+		public int AdapterPosition;
+
+		public int OldPosition;
         public ViewHolder(View view){
             super(view);
             title=(TextView)view.findViewById(R.id.item_post_title);
@@ -241,6 +289,18 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
 			lookAllComments=(TextView)view.findViewById(R.id.item_post_lookAllComments);
 			go=(RelativeLayout)view.findViewById(R.id.item_post_go);
 		    hader=(ImageButton)view.findViewById(R.id.item_post_header);
+			try{
+				Position=getPosition();
+				ItemViewType=getItemViewType();
+				LayoutPosition=getLayoutPosition();
+				AdapterPosition=getAdapterPosition();
+				OldPosition=getOldPosition();
+
+				//notifyItemInserted(AdapterPosition);
+				insert(Position);
+			  }catch(Exception e){
+				print(e);
+			  }
           }
       }
   }

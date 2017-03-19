@@ -2,9 +2,28 @@ package net.lybf.chat.util;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
+import android.text.format.DateFormat;
+import java.text.ParseException;
+import net.lybf.chat.system.Utils;
 
 public class DateTools
   {
+	public Date String2Date(String date,String type){
+		SimpleDateFormat f=new SimpleDateFormat();
+		f.applyPattern(type);
+		Date dat = null;
+		try{
+			dat=f.parse(date);
+		  }catch(Exception e){
+			new Utils().print(this.getClass(),e);
+		  }
+		return dat;
+	  }
+	public long Date2Long(Date date){
+		if(date!=null)
+		  return date.getTime();
+		return 0;
+	  }
 	public  String date(Date startDate){ 
 		Date endDate=new Date(System.currentTimeMillis());
 		if(startDate==null||endDate==null)
@@ -33,5 +52,5 @@ public class DateTools
 			sdf.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
 			return sdf.format(startDate);
 		  }
-		}
+	  }
   }

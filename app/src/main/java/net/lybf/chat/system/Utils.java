@@ -99,13 +99,13 @@ public class Utils
 	  }
 
 	public void print(java.lang.Class mclass,Object obj){
-		System.out.println(String.format("\n%s.class :%s\n",mclass.toString(),obj));
+		System.out.println(String.format("\n%s.class :%s\n",mclass.getPackage(),obj));
 	  }
 
 
 	public void logE(String tag,String msg){
 		Log.e(tag,msg);
+		}
+}
 
-	  }
-
-  }
+	  

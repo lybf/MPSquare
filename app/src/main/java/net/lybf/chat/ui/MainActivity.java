@@ -71,6 +71,7 @@ import net.lybf.chat.adapter.MainPagerAdaptet;
 import net.lybf.chat.util.CommentCount;
 import org.json.JSONObject;
 import net.lybf.chat.system.ActivityResultCode;
+import android.opengl.Visibility;
 
 public class MainActivity extends AppCompatActivity
   {
@@ -342,6 +343,76 @@ public class MainActivity extends AppCompatActivity
 		mViewPagerAdapter=new MainPagerAdaptet(tabs,mContent);
 		use=BmobUser.getCurrentUser(MyUser.class);
 		net=new Network(this);
+
+		try{
+			mRecyclerview=(RecyclerView)Post.findViewById(R.id.main_post_listview);
+			mRecyclerview.setEnabled(true);
+			mRecyclerview.setFocusable(true);
+
+
+
+			LinearLayoutManager Manager = new LinearLayoutManager(this); 		
+			Manager.setOrientation(LinearLayoutManager.VERTICAL);
+			mRecyclerview.setLayoutManager(Manager); 
+			mRecyclerview.setAdapter((MTA=new MainTieAdapter(this)));
+			mRecyclerview.setItemAnimator(new DefaultItemAnimator());
+			
+			try{
+				mRecyclerview.setOnScrollChangeListener(new RecyclerView.OnScrollChangeListener(){
+					@Override
+					public void onScrollChange(View p1,int p2,int p3,int p4,int p5){
+					//  MTA.ViewHolder.Position;
+
+					  }			
+					 
+			  });
+			}catch(Exception e){
+			  print(e);
+			}
+
+			mDrawerLayout=(DrawerLayout) findViewById(R.id.drawerlayout);
+			mToolbar=(Toolbar) findViewById(R.id.toolbar);
+			mNavigationView=(NavigationView) findViewById(R.id.navigationview);
+			mNavigationView.inflateHeaderView(R.layout.activity_main_nv_menu);
+			mNavigationView.inflateMenu(R.menu.menu_main_nav);
+			NavigationViewListener(mNavigationView);
+			setSupportActionBar(mToolbar);
+
+			ActionBarDrawerToggle mActionbarDrawerToggle= new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open,R.string.close);
+			mActionbarDrawerToggle.syncState();
+			mDrawerLayout.setDrawerListener(mActionbarDrawerToggle);
+
+			fab=(FloatingActionButton)findViewById(R.id.main_fab);
+
+			// fab .setOnClickListener(new SendTie());
+
+
+			refresh=(SwipeRefreshLayout)Post.findViewById(R.id.main_refresh);	
+			refresh.setProgressViewOffset(false,0,new CommonUtil().dip2px(24f));
+			refresh.setOnRefreshListener(new SwipeRefresh());
+			//refresh.setProgressBackground(Color.parseColor("0xFFFFFFFF"));
+			refresh.setColorSchemeResources(R.color.orange,R.color.green,R.color.blue); 
+			//refresh.setColorSchemeResources(android.R.colorholo_blue_ligh,android.R.color.holo_red_light,android.R.color.holo_orange_light,android.R.color.holo_green_light);
+			//refresh.setRefreshing(true);
+			refresh.setSize(SwipeRefreshLayout.DEFAULT);
+			read(false);
+
+		  }catch(Exception e){
+			print("\nError:"+e);
+		  }
+		try{
+			mHeaderLayout=mNavigationView.getHeaderView(0);
+			nv_name=(TextView)mHeaderLayout.findViewById(R.id.main_nav_name);
+			nv_header=(CircleImageView)mHeaderLayout.findViewById(R.id.main_nav_header);
+			nv_header.setOnClickListener(new OnClickListener(){
+				public void onClick(View v){
+					详情();
+				  }
+			  });
+			refreshUser();
+		  }catch(Exception e){
+			print("Error:"+e);
+		  }
 		try{
 			mViewPager.setAdapter(mViewPagerAdapter);
 			// 给ViewPager添加页面动态监听器（为了让Toolbar中的Title可以变化相应的Tab的标题）
@@ -354,7 +425,15 @@ public class MainActivity extends AppCompatActivity
 				@Override
 				public void onPageSelected(int p1){
 					//mToolbar.setTitle(mTitles[position]);
-
+					switch(p1){
+						case 0:
+						  fab.setVisibility(View.VISIBLE);
+						  fab.setOnClickListener(new SendTie());
+						  break;
+						case 1:
+						  fab.setVisibility(View.GONE);
+						  break;
+					  }
 				  }
 
 				@Override
@@ -372,64 +451,8 @@ public class MainActivity extends AppCompatActivity
 		  }catch(Exception e){
 			print(e+"  initTabLayout&ViewPager");
 		  }
-        try{
 
 
-			mRecyclerview=(RecyclerView)Post.findViewById(R.id.main_post_listview);
-            mRecyclerview.setEnabled(true);
-            mRecyclerview.setFocusable(true);
-
-
-            LinearLayoutManager Manager = new LinearLayoutManager(this); 		
-            Manager.setOrientation(LinearLayoutManager.VERTICAL);
-            mRecyclerview.setLayoutManager(Manager); 
-            mRecyclerview.setAdapter((MTA=new MainTieAdapter(this)));
-            mRecyclerview.setItemAnimator(new DefaultItemAnimator());
-
-
-            mDrawerLayout=(DrawerLayout) findViewById(R.id.drawerlayout);
-            mToolbar=(Toolbar) findViewById(R.id.toolbar);
-            mNavigationView=(NavigationView) findViewById(R.id.navigationview);
-            mNavigationView.inflateHeaderView(R.layout.activity_main_nv_menu);
-            mNavigationView.inflateMenu(R.menu.menu_main_nav);
-            NavigationViewListener(mNavigationView);
-            setSupportActionBar(mToolbar);
-
-            ActionBarDrawerToggle mActionbarDrawerToggle= new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open,R.string.close);
-            mActionbarDrawerToggle.syncState();
-            mDrawerLayout.setDrawerListener(mActionbarDrawerToggle);
-
-            fab=(FloatingActionButton)Post.findViewById(R.id.main_fab_writePost);
-
-            fab .setOnClickListener(new SendTie());
-
-
-            refresh=(SwipeRefreshLayout)Post.findViewById(R.id.main_refresh);	
-            refresh.setProgressViewOffset(false,0,new CommonUtil().dip2px(24f));
-            refresh.setOnRefreshListener(new SwipeRefresh());
-            //refresh.setProgressBackgronv_namedColor(0xFFFFFFFF);
-            refresh.setColorSchemeResources(R.color.orange,R.color.green,R.color.blue); 
-            //refresh.setColorSchemeResources(android.R.colorholo_blue_ligh,android.R.color.holo_red_light,android.R.color.holo_orange_light,android.R.color.holo_green_light);
-            //refresh.setRefreshing(true);
-            refresh.setSize(SwipeRefreshLayout.DEFAULT);
-			read(false);
-
-          }catch(Exception e){
-            print("\nError:"+e);
-          }
-        try{
-            mHeaderLayout=mNavigationView.getHeaderView(0);
-            nv_name=(TextView)mHeaderLayout.findViewById(R.id.main_nav_name);
-            nv_header=(CircleImageView)mHeaderLayout.findViewById(R.id.main_nav_header);
-            nv_header.setOnClickListener(new OnClickListener(){
-                public void onClick(View v){
-                    详情();
-                  }
-              });
-            refreshUser();
-          }catch(Exception e){
-            print("Error:"+e);
-          }
 
       }
 
@@ -538,25 +561,25 @@ public class MainActivity extends AppCompatActivity
 			@Override
 			public boolean onNavigationItemSelected(MenuItem p1){
 				switch(p1.getItemId()){
-			
+
 					case R.id.关于:
 					  startActivity(new Intent(ctx,AboutActivity.class));
-					//  new Intent()
-					/*
-					  new AlertDialog.Builder(ctx)
-					  .setPositiveButton("加入群",new DialogInterface.OnClickListener(){
-						  @Override
-						  public void onClick(DialogInterface p1,int p2){
-							  Uri uri = Uri.parse("http://jq.qq.com/?_wv=1027&k=41AHK2k");
-							  Intent intent = new Intent(Intent.ACTION_VIEW,uri);
-							  startActivity(intent);
-							}
-						}
-					  )
-					  .setNegativeButton("关闭",null)
-					  .setView(R.layout.content_about)
-					  .setCancelable(false)
-					  .show();*/
+					  //  new Intent()
+					  /*
+					   new AlertDialog.Builder(ctx)
+					   .setPositiveButton("加入群",new DialogInterface.OnClickListener(){
+					   @Override
+					   public void onClick(DialogInterface p1,int p2){
+					   Uri uri = Uri.parse("http://jq.qq.com/?_wv=1027&k=41AHK2k");
+					   Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+					   startActivity(intent);
+					   }
+					   }
+					   )
+					   .setNegativeButton("关闭",null)
+					   .setView(R.layout.content_about)
+					   .setCancelable(false)
+					   .show();*/
 					  break;
 
 					  //

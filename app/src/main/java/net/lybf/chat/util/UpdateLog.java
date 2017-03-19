@@ -46,10 +46,13 @@ public class UpdateLog
 				byte[] by=new byte[1024*1024];
 				in.read(by);
 				rootjson=new JSONArray(new String(by));
-			  }catch(Exception e){}
+			  }catch(Exception e){
+				print(e);
+			  }
 		  }else{
 			try{
 				rootjson=new JSONArray("[]");
+				save();
 			  }catch(Exception e){
 				print(e);
 			  }
@@ -123,7 +126,7 @@ public class UpdateLog
 	private boolean isExists(update up){
 		int j=count();
 		for(int i=0;i<j;i++){
-			if(up==new Gson().fromJson(rootjson.opt(i).toString(),update.class)
+			if(up.equals(new Gson().fromJson(rootjson.opt(i).toString(),update.class))
 			||new Gson().toJson(up).equals(rootjson.opt(i)))
 			  return true;
 		  }
@@ -139,23 +142,37 @@ public class UpdateLog
 			if(order){
 				int l=count();
 				for(int i=0;i<l;i++){
-					JSONObject temp;
-					update up=new Gson().fromJson((temp=new JSONObject(rootjson.opt(i).toString())).toString(),update.class);
-					for(int p=0;p<l;p++){
-						JSONObject temp2;
-						update po=new Gson().fromJson((temp2=new JSONObject(rootjson.opt(p).toString())).toString(),update.class);
-						SimpleDateFormat da=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						try{
-							Date d2=da.parse(up.getCreatedAt());
-							Date d3=da.parse(po.getCreatedAt());
-							if(d3.getTime()-d2.getTime()<0){
-							  }else{
-								rootjson.remove(i);
-								rootjson.put(i,temp2);
+					try{
+						JSONObject temp;
+						update up=new Gson().fromJson((temp=new JSONObject(""+rootjson.opt(i))).toString(),update.class);
+						for(int p=0;p<l;p++){
+							JSONObject temp2;
+							update po=new Gson().fromJson((temp2=new JSONObject(""+rootjson.opt(p))).toString(),update.class);
+
+							boolean remove=false;
+							if(isExists(po)  &&i!=p){
 								rootjson.remove(p);
-								rootjson.put(p,temp);
+								remove=true;
+							  }	
+							if(!remove){
+								SimpleDateFormat da=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+								try{
+									Date d2=da.parse(up.getCreatedAt());
+									Date d3=da.parse(po.getCreatedAt());
+									if(d3.getTime()-d2.getTime()<0){
+									  }else{
+										rootjson.remove(i);
+										rootjson.put(i,temp2);
+										rootjson.remove(p);
+										rootjson.put(p,temp);
+									  }
+								  }catch(Exception e){
+									print(e);
+								  }
 							  }
-						  }catch(Exception e){}
+						  }
+					  }catch(Exception e){
+						print(e);
 					  }
 				  }
 			  }

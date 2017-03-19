@@ -21,20 +21,4 @@
 
 	</android.support.v4.widget.SwipeRefreshLayout>
 
-	<android.support.design.widget.FloatingActionButton
-		android:id="@+id/main_fab_writePost"
-		android:layout_width="60dp"
-		android:layout_height="60dp"
-		android:layout_margin="4dp"
-		android:src="@drawable/ic_edit"
-		android:layout_gravity="bottom|right"
-		app:layout_anchor="@id/main_post_listview"
-		app:layout_anchorGravity="bottom|right|end"
-		app:elevation="6dp"
-		app:fabSize="normal"
-		app:pressedTranslationZ="8dp"
-		app:backgroundTint="@color/accent"
-		app:rippleColor="@color/primary"
-		android:paddingRight="20dp"
-		android:paddingBottom="20dp"/>
 </android.support.design.widget.CoordinatorLayout>
