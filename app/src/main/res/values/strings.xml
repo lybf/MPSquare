@@ -26,7 +26,6 @@
 	<string name="sign_aginEnterPassword">再次输入你的密码</string>
 
     <string name="signup">注册</string>
-    <string name="login">登陆</string>
 
     <string name="settings">设置</string>
 </resources>

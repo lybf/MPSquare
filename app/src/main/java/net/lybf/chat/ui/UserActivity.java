@@ -48,109 +48,118 @@ import net.lybf.chat.system.ActivityResultCode;
 import android.support.design.widget.TextInputEditText;
 import android.widget.EditText;
 import android.support.design.widget.TextInputLayout;
+import net.lybf.chat.MainApplication;
 
 public class UserActivity extends AppCompatActivity
   {
 
     private settings set;
 
-	private ImageButton UserHeader;
+    private ImageButton UserHeader;
 
-	private CheckBox EmailVerify;
+    private CheckBox EmailVerify;
 
-	private Context ctx;
+    private Context ctx;
 
-	private boolean UserInfoChange=false;
+    private boolean UserInfoChange=false;
+
+    private MainApplication app;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        set=new settings();
-		ctx=this;
-		if(set.isDark()){
+        app=new MainApplication();
+        set=app.set;
+        ctx=this;
+        if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{
-			setTheme(R.style.LightTheme);
-		  }
+            setTheme(R.style.LightTheme);
+          }
         setContentView(R.layout.activity_user);
         initView();
       }
 
-	@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.menu_user,menu);
         return true;
       }
 
-	@Override
-	public void onBackPressed(){
-		if(UserInfoChange)
-		  setResult(ActivityResultCode.USER_REFRESH);
-		finish();
-		super.onBackPressed();
-	  }
+    @Override
+    public void onBackPressed(){
+        if(UserInfoChange)
+          setResult(ActivityResultCode.USER_REFRESH);
+        //finish();
+        super.onBackPressed();
+      }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case android.R.id.home:
-			  if(UserInfoChange){
-				  use=null;
-				  setResult(ActivityResultCode.USER_REFRESH);
-				}
+              if(UserInfoChange){
+                  use=null;
+                  setResult(ActivityResultCode.USER_REFRESH);
+                }
               this.finish();
               break;
 
-			case R.id.user_refresh:
-			  if(use!=null)
-				use.update(new UpdateListener(){
-					@Override
-					public void done(BmobException p1){
-						if(p1==null){
-							refreshData();
-							Snackbar.make(UserEmail,"刷新成功",Snackbar.LENGTH_SHORT).show();
-						  }else{
-							ErrorMessage msg=new ErrorMessage();
-							new AlertDialog.Builder(ctx).setMessage(msg.getMessage(p1.getErrorCode()))
-							.setPositiveButton("确定",null)
-							.show();
-						  }
-					  }
-				  });
-			  break;
-			case R.id.user_logout:
-			  new AlertDialog.Builder(ctx)
-			  .setTitle("退出登录？")
-			  .setMessage("你确定要退出登录？")
-			  .setPositiveButton("是",new DialogInterface.OnClickListener(){
-				  @Override
-				  public void onClick(DialogInterface p1,int p2){
+            case R.id.user_refresh:
+              if(use!=null)
+                use.update(new UpdateListener(){
+                    @Override
+                    public void done(BmobException p1){
+                        if(p1==null){
+                            refreshData();
+                            Snackbar.make(UserEmail,"刷新成功",Snackbar.LENGTH_SHORT).show();
+                          }else{
+                            ErrorMessage msg=new ErrorMessage();
+                            new AlertDialog.Builder(ctx).setMessage(msg.getMessage(p1.getErrorCode()))
+                            .setPositiveButton("确定",null)
+                            .show();
+                          }
+                      }
+                  });
+              break;
 
-					  use.logOut();
-					  use=null;
-					  UserInfoChange=true;
-					  final Snackbar snackbar = Snackbar.make(UserEmail,"退出成功",Snackbar.LENGTH_LONG); 
-					  snackbar.setAction("关闭",new View.OnClickListener() { 
-						  @Override public void onClick(View v){ 
-							  snackbar.dismiss();
-							} 
-						}
-					  );  
-					  snackbar.show();
-					  refreshData();
-					}
-				}
-			  )
-			  .setNegativeButton("否",null)
-			  .setCancelable(false)
-			  .show();
-			  break;
+            case R.id.user_logout:
+              new AlertDialog.Builder(ctx)
+              .setTitle("退出登录？")
+              .setMessage("你确定要退出登录？")
+              .setPositiveButton("是",new DialogInterface.OnClickListener(){
+                  @Override
+                  public void onClick(DialogInterface p1,int p2){
+
+                      use.logOut();
+                      use=null;
+                      UserInfoChange=true;
+                      final Snackbar snackbar = Snackbar.make(UserEmail,"退出成功",Snackbar.LENGTH_LONG); 
+                      snackbar.setAction("关闭",new View.OnClickListener() { 
+                          @Override public void onClick(View v){ 
+                              snackbar.dismiss();
+                            } 
+                        }
+                      );  
+                      snackbar.show();
+                      UserActivity.this.setResult(ActivityResultCode.USER_REFRESH);
+                     // setResult(ActivityResultCode.USER_REFRESH);
+                      
+                      UserActivity.this.finish();
+                      //  refreshData();
+                    }
+                }
+              )
+              .setNegativeButton("否",null)
+              .setCancelable(false)
+              .show();
+              break;
           }
         return super.onOptionsItemSelected(item);
       }
 
 
-	/*用户名*/
+    /*用户名*/
     private TextView UserName;
     private TextView UserEmail;
     private TextView UserDescribe;
@@ -158,155 +167,155 @@ public class UserActivity extends AppCompatActivity
     private MyUser use;
     private void initView(){
         use=BmobUser.getCurrentUser(MyUser.class);
-		UserHeader=(ImageButton)findViewById(R.id.user_header);
+        UserHeader=(ImageButton)findViewById(R.id.user_header);
 
         UserName=(TextView)findViewById(R.id.user_name);
         UserEmail=(TextView)findViewById(R.id.user_email);
 
-		UserDescribe=(TextView)findViewById(R.id.user_describe);
+        UserDescribe=(TextView)findViewById(R.id.user_describe);
 
         bar=(Toolbar)findViewById(R.id.toolbar_user);
         setSupportActionBar(bar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		EmailVerify=(CheckBox)findViewById(R.id.user_emailVerify);
+        EmailVerify=(CheckBox)findViewById(R.id.user_emailVerify);
         refreshData();
       }
 
 
 
 
-	public void refreshData(){
-		try{
-			if(use!=null){
-				UserName.setText(use.getUsername());
-				UserEmail.setText(use.getEmail());
-				UserDescribe.setText(use.getdescribe());
+    public void refreshData(){
+        try{
+            if(use!=null){
+                UserName.setText(use.getUsername());
+                UserEmail.setText(use.getEmail());
+                UserDescribe.setText(use.getdescribe());
 
-				if(use.getEmail()!=null&&!use.getEmail().equals("")){
-					boolean emailverify = false;
-					try{
-						emailverify=use.getEmailVerified();
-					  }catch(Exception e){
-						new Utils().print(this.getClass(),e);
-					  }
-					if(emailverify){
-						EmailVerify.setChecked(true);
-						EmailVerify.setEnabled(false);
-					  }else{
-						EmailVerify.setEnabled(false);
-						UserEmail.setOnClickListener(new OnClickListener(){
-							@Override
-							public void onClick(View p1){
-								AlertDialog.Builder dialog=new AlertDialog.Builder(ctx);
-								dialog.setMessage("邮箱:"+use.getEmail()+"没有验证成功，是否重新验证？\n验证后享受更好的体验，如:\n邮箱+密码登录\n邮箱重置密码等");
-								dialog.setPositiveButton("确定",new DialogInterface.OnClickListener(){
-									@Override
-									public void onClick(DialogInterface p1,int p2){
-										use.requestEmailVerify(use.getEmail(),new UpdateListener(){
-											@Override
-											public void done(BmobException p1){
-												if(p1==null){
-													Snackbar.make(UserEmail,"已发送邮件，请查收",Snackbar.LENGTH_SHORT).show();
-												  }else{
-													ErrorMessage msg=new ErrorMessage();
-													new AlertDialog.Builder(ctx).setMessage(msg.getMessage(p1.getErrorCode()))
-													.setPositiveButton("确定",null)
-													.show();
+                if(use.getEmail()!=null&&!use.getEmail().equals("")){
+                    boolean emailverify = false;
+                    try{
+                        emailverify=use.getEmailVerified();
+                      }catch(Exception e){
+                        new Utils().print(this.getClass(),e);
+                      }
+                    if(emailverify){
+                        EmailVerify.setChecked(true);
+                        EmailVerify.setEnabled(false);
+                      }else{
+                        EmailVerify.setEnabled(false);
+                        UserEmail.setOnClickListener(new OnClickListener(){
+                            @Override
+                            public void onClick(View p1){
+                                AlertDialog.Builder dialog=new AlertDialog.Builder(ctx);
+                                dialog.setMessage("邮箱:"+use.getEmail()+"没有验证成功，是否重新验证？\n验证后享受更好的体验，如:\n邮箱+密码登录\n邮箱重置密码等");
+                                dialog.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface p1,int p2){
+                                        use.requestEmailVerify(use.getEmail(),new UpdateListener(){
+                                            @Override
+                                            public void done(BmobException p1){
+                                                if(p1==null){
+                                                    Snackbar.make(UserEmail,"已发送邮件，请查收",Snackbar.LENGTH_SHORT).show();
+                                                  }else{
+                                                    ErrorMessage msg=new ErrorMessage();
+                                                    new AlertDialog.Builder(ctx).setMessage(msg.getMessage(p1.getErrorCode()))
+                                                    .setPositiveButton("确定",null)
+                                                    .show();
 
-												  }
-											  }
-										  });
+                                                  }
+                                              }
+                                          });
 
-									  }			
-								  });
+                                      }            
+                                  });
 
-								dialog.setNegativeButton("关闭",null);
-								dialog.show();
-							  }
-						  });
+                                dialog.setNegativeButton("关闭",null);
+                                dialog.show();
+                              }
+                          });
 
-					  }
+                      }
 
-				  }else{
-					UserEmail.setText("未绑定邮箱，点击绑定");
-					UserEmail.setOnClickListener(new OnClickListener(){
-						@Override
-						public void onClick(View p1){
-							TextInputLayout til=new TextInputLayout(ctx);
-							til.setHint("输入您的邮箱");
-							final EditText in=new EditText(ctx);
-							til.addView(in);
-							//in.setHint("输入您的邮箱");
-							new AlertDialog.Builder(ctx)
-							.setView(til)
-							.setPositiveButton("确定",new DialogInterface.OnClickListener(){
-								@Override
-								public void onClick(DialogInterface p1,int p2){
-									use.requestEmailVerify(in.getText().toString(),new UpdateListener(){
-										@Override
-										public void done(BmobException p1){
-											if(p1==null){
-												Snackbar.make(UserEmail,"请查收邮件",Snackbar.LENGTH_SHORT).show();
-											  }else{
-												new AlertDialog.Builder(ctx).setMessage("错误信息:"+new ErrorMessage().getMessage(p1.getErrorCode()))
-												.setPositiveButton("确定",null)
-												.show();
-											  }
-										  }  
-									  });
-								  }
-							  }).show();
-						  }
-					  });
+                  }else{
+                    UserEmail.setText("未绑定邮箱，点击绑定");
+                    UserEmail.setOnClickListener(new OnClickListener(){
+                        @Override
+                        public void onClick(View p1){
+                            TextInputLayout til=new TextInputLayout(ctx);
+                            til.setHint("输入您的邮箱");
+                            final EditText in=new EditText(ctx);
+                            til.addView(in);
+                            //in.setHint("输入您的邮箱");
+                            new AlertDialog.Builder(ctx)
+                            .setView(til)
+                            .setPositiveButton("确定",new DialogInterface.OnClickListener(){
+                                @Override
+                                public void onClick(DialogInterface p1,int p2){
+                                    use.requestEmailVerify(in.getText().toString(),new UpdateListener(){
+                                        @Override
+                                        public void done(BmobException p1){
+                                            if(p1==null){
+                                                Snackbar.make(UserEmail,"请查收邮件",Snackbar.LENGTH_SHORT).show();
+                                              }else{
+                                                new AlertDialog.Builder(ctx).setMessage("错误信息:"+new ErrorMessage().getMessage(p1.getErrorCode()))
+                                                .setPositiveButton("确定",null)
+                                                .show();
+                                              }
+                                          }  
+                                      });
+                                  }
+                              }).show();
+                          }
+                      });
 
-				  }
-
-
-				BmobFile icon=use.getIcon();
-				final String ic=icon.getFilename();
-				new Utils().print("图片名:"+ic);
-				final File f=new File("/sdcard/lybf/MPSquare/.user/"+use.getObjectId()+"/"+ic);
-				new Utils().print("文件路径:"+f.getAbsolutePath());
-				if(!f.getParentFile().exists())
-				  f.getParentFile().mkdirs();
-				if(f.exists()){
-					UserHeader.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
-				  }else{
-					icon.download(f.getAbsoluteFile(),new DownloadFileListener(){
-						@Override
-						public void done(String p1,BmobException p2){
-							if(p2==null){
-								UserHeader.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
-							  }else{
-								System.out. println("下载失败:"+p2);
-							  }
-						  }
-						@Override
-						public void onProgress(Integer p1,long p2){
-							new Utils().print("下载:"+ic+"到:"+f.getAbsolutePath()+"   进度:"+p1);
-						  }   
-					  });
-				  }
-			  }else{
-				UserName.setText("未登录");
-				UserEmail.setText("");
-				UserDescribe.setText("");
-				EmailVerify.setChecked(false);
-				EmailVerify.setEnabled(false);
-				UserHeader.setImageBitmap(		
-				BitmapFactory.decodeResource(getResources(),
-				R.drawable.ic_launcher
-				));
-			  }
-
-		  }catch(Exception e){
-			new Utils().print("错误。"+e);
-		  }
-	  }
+                  }
 
 
-	public void 设置头像(View v){
+                BmobFile icon=use.getIcon();
+                final String ic=icon.getFilename();
+                new Utils().print("图片名:"+ic);
+                final File f=new File("/sdcard/lybf/MPSquare/.user/"+use.getObjectId()+"/"+ic);
+                new Utils().print("文件路径:"+f.getAbsolutePath());
+                if(!f.getParentFile().exists())
+                  f.getParentFile().mkdirs();
+                if(f.exists()){
+                    UserHeader.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
+                  }else{
+                    icon.download(f.getAbsoluteFile(),new DownloadFileListener(){
+                        @Override
+                        public void done(String p1,BmobException p2){
+                            if(p2==null){
+                                UserHeader.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
+                              }else{
+                                System.out. println("下载失败:"+p2);
+                              }
+                          }
+                        @Override
+                        public void onProgress(Integer p1,long p2){
+                            new Utils().print("下载:"+ic+"到:"+f.getAbsolutePath()+"   进度:"+p1);
+                          }   
+                      });
+                  }
+              }else{
+                UserName.setText("未登录");
+                UserEmail.setText("");
+                UserDescribe.setText("");
+                EmailVerify.setChecked(false);
+                EmailVerify.setEnabled(false);
+                UserHeader.setImageBitmap(        
+                BitmapFactory.decodeResource(getResources(),
+                R.drawable.ic_launcher
+                ));
+              }
+
+          }catch(Exception e){
+            new Utils().print("错误。"+e);
+          }
+      }
+
+
+    public void 设置头像(View v){
         Intent  intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -348,7 +357,7 @@ public class UserActivity extends AppCompatActivity
                 @Override
                 public void done(BmobException p){
                     if(p==null){
-						new Utils().print(this.getClass(),"成功");
+                        new Utils().print(this.getClass(),"成功");
                       }else{
                         alert("错误","状态码："+p.getErrorCode()+"\n错误信息:\n"+p.getMessage());
                       }

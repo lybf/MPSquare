@@ -33,7 +33,7 @@ public class UpdateLog
 	public UpdateLog(){
 		this.update=new update();
 		refresh();
-		order(true);
+		//order(true);
 	  }
 
 	public UpdateLog refresh(){
@@ -61,13 +61,13 @@ public class UpdateLog
 	  }
 
 	public List<update> getAllUpdateLog(){
-		List list=new ArrayList();
+		List<update> list=new ArrayList<update>();
 		int j=rootjson.length();
 		for(int i=0;i<j;i++){
 			try{
 				JSONObject obj=new JSONObject(rootjson.get(i).toString());
-				Number num=(Number) obj.get("showType");
-				list.add(((update)new Gson().fromJson(rootjson.get(i).toString(),update.class)).setShowType(num));
+				//	Number num=(Number) obj.get("showType");
+				list.add((new Gson().fromJson(rootjson.get(i).toString(),update.class)));
 			  }catch(Exception e){
 				print(e);
 			  }
@@ -126,8 +126,8 @@ public class UpdateLog
 	private boolean isExists(update up){
 		int j=count();
 		for(int i=0;i<j;i++){
-			if(up.equals(new Gson().fromJson(rootjson.opt(i).toString(),update.class))
-			||new Gson().toJson(up).equals(rootjson.opt(i)))
+			update u=new Gson().fromJson(rootjson.opt(i).toString(),update.class);
+			if(up.equals(u)||up.getObjectId().equals(u.getObjectId()))
 			  return true;
 		  }
 		return false;
@@ -150,10 +150,23 @@ public class UpdateLog
 							update po=new Gson().fromJson((temp2=new JSONObject(""+rootjson.opt(p))).toString(),update.class);
 
 							boolean remove=false;
-							if(isExists(po)  &&i!=p){
-								rootjson.remove(p);
-								remove=true;
-							  }	
+							if(isExists(po)&&i!=p){
+								SimpleDateFormat da=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+								try{
+									Date d2=da.parse(up.getCreatedAt());
+									Date d3=da.parse(po.getCreatedAt());
+									if(d2.getTime()>d3.getTime()){
+										rootjson.remove(p);
+									  }else{
+										rootjson.remove(i);
+									  }
+									remove=true;
+								  }catch(Exception e){				
+									print(e);
+								  }
+							  }else{
+								remove=false;
+							  }
 							if(!remove){
 								SimpleDateFormat da=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 								try{

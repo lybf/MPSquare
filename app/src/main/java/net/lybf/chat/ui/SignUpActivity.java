@@ -1,39 +1,39 @@
 package net.lybf.chat.ui;
-import android.support.v7.app.AppCompatActivity;
-import cn.bmob.v3.BmobUser;
 import android.os.Bundle;
-import net.lybf.chat.R;
-import cn.bmob.v3.exception.BmobException;
-import android.support.v7.app.AlertDialog;
-import android.content.DialogInterface;
-import net.lybf.chat.bmob.ErrorMessage;
-import cn.bmob.v3.listener.SaveListener;
-import android.support.v7.widget.Toolbar;
-import android.widget.EditText;
-import android.view.MenuItem;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import com.gc.materialdesign.views.ButtonRectangle;
-import android.view.View.OnClickListener;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import android.support.design.widget.TextInputLayout;
-import android.widget.Toast;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+import com.gc.materialdesign.views.ButtonRectangle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import net.lybf.chat.MainApplication;
+import net.lybf.chat.R;
+import net.lybf.chat.bmob.ErrorMessage;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.system.settings;
-import android.text.TextUtils;
 
 public class SignUpActivity extends AppCompatActivity
   {
 
     private settings set;
 
+	private MainApplication app;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        set=new settings();
+		app=new MainApplication();
+        set=app.set;
 		if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{

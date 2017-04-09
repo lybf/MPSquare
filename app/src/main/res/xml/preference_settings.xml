@@ -11,7 +11,7 @@
 		<CheckBoxPreference
             android:title="夜间模式"
             android:key="CheckBox_DarkTheme"
-            android:summary="勾选后开启夜间模式，重启有效"
+            android:summary="勾选后开启夜间模式"
             android:defaultValue="false"/>
     </PreferenceCategory>
 

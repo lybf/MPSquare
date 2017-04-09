@@ -4,104 +4,139 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import com.google.gson.Gson;
+import org.json.JSONException;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
 
 public class update
   {
-	public static final Number TYPE_HTML=0;
-	public static final Number TYPE_TEXT=1;
-	private Number showType;
-	private String content;
-	private String apkurl;
-	private Number versionCode;
-	private String versionName;
-	private Number level;
+    public static final Number TYPE_HTML=0;
+    public static final Number TYPE_TEXT=1;
 
-	private String createdAt;
+    private String objectid;
+    private Number showType;
+    private String content;
+    private String apkurl;
+    private Number versionCode;
+    private String versionName;
+    private Number level;
 
-	private String updatedAt;
+    private String createdAt;
 
-	private String title;
+    private String updatedAt;
 
-	public update setTitle(String title){
-		this.title=title;
-		return this;
-	  }
-	
-	public String getTitle(){
-		return this.title;
-	  }
+    private String title;
 
-	public update setShowType(Number i){
-		this.showType=i;
-		return this;
-	  }
+    public update setObjecId(String Id){
+        this.objectid=Id;
+        return this;
+      }
 
-	public Number getShowType(){
-		return this.showType;
-	  }
+    public String getObjectId(){
+        return this.objectid;
+      }
 
-	public update setContent(String content){
-		this.content=content;
-		return this;
-	  }
+    public update setTitle(String title){
+        this.title=title;
+        return this;
+      }
 
-	public String getContent(){
-		return this.content;
-	  }
+    public String getTitle(){
+        return this.title;
+      }
 
-	public update setApkUrl(String url){
-		this.apkurl=url;
-		return this;
-	  }
+    public update setShowType(Number i){
+        this.showType=i;
+        return this;
+      }
 
-	public String getApkUrl(){
-		return this.apkurl;
-	  }
+    public Number getShowType(){
+        return this.showType;
+      }
 
-	public update setVersionCode(Number num){
-		this.versionCode=num;
-		return this;
-	  }
+    public update setContent(String content){
+        this.content=content;
+        return this;
+      }
 
-	public Number getVersionCode(){
-		return this.versionCode;
-	  }
+    public String getContent(){
+        return this.content;
+      }
 
-	public update setVersionName(String name){
-		this.versionName=name;
-		return this;
-	  }
+    public update setApkUrl(String url){
+        this.apkurl=url;
+        return this;
+      }
 
-	public String getVersionName(){
-		return this.versionName;
-	  }
+    public String getApkUrl(){
+        return this.apkurl;
+      }
 
-	public update setLevel(Number num){
-		this.level=num;
-		return this;
-	  }
+    public update setVersionCode(Number num){
+        this.versionCode=num;
+        return this;
+      }
 
-	public Number getLevel(){
-		return this.level;
-	  }
+    public Number getVersionCode(){
+        return this.versionCode;
+      }
+
+    public update setVersionName(String name){
+        this.versionName=name;
+        return this;
+      }
+
+    public String getVersionName(){
+        return this.versionName;
+      }
+
+    public update setLevel(Number num){
+        this.level=num;
+        return this;
+      }
+
+    public Number getLevel(){
+        return this.level;
+      }
 
 
-	public update setCreatedAt(String created){
-		this.createdAt=created;
-		return this;
-	  }
-	public String getCreatedAt(){
-		return this.createdAt;
-	  }
+    public update setCreatedAt(String created){
+        this.createdAt=created;
+        return this;
+      }
+    public String getCreatedAt(){
+        return this.createdAt;
+      }
 
 
 
-	public update setUpdatedAt(String update){
-		this.updatedAt=update;
-		return this;
-	  }
-	public String getUpdatedAt(){
-		return this.updatedAt;
-	  }
+    public update setUpdatedAt(String update){
+        this.updatedAt=update;
+        return this;
+      }
 
+    public String getUpdatedAt(){
+        return this.updatedAt;
+      }
+
+    public JSONObject toJson(){
+        String str=new Gson().toJson(this);
+        JSONObject json = null;
+        try{
+            json=new JSONObject(str);
+          }catch(JSONException e){
+            
+          }
+        return json;
+      }
+
+    public String toString(){
+        Gson gson3 = new GsonBuilder().setPrettyPrinting().create();
+        JsonParser jp = new JsonParser();
+        JsonElement je = jp.parse(""+toJson());
+        String format= gson3.toJson(je);
+        return format;
+      }
   }

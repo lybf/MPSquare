@@ -72,28 +72,29 @@ import net.lybf.chat.util.CommentCount;
 import org.json.JSONObject;
 import net.lybf.chat.system.ActivityResultCode;
 import android.opengl.Visibility;
+import net.lybf.chat.MainApplication;
 
 public class MainActivity extends AppCompatActivity
   {
 
 
     //public static String APPID ="4eaad1f155b7ed751472ed23e05bf084";
-	//Tabs
-	private String[] tabs={
-	  "主页",
-	  "社区"};
-	//界面
-	private List<View> mContent=new ArrayList<View>();
+    //Tabs
+    private String[] tabs={
+      "主页",
+      "社区"};
+    //界面
+    private List<View> mContent=new ArrayList<View>();
 
-	//社区
-	private View Post;
-	//主页
-	private View MainPage;
+    //社区
+    private View Post;
+    //主页
+    private View MainPage;
 
-	//页卡
-	private ViewPager mViewPager;
-	//选项卡
-	private TabLayout mTabLayout;
+    //页卡
+    private ViewPager mViewPager;
+    //选项卡
+    private TabLayout mTabLayout;
 
     //Context
     private Context ctx;
@@ -120,35 +121,48 @@ public class MainActivity extends AppCompatActivity
     //图片工具
     //private BitMapTools bitmaptools;
     private int 加载信息条数=30;
-    private Bitmap tu;
-    private boolean first=true;
-
     private Network net;
+    //配置类
     private settings set;
 
-	//RecyclerView
-	private RecyclerView mRecyclerview;
+    //RecyclerView
+    private RecyclerView mRecyclerview;
 
-	private MainPagerAdaptet mViewPagerAdapter;
+    private MainPagerAdaptet mViewPagerAdapter;
 
-	private boolean FIRST_READ=true;;
+    private boolean FIRST_READ=true;;
 
-	private boolean REFRESH_HINT=true;
+    private boolean REFRESH_HINT=true;
+
+    private Bundle bundle;
+
+    private MainApplication app;
     @Override
     public void onCreate(Bundle save){
         super.onCreate(save);
-		//getSupportActionBar().hide();
-		ctx=this;
-        set=new settings();
-		if(set.isDark()){
-			setTheme(R.style.DarkTheme);
-		  }else{
-			setTheme(R.style.LightTheme);
-		  }
+        bundle=save;
+        //getSupportActionBar().hide();
+        ctx=this;
+        app=new MainApplication();
+        set=app.set;
+        initViews();
+      }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+      }
+
+    public void initViews(){
+        if(set.isDark()){
+            setTheme(R.style.DarkTheme);
+          }else{
+            setTheme(R.style.LightTheme);
+          }
         setContentView(R.layout.activity_main);
         try{
             if(19>=Build.VERSION.SDK_INT){
-				//      setStatusBarTint(R.color.accent);
+                //      setStatusBarTint(R.color.accent);
               }
           }catch(Exception e){
             print(e);
@@ -169,16 +183,13 @@ public class MainActivity extends AppCompatActivity
         .show();
       }
 
-    private class ExitApp implements DialogInterface.OnClickListener
-      {
+    private class ExitApp implements DialogInterface.OnClickListener{
         @Override
         public void onClick(DialogInterface p1,int p2){
             MainActivity.this.finish();
           }
-
       }
 
-//右上角菜单  CteateMenu
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater=getMenuInflater();
@@ -198,30 +209,54 @@ public class MainActivity extends AppCompatActivity
               .setTitle("设备信息")
               .setMessage(str)
               .setPositiveButton("复制",new DialogInterface.OnClickListener(){
-				  @Override
-				  public void onClick(DialogInterface p1,int p2){
-					  Utils u=new Utils();
-					  final String str=u.getDeviceInfo();
-					  ClipboardManager clip=(ClipboardManager)getSystemService(ctx.CLIPBOARD_SERVICE);        
-					  clip.setText(str);
-					}
-				}
-			  )
+                  @Override
+                  public void onClick(DialogInterface p1,int p2){
+                      Utils u=new Utils();
+                      final String str=u.getDeviceInfo();
+                      ClipboardManager clip=(ClipboardManager)getSystemService(ctx.CLIPBOARD_SERVICE);        
+                      clip.setText(str);
+                    }
+                }
+              )
               .setCancelable(false)
               .setNegativeButton("关闭",null)
-              .show();			
+              .show();            
               break;
           }
         return super.onOptionsItemSelected(item);
       }
 
+
+
+
     @Override
     public void onActivityResult(int requestCode,int resultCode,Intent data){
         read(true);
-        if(requestCode==0&&resultCode==ActivityResultCode.USER_REFRESH){
-			use=null;
-            refreshUser();
+        if(requestCode==0){
+
+            switch(resultCode){
+                case ActivityResultCode.USER_REFRESH:
+                  use=null;
+                  refreshUser();
+                  break;
+
+                case ActivityResultCode.SETTINGS_CHANGE:
+                  print("SettingsChange");
+                  recreate();
+                  //initViews();
+                  break;
+
+                case ActivityResultCode.USER_LOGIN:
+                  recreate();
+                  break;
+
+                case ActivityResultCode.USER_LOGOUT:
+                  recreate();
+                  break;
+
+              }
           }
+
         super.onActivityResult(requestCode,resultCode,data);
       }
 
@@ -259,7 +294,7 @@ public class MainActivity extends AppCompatActivity
                     final String ic=icon.getFilename();
                     print("图片名:"+ic);
                     final File f=new File("/sdcard/lybf/MPSquare/.user/"+use.getObjectId()+"/"+ic);
-					print("文件路径:"+f.getAbsolutePath());
+                    print("文件路径:"+f.getAbsolutePath());
                     if(!f.getParentFile().exists())
                       f.getParentFile().mkdirs();
                     if(f.exists()){
@@ -276,7 +311,7 @@ public class MainActivity extends AppCompatActivity
                               }
                             @Override
                             public void onProgress(Integer p1,long p2){
-								print("下载:"+ic+"到:"+f.getAbsolutePath()+"   进度:"+p1);
+                                print("下载:"+ic+"到:"+f.getAbsolutePath()+"   进度:"+p1);
                               }   
                           });
                       }
@@ -293,9 +328,9 @@ public class MainActivity extends AppCompatActivity
                   print("名字为空");
               }else{
                 if(nv_name!=null){
-					nv_name.setText("未登录，点击头像以登录");
-					nv_header.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.ic_user_header));
-				  }
+                    nv_name.setText("未登录，点击头像以登录");
+                    nv_header.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.ic_user_header));
+                  }
               }
 
 
@@ -321,7 +356,7 @@ public class MainActivity extends AppCompatActivity
         .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(title)
         .setContentText(text)
-		.setAutoCancel(true)
+        .setAutoCancel(true)
         .setDefaults(Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE)
         .setContentIntent(Pi);
         // 发送通知
@@ -334,123 +369,126 @@ public class MainActivity extends AppCompatActivity
 
 
     private void initView(){
-	    mViewPager=(ViewPager)findViewById(R.id.main_viewpage);
-		mTabLayout=(TabLayout)findViewById(R.id.main_tabs);
-		Post=LayoutInflater.from(this).inflate(R.layout.content_main_posts,null);
-		MainPage=new View(this);
-		mContent.add(Post);
-		mContent.add(MainPage);
-		mViewPagerAdapter=new MainPagerAdaptet(tabs,mContent);
-		use=BmobUser.getCurrentUser(MyUser.class);
-		net=new Network(this);
+        mViewPager=(ViewPager)findViewById(R.id.main_viewpage);
+        mTabLayout=(TabLayout)findViewById(R.id.main_tabs);
+        Post=LayoutInflater.from(this).inflate(R.layout.content_main_posts,null);
+        MainPage=new View(this);
+        mContent.add(Post);
+        mContent.add(MainPage);
+        mViewPagerAdapter=new MainPagerAdaptet(tabs,mContent);
+        use=BmobUser.getCurrentUser(MyUser.class);
+        net=new Network(this);
 
-		try{
-			mRecyclerview=(RecyclerView)Post.findViewById(R.id.main_post_listview);
-			mRecyclerview.setEnabled(true);
-			mRecyclerview.setFocusable(true);
-
-
-
-			LinearLayoutManager Manager = new LinearLayoutManager(this); 		
-			Manager.setOrientation(LinearLayoutManager.VERTICAL);
-			mRecyclerview.setLayoutManager(Manager); 
-			mRecyclerview.setAdapter((MTA=new MainTieAdapter(this)));
-			mRecyclerview.setItemAnimator(new DefaultItemAnimator());
-			
-			try{
-				mRecyclerview.setOnScrollChangeListener(new RecyclerView.OnScrollChangeListener(){
-					@Override
-					public void onScrollChange(View p1,int p2,int p3,int p4,int p5){
-					//  MTA.ViewHolder.Position;
-
-					  }			
-					 
-			  });
-			}catch(Exception e){
-			  print(e);
-			}
-
-			mDrawerLayout=(DrawerLayout) findViewById(R.id.drawerlayout);
-			mToolbar=(Toolbar) findViewById(R.id.toolbar);
-			mNavigationView=(NavigationView) findViewById(R.id.navigationview);
-			mNavigationView.inflateHeaderView(R.layout.activity_main_nv_menu);
-			mNavigationView.inflateMenu(R.menu.menu_main_nav);
-			NavigationViewListener(mNavigationView);
-			setSupportActionBar(mToolbar);
-
-			ActionBarDrawerToggle mActionbarDrawerToggle= new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open,R.string.close);
-			mActionbarDrawerToggle.syncState();
-			mDrawerLayout.setDrawerListener(mActionbarDrawerToggle);
-
-			fab=(FloatingActionButton)findViewById(R.id.main_fab);
-
-			// fab .setOnClickListener(new SendTie());
+        try{
+            mRecyclerview=(RecyclerView)Post.findViewById(R.id.main_post_listview);
+            mRecyclerview.setEnabled(true);
+            mRecyclerview.setFocusable(true);
 
 
-			refresh=(SwipeRefreshLayout)Post.findViewById(R.id.main_refresh);	
-			refresh.setProgressViewOffset(false,0,new CommonUtil().dip2px(24f));
-			refresh.setOnRefreshListener(new SwipeRefresh());
-			//refresh.setProgressBackground(Color.parseColor("0xFFFFFFFF"));
-			refresh.setColorSchemeResources(R.color.orange,R.color.green,R.color.blue); 
-			//refresh.setColorSchemeResources(android.R.colorholo_blue_ligh,android.R.color.holo_red_light,android.R.color.holo_orange_light,android.R.color.holo_green_light);
-			//refresh.setRefreshing(true);
-			refresh.setSize(SwipeRefreshLayout.DEFAULT);
-			read(false);
 
-		  }catch(Exception e){
-			print("\nError:"+e);
-		  }
-		try{
-			mHeaderLayout=mNavigationView.getHeaderView(0);
-			nv_name=(TextView)mHeaderLayout.findViewById(R.id.main_nav_name);
-			nv_header=(CircleImageView)mHeaderLayout.findViewById(R.id.main_nav_header);
-			nv_header.setOnClickListener(new OnClickListener(){
-				public void onClick(View v){
-					详情();
-				  }
-			  });
-			refreshUser();
-		  }catch(Exception e){
-			print("Error:"+e);
-		  }
-		try{
-			mViewPager.setAdapter(mViewPagerAdapter);
-			// 给ViewPager添加页面动态监听器（为了让Toolbar中的Title可以变化相应的Tab的标题）
-			mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
-				@Override
-				public void onPageScrolled(int p1,float p2,int p3){
+            LinearLayoutManager Manager = new LinearLayoutManager(this);         
+            Manager.setOrientation(LinearLayoutManager.VERTICAL);
+            mRecyclerview.setLayoutManager(Manager); 
+            mRecyclerview.setAdapter((MTA=new MainTieAdapter(this)));
+            mRecyclerview.setItemAnimator(new DefaultItemAnimator());
 
-				  }
+            try{
+                MTA.setOnItemClickListener(new MainTieAdapter.OnItemClickListener(){
+                    @Override
+                    public void onClick(View view,int index){
+                        Post m=MTA.getPost(index);
+                        Intent i=new Intent(ctx,PostActivity.class);
+                        Bundle bu=new Bundle();
+                        bu.putString("帖子",m.getObjectId());
+                        i.putExtra("Mydata",bu);
+                        ctx.startActivity(i);
+                      }
+                  });
+              }catch(Exception e){
+                print(e);
+              }
 
-				@Override
-				public void onPageSelected(int p1){
-					//mToolbar.setTitle(mTitles[position]);
-					switch(p1){
-						case 0:
-						  fab.setVisibility(View.VISIBLE);
-						  fab.setOnClickListener(new SendTie());
-						  break;
-						case 1:
-						  fab.setVisibility(View.GONE);
-						  break;
-					  }
-				  }
+            mDrawerLayout=(DrawerLayout) findViewById(R.id.drawerlayout);
+            mToolbar=(Toolbar) findViewById(R.id.toolbar);
+            mNavigationView=(NavigationView) findViewById(R.id.navigationview);
+            mNavigationView.inflateHeaderView(R.layout.activity_main_nv_menu);
+            mNavigationView.inflateMenu(R.menu.menu_main_nav);
+            NavigationViewListener(mNavigationView);
+            setSupportActionBar(mToolbar);
 
-				@Override
-				public void onPageScrollStateChanged(int p1){
-				  }
+            ActionBarDrawerToggle mActionbarDrawerToggle= new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open,R.string.close);
+            mActionbarDrawerToggle.syncState();
+            mDrawerLayout.setDrawerListener(mActionbarDrawerToggle);
 
-			  });
+            fab=(FloatingActionButton)findViewById(R.id.main_fab);
+            fab .setOnClickListener(new SendTie());
 
 
-			//mTabLayout.setTabMode(MODE_SCROLLABLE);
-			// 将TabLayout和ViewPager进行关联，让两者联动起来
-			mTabLayout.setupWithViewPager(mViewPager);
-			// 设置Tablayout的Tab显示ViewPager的适配器中的getPageTitle函数获取到的标题
-			mTabLayout.setTabsFromPagerAdapter(mViewPagerAdapter);
-		  }catch(Exception e){
-			print(e+"  initTabLayout&ViewPager");
-		  }
+            refresh=(SwipeRefreshLayout)Post.findViewById(R.id.main_refresh);    
+            refresh.setProgressViewOffset(false,0,new CommonUtil().dip2px(24f));
+            refresh.setOnRefreshListener(new SwipeRefresh());
+            //refresh.setProgressBackground(Color.parseColor("0xFFFFFFFF"));
+            refresh.setColorSchemeResources(R.color.orange,R.color.green,R.color.blue); 
+            //refresh.setColorSchemeResources(android.R.colorholo_blue_ligh,android.R.color.holo_red_light,android.R.color.holo_orange_light,android.R.color.holo_green_light);
+            //refresh.setRefreshing(true);
+            refresh.setSize(SwipeRefreshLayout.DEFAULT);
+            read(false);
+
+          }catch(Exception e){
+            print("\nError:"+e);
+          }
+        try{
+            mHeaderLayout=mNavigationView.getHeaderView(0);
+            nv_name=(TextView)mHeaderLayout.findViewById(R.id.main_nav_name);
+            nv_header=(CircleImageView)mHeaderLayout.findViewById(R.id.main_nav_header);
+            nv_header.setOnClickListener(new OnClickListener(){
+                public void onClick(View v){
+                    详情();
+                  }
+              });
+            refreshUser();
+          }catch(Exception e){
+            print("Error:"+e);
+          }
+        try{
+            mViewPager.setAdapter(mViewPagerAdapter);
+            // 给ViewPager添加页面动态监听器（为了让Toolbar中的Title可以变化相应的Tab的标题）
+            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+                @Override
+                public void onPageScrolled(int p1,float p2,int p3){
+
+                  }
+
+                @Override
+                public void onPageSelected(int p1){
+                    //mToolbar.setTitle(mTitles[position]);
+                    switch(p1){
+                        case 0:
+                          fab.setVisibility(View.VISIBLE);
+                          fab.setOnClickListener(new SendTie());
+                          break;
+                        case 1:
+                          fab.setVisibility(View.GONE);
+                          fab.setOnClickListener(null);
+                          break;
+                      }
+                  }
+
+                @Override
+                public void onPageScrollStateChanged(int p1){
+                  }
+
+              });
+
+
+            //mTabLayout.setTabMode(MODE_SCROLLABLE);
+            // 将TabLayout和ViewPager进行关联，让两者联动起来
+            mTabLayout.setupWithViewPager(mViewPager);
+            // 设置Tablayout的Tab显示ViewPager的适配器中的getPageTitle函数获取到的标题
+            mTabLayout.setTabsFromPagerAdapter(mViewPagerAdapter);
+          }catch(Exception e){
+            print(e+"  initTabLayout&ViewPager");
+          }
 
 
 
@@ -500,12 +538,12 @@ public class MainActivity extends AppCompatActivity
 
 
     private AlertDialog.Builder showError(String title,String msg){
-		AlertDialog.Builder build=new AlertDialog.Builder(this);
-		if(title!=null)
-		  build .setTitle(title);
-		if(msg!=null)
-		  build.setMessage(msg);
-		return build;
+        AlertDialog.Builder build=new AlertDialog.Builder(this);
+        if(title!=null)
+          build .setTitle(title);
+        if(msg!=null)
+          build.setMessage(msg);
+        return build;
       }
 
 
@@ -521,16 +559,16 @@ public class MainActivity extends AppCompatActivity
                 read(true);    
               }else{
                 read(false);
-				refresh.setRefreshing(false);
-				if(REFRESH_HINT){
-					new AlertDialog.Builder(ctx)
-					.setTitle("没网了")
-					.setMessage("你必须连接网络才能刷新最新数据，无网将从缓存读取(不耗流量)")
-					.setPositiveButton("知道了",null)
-					.setNegativeButton("设置网络",new setNetWork())  .show();
-				  }else{
-					REFRESH_HINT=false;
-				  }
+                refresh.setRefreshing(false);
+                if(REFRESH_HINT){
+                    new AlertDialog.Builder(ctx)
+                    .setTitle("没网了")
+                    .setMessage("你必须连接网络才能刷新最新数据，无网将从缓存读取(不耗流量)")
+                    .setPositiveButton("知道了",null)
+                    .setNegativeButton("设置网络",new setNetWork())  .show();
+                  }else{
+                    REFRESH_HINT=false;
+                  }
               }
           }    
       }
@@ -544,7 +582,7 @@ public class MainActivity extends AppCompatActivity
             if(i==5&&refresh.isRefreshing()&&refresh!=null){
                 refresh.setRefreshing(false);
                 showError(null,"未知错误:刷新时间超过5秒，请检查您的网络连接").show();
-              }		
+              }        
             if(refresh.isRefreshing()&&i<=5)
               refreshing.postDelayed(this,1000);
           }
@@ -557,47 +595,47 @@ public class MainActivity extends AppCompatActivity
 
     private void NavigationViewListener(NavigationView mNav){
         mNav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
-		  {
-			@Override
-			public boolean onNavigationItemSelected(MenuItem p1){
-				switch(p1.getItemId()){
+          {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem p1){
+                switch(p1.getItemId()){
 
-					case R.id.关于:
-					  startActivity(new Intent(ctx,AboutActivity.class));
-					  //  new Intent()
-					  /*
-					   new AlertDialog.Builder(ctx)
-					   .setPositiveButton("加入群",new DialogInterface.OnClickListener(){
-					   @Override
-					   public void onClick(DialogInterface p1,int p2){
-					   Uri uri = Uri.parse("http://jq.qq.com/?_wv=1027&k=41AHK2k");
-					   Intent intent = new Intent(Intent.ACTION_VIEW,uri);
-					   startActivity(intent);
-					   }
-					   }
-					   )
-					   .setNegativeButton("关闭",null)
-					   .setView(R.layout.content_about)
-					   .setCancelable(false)
-					   .show();*/
-					  break;
+                    case R.id.关于:
+                      startActivity(new Intent(ctx,AboutActivity.class));
+                      //  new Intent()
+                      /*
+                       new AlertDialog.Builder(ctx)
+                       .setPositiveButton("加入群",new DialogInterface.OnClickListener(){
+                       @Override
+                       public void onClick(DialogInterface p1,int p2){
+                       Uri uri = Uri.parse("http://jq.qq.com/?_wv=1027&k=41AHK2k");
+                       Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                       startActivity(intent);
+                       }
+                       }
+                       )
+                       .setNegativeButton("关闭",null)
+                       .setView(R.layout.content_about)
+                       .setCancelable(false)
+                       .show();*/
+                      break;
 
-					  //
+                      //
 
-					case R.id.反馈:
-					  break;
+                    case R.id.反馈:
+                      break;
 
-					  //
+                      //
 
-					case R.id.设置:
-					  startActivity(new Intent(ctx,SettingsActivity.class));
-					  break;
-				  }
-				return false;
-			  }
-		  }
-		);
-	  }
+                    case R.id.设置:
+                      startActivity(new Intent(ctx,SettingsActivity.class));
+                      break;
+                  }
+                return false;
+              }
+          }
+        );
+      }
 
 
 
@@ -613,59 +651,59 @@ public class MainActivity extends AppCompatActivity
         MTA.notifyDataSetChanged();
         print("扫描…………");
         BmobQuery<Post> query = new BmobQuery<Post>();
-		query.addWhereEqualTo("type","0");
+        query.addWhereEqualTo("type","0");
         query.order("-createdAt");
         query.include("user");
-		/* query.include("image");
-		 query.include("image2");
-		 query.include("image3");*/
+        /* query.include("image");
+         query.include("image2");
+         query.include("image3");*/
         query.setLimit(加载信息条数);
-		boolean isCache = query.hasCachedResult(Post.class);
-		if(!b||!net.isNetWork()){//离线阅读
-			if(isCache){
-				//	query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-				query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
-			  }else{
-				query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
-				showError(null,"无缓存").show();//提示无缓存，为何isCache为false？
-			  }
-		  }else{
-			if(FIRST_READ|!b){
-				FIRST_READ=false;
-				if(isCache){
-					query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-				  }else{
-					query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
-				  }
-			  }else{
-				query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
-			  }
-		  }
+        boolean isCache = query.hasCachedResult(Post.class);
+        if(!b||!net.isNetWork()){//离线阅读
+            if(isCache){
+                //    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+                query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
+              }else{
+                query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+                showError(null,"无缓存").show();//提示无缓存，为何isCache为false？
+              }
+          }else{
+            if(FIRST_READ|!b){
+                FIRST_READ=false;
+                if(isCache){
+                    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+                  }else{
+                    query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+                  }
+              }else{
+                query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+              }
+          }
 
-		query.findObjects(new FindListener<Post>() {
+        query.findObjects(new FindListener<Post>() {
             @Override
             public void done(List<Post> obj,BmobException er){
                 if(er==null){
-					int le=obj.size();
+                    int le=obj.size();
                     print("查询成功............................共"+le+"条");
                     for(int i=0;i<le;i++){
                         final Post m=(Post)obj.get(i);
 
-						new CommentCount().setPostID(m.getObjectId()).count(new CommentCount.CommentCountListener(){
-							@Override
-							public void done(int i,BmobException e){
-								if(e==null){
-									MTA.addPostCommentCount(m.getObjectId(),i);
-									MTA.additem(m);
-									print("增加数据:"+m.getObjectId());           
-								  }else{
-									MTA.additem(m);
-									print("增加数据:"+m.getObjectId());           
-									print("CountCommentE:"+e.getMessage());
-								  }
+                        new CommentCount().setPostID(m.getObjectId()).count(new CommentCount.CommentCountListener(){
+                            @Override
+                            public void done(int i,BmobException e){
+                                if(e==null){
+                                    MTA.addPostCommentCount(m.getObjectId(),i);
+                                    MTA.additem(m);
+                                    print("增加数据:"+m.getObjectId());           
+                                  }else{
+                                    MTA.additem(m);
+                                    print("增加数据:"+m.getObjectId());           
+                                    print("CountCommentE:"+e.getMessage());
+                                  }
 
-							  }							  
-						  });
+                              }                              
+                          });
                       }
 
                     if(refresh.isRefreshing()&&refresh!=null)
@@ -682,8 +720,9 @@ public class MainActivity extends AppCompatActivity
 
 
     private void print(Object o){
-		new Utils().print(this.getClass(),o);
-	  }
+        new Utils().print(this.getClass(),o);
+        new Utils().print(this,"test");;
+      }
 
 
 
@@ -691,26 +730,26 @@ public class MainActivity extends AppCompatActivity
 
 
     public  void setStatusBarTint(int color){
-		if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
-			setTranslucentStatus(true);
-		  }
-		SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+            setTranslucentStatus(true);
+          }
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setStatusBarTintColor(color);
-	  }
+      }
 
     @TargetApi(19)
     private  void setTranslucentStatus(boolean on){
-		Window win = this.getWindow();
+        Window win = this.getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
         final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
         if(on){
-			winParams.flags|=bits;
-		  }else{
-			winParams.flags&=~bits;
-		  }
-		win.setAttributes(winParams);
-	  }
+            winParams.flags|=bits;
+          }else{
+            winParams.flags&=~bits;
+          }
+        win.setAttributes(winParams);
+      }
 
   }
 

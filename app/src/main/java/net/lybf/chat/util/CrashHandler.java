@@ -9,6 +9,7 @@ public class CrashHandler implements UncaughtExceptionHandler
   {
 	private Thread.UncaughtExceptionHandler mDefaultHandler;
 	private Context m;
+	public String TGA="CrashHandler";
 	public CrashHandler(Context main){
 		m=main;
 		mDefaultHandler=Thread.getDefaultUncaughtExceptionHandler();
@@ -33,7 +34,7 @@ public class CrashHandler implements UncaughtExceptionHandler
 			StringBuilder builder=msg.getMessage();
 
 			try{
-				new Utils().print("ErrorMessage:"+ex.toString());
+				new Utils().print(this.getClass(),ex.toString());
 				Intent i=new Intent(m,Class.forName("net.lybf.chat.ui.ErrorActivity"));
 				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				Bundle b=new Bundle();

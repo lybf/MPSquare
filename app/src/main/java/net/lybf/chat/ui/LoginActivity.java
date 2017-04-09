@@ -42,6 +42,7 @@ import net.lybf.chat.system.settings;
 import android.support.v7.app.ActionBar;
 import net.lybf.chat.system.Utils;
 import android.text.TextUtils;
+import net.lybf.chat.MainApplication;
 public class LoginActivity extends AppCompatActivity
   {
     private Toolbar bar;
@@ -51,15 +52,18 @@ public class LoginActivity extends AppCompatActivity
     private TextView SIGNUP;
     private RelativeLayout root;
     private settings set;
+
+    private MainApplication app;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        set=new settings();
+        app=new MainApplication();
+        set=app.set;
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{
-			setTheme(R.style.LightTheme);
-		  }
+            setTheme(R.style.LightTheme);
+          }
 
         setContentView(R.layout.activity_login);
         initView();
@@ -204,6 +208,6 @@ public class LoginActivity extends AppCompatActivity
 
 
     private void print(Object o){
-		new Utils().print(this.getClass(),o);
+        new Utils().print(this.getClass(),o);
       }
   }

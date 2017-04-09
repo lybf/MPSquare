@@ -9,62 +9,62 @@ import net.lybf.chat.bmob.images;
 
 public class Post extends BmobObject
   {
-	//标题
-	private String title;
-	//内容
-	private String content;
-	//类型
+    //标题
+    private String title;
+    //内容
+    private String content;
+    //类型
     private String type;
-	//图1~图3
-	private images image,image2,image3;
-	//用户
-	private MyUser user;
+    //图1~图3
+    private images image,image2,image3;
+    //用户
+    private MyUser user;
 
     public void setType(String p){
-		type=p;
+        type=p;
       }
 
     public String getType(){
-		return type;
-	  }
-
-	public String getMessage(){
-		if(content==null)
-		  return null;
-		return content;
+        return type;
       }
 
-	public void setMessage(String str){
-		content=str;
+    public String getMessage(){
+        if(content==null)
+          return null;
+        return content;
       }
 
-
-
-
-	public String getTitle(){
-		if(title==null)
-		  return null;
-		return title;
-      }
-
-	public void setTitle(String str){
-		title=str;
-      }
-
-
-	public MyUser getUser(){
-		if(user==null)
-		  return null;
-		return user;
-      }
-
-	public void setUser(MyUser str){
-		user=str;
+    public void setMessage(String str){
+        content=str;
       }
 
 
 
-	public images getImage(){
+
+    public String getTitle(){
+        if(title==null)
+          return null;
+        return title;
+      }
+
+    public void setTitle(String str){
+        title=str;
+      }
+
+
+    public MyUser getUser(){
+        if(user==null)
+          return null;
+        return user;
+      }
+
+    public void setUser(MyUser str){
+        user=str;
+      }
+
+
+
+    public images getImage(){
         return image;
       }
 
@@ -73,7 +73,7 @@ public class Post extends BmobObject
       }
 
 
-	public images getImage2(){
+    public images getImage2(){
         return image2;
       }
 

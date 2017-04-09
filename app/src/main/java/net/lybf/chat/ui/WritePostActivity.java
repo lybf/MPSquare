@@ -31,36 +31,40 @@ import android.widget.Toast;
 import android.content.Context;
 import net.lybf.chat.system.settings;
 import net.lybf.chat.system.Utils;
+import net.lybf.chat.MainApplication;
 
 public class WritePostActivity extends AppCompatActivity
   {
 
-	/*
-	 标题
-	 内容
-	 */
+    /*
+     标题
+     内容
+     */
     private EditText Title, content;
-	/*用户*/
+    /*用户*/
     private MyUser use;
-	/*工具栏*/
+    /*工具栏*/
     private Toolbar bar;
     /*Content*/
     private Context ctx;
     /*设置*/
     private settings set;
     /*发送*/
-	private ButtonRectangle send;
+    private ButtonRectangle send;
+
+    private MainApplication app;
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
-        set=new settings();
+        app=new MainApplication();
+        set=app.set;
 
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{
-			setTheme(R.style.LightTheme);
-		  }
+            setTheme(R.style.LightTheme);
+          }
         setContentView(R.layout.activity_writepost);
         ctx=this;
         init();
@@ -93,7 +97,7 @@ public class WritePostActivity extends AppCompatActivity
                 sendmessage(tit,msg);
               }
           }
-        );	
+        );    
 
         use=BmobUser.getCurrentUser(MyUser.class);
       }
@@ -118,11 +122,11 @@ public class WritePostActivity extends AppCompatActivity
             if(msg==null){
                 printError("帖子标题不能为空\n"+"内容不能为空");
               }else{
-				if(title!=null)
-				  printError("帖子内容不能为空");
+                if(title!=null)
+                  printError("帖子内容不能为空");
               }
           }else{
-			//    printError("帖子标题不能为空");
+            //    printError("帖子标题不能为空");
           }
         if(title!=null&&msg!=null){
 
@@ -157,6 +161,6 @@ public class WritePostActivity extends AppCompatActivity
       }
 
     private void print(Object o){
-		new Utils().print(this.getClass(),o);
+        new Utils().print(this.getClass(),o);
       }
   }

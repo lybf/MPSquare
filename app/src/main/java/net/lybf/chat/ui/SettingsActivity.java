@@ -15,20 +15,47 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import org.json.JSONException;
 import android.app.FragmentManager;
+import net.lybf.chat.MainApplication;
+import net.lybf.chat.system.Utils;
+import net.lybf.chat.system.ActivityResultCode;
+import android.content.Context;
 
 public class SettingsActivity extends AppCompatActivity
   {
 
-    settings set;
+//    settings set;
+
+    public static Context ctx;
+    private Bundle bundle;
+
+    private MainApplication app;
+
+    private settings set;
+
+    private SettingsFlagment sf;
+
+    private boolean isDark=false;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-		set=new settings();
-		if(set.isDark()){
+        ctx=this;
+        app=new MainApplication();
+        initView();
+      }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+      }
+
+
+    public void initView(){
+        set=app.set;
+        if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{
-			setTheme(R.style.LightTheme);
-		  }
+            setTheme(R.style.LightTheme);
+          }
         setContentView(R.layout.activity_settings);
         init();
       }
@@ -40,21 +67,43 @@ public class SettingsActivity extends AppCompatActivity
         setSupportActionBar(bar);
         ActionBar ab= getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-        fm=(FrameLayout)findViewById(R.id.settings_framelayout);
-        ab. setDisplayHomeAsUpEnabled(true);
-        SettingsFlagment sf=  new SettingsFlagment(this);
-        getFragmentManager().beginTransaction().replace(R.id.settings_framelayout,sf).commit();
+        try{
+            fm=(FrameLayout)findViewById(R.id.settings_framelayout);
+            sf=new SettingsFlagment();
+            //getFragmentManager().beginTransaction().hide(sf);
+            getFragmentManager().beginTransaction().replace(R.id.settings_framelayout,sf).commit();
+            sf.setContext(this);
+            sf.setThemeChangeListener(new SettingsFlagment.ThemeChange(){
+                public void change(boolean bool){
+                    isDark=bool;
+                    recreate();
+                    SettingsActivity.this.setResult(ActivityResultCode.SETTINGS_CHANGE);
+                  }
+              });
+          }catch(Exception e){
+            print(e);
+          }
       }
 
+    @Override
+    public void onBackPressed(){
+        //setResult(ActivityResultCode.SETTINGS_CHANGE);
+        this.finish();
+        super.onBackPressed();
+      }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case android.R.id.home:
+            //  this.setResult(ActivityResultCode.SETTINGS_CHANGE);
               finish();
               break;
           }
         return super.onOptionsItemSelected(item);
       }
 
+    private void print(Object e){
+        new Utils().print(this.getClass(),e);
+      }
   }

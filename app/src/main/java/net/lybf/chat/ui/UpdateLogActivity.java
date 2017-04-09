@@ -19,98 +19,116 @@ import android.support.v7.widget.LinearLayoutManager;
 import net.lybf.chat.adapter.UpdateLogAdapter;
 import android.support.v7.widget.DefaultItemAnimator;
 import net.lybf.chat.util.Network;
+import net.lybf.chat.system.settings;
+import net.lybf.chat.MainApplication;
 
 public class UpdateLogActivity extends AppCompatActivity
   {
 
-	private Toolbar bar;
-	private net.lybf.chat.util.UpdateLog log;
+    public static Context ctx;
+    
+    private Toolbar bar;
+    private net.lybf.chat.util.UpdateLog log;
 
-	private RecyclerView mListView;
+    private RecyclerView mListView;
 
-	private UpdateLogAdapter adapter;
+    private UpdateLogAdapter adapter;
 
-	private Network net;
-	@Override
-	protected void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_updatelog);
-		log=new net.lybf.chat.util.UpdateLog();
-		net=new Network(this);
+    private Network net;
 
-		bar=(Toolbar)findViewById(R.id.updatelog_toolbar);
+    private settings set;
+
+    private MainApplication app;
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        ctx=this;
+        app=new MainApplication();
+        set=app.set;
+        if(set.isDark()){
+            setTheme(R.style.DarkTheme);
+          }else{
+            setTheme(R.style.LightTheme);
+          }
+        setContentView(R.layout.activity_updatelog);
+        log=new net.lybf.chat.util.UpdateLog();
+        net=new Network(this);
+
+        bar=(Toolbar)findViewById(R.id.updatelog_toolbar);
         setSupportActionBar(bar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		initView();
-		initData();
-	  }
+        initView();
+        initData();
+      }
 
-	private void initData(){
-		if(net.isNetWork()){
-			BmobQuery query=new BmobQuery<UpdateLog>();
-			query.order("-createdAt");
-			query.setLimit(1000);
-			query.findObjects(new FindListener<UpdateLog>(){
-				@Override
-				public void done(List<UpdateLog> p1,BmobException e){
-					if(e==null){
-						for(UpdateLog l:p1){
-							update up=new update();
-							up.setApkUrl(l.getApkFile());
-							up.setContent(l.getMessage());
-							up.setCreatedAt(l.getCreatedAt());
-							up.setLevel(l.getLevel());
-							up.setShowType(l.getShowType().intValue());
-							up.setUpdatedAt(l.getUpdatedAt());
-							up.setVersionCode(l.getVersionCode());
-							up.setVersionName(l.getVersionName());
-							up.setTitle(l.getTile());
-							log.addItem(up);
-							adapter.addItem(up);
-						  }
-					  }else{
-						print(e);
-					  }
-				  }
-			  });
+    private void initData(){
+        if(net.isNetWork()){
+            BmobQuery<UpdateLog> query=new BmobQuery<UpdateLog>();
+            query.order("-createdAt");
+            query.setLimit(1000);
+            query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
+            query.findObjects(new FindListener<UpdateLog>(){
+                @Override
+                public void done(List<UpdateLog> p1,BmobException e){
+                    if(e==null){
+                        for(UpdateLog l:p1){
+                            update up=new update();
+                            up.setObjecId(l.getObjectId())
+                            .setApkUrl(l.getApkFile())
+                            .setContent(l.getMessage())
+                            .setCreatedAt(l.getCreatedAt())
+                            .setLevel(l.getLevel())
+                            .setShowType(l.getShowType().intValue())
+                            .setUpdatedAt(l.getUpdatedAt())
+                            .setVersionCode(l.getVersionCode())
+                            .setVersionName(l.getVersionName())
+                            .setTitle(l.getTile());
+                            log.addItem(up);
+                            adapter.addItem(up);
+                          }
+                      }else{
+                        print(e);
+                      }
+                  }
+              });
 
-		  }else{
-			try{
-				if(log.count()>0){
-					List l=log.getAllUpdateLog();
-					for(int i=0;i<l.size();i++){
-						adapter.addItem((update)l.get(i));
-					  }
-				  }
-			  }catch(Exception e){
-				print(e);
-			  }
-		  }
+          }else{
+            try{
+                if(log.count()>0){
+                    List<update> l=log.getAllUpdateLog();
+                    for(int i=0;i<l.size();i++){
+                        adapter.addItem(l.get(i));
+                      }
+                  }
+              }catch(Exception e){
+                print(e);
+              }
+          }
 
 
-	  }
+      }
 
 
-	private void initView(){
-		mListView=(RecyclerView)findViewById(R.id.updatelog_listview);
-		mListView.setAdapter((adapter=new UpdateLogAdapter(this)));
-		LinearLayoutManager Manager = new LinearLayoutManager(this); 		
-		Manager.setOrientation(LinearLayoutManager.VERTICAL);
-		mListView.setLayoutManager(Manager); 
-		mListView.setItemAnimator(new DefaultItemAnimator());
+    private void initView(){
+        mListView=(RecyclerView)findViewById(R.id.updatelog_listview);
+        mListView.setAdapter((adapter=new UpdateLogAdapter(this)));
+        LinearLayoutManager Manager = new LinearLayoutManager(this);         
+        Manager.setOrientation(LinearLayoutManager.VERTICAL);
+        mListView.setLayoutManager(Manager); 
+        mListView.setItemAnimator(new DefaultItemAnimator());
 
-	  }
-	@Override
+      }
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case android.R.id.home:
-		      this.finish();
+              this.finish();
               break;
-		  }
-		return true;
-	  }
-	private void print(Object e){
-		new Utils().print(this.getClass(),e);
-	  }
+          }
+        return true;
+      }
+    private void print(Object e){
+        new Utils().print(this.getClass(),e);
+      }
 
   }

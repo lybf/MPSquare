@@ -11,29 +11,33 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
+import net.lybf.chat.MainApplication;
 
 public class ErrorActivity extends AppCompatActivity
   {
 
-	//This is error message EditText
+    //This is error message EditText
     private EditText dis;
-	//错误消息 Error message
+    //错误消息 Error message
     private TextView message;
-	//获取设备信息，重启应用
+    //获取设备信息，重启应用
     private CheckBox get,reApp;
-	//配置信息类
+    //配置信息类
     private settings set;
-	
+
+    private MainApplication app;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState){
         print("接收到错误信息");
         super.onCreate(savedInstanceState);
-        set=new settings();
+        app=new MainApplication();
+        set=app.set;
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{
-			setTheme(R.style.LightTheme);
-		  }
+            setTheme(R.style.LightTheme);
+          }
 
         setContentView(R.layout.activity_error);
         Toolbar t=(Toolbar)findViewById(R.id.toolbar_error);
@@ -49,7 +53,7 @@ public class ErrorActivity extends AppCompatActivity
           }
         if(b!=null)
           if(b.getString("error")!=null){
-			  print(b.getString("error").toString());
+              print(b.getString("error").toString());
               //long date=System.currentTimeMillis();
               String str = null;
               try{
@@ -64,10 +68,10 @@ public class ErrorActivity extends AppCompatActivity
               print(u.getDeviceInfo());
             }
       }
-	  
-	  public void print(Object o){
-		new Utils().print(this.getClass(),o);
-	  }
+      
+      public void print(Object o){
+        new Utils().print(this.getClass(),o);
+      }
 
 
 

@@ -16,18 +16,22 @@ import java.io.FileOutputStream;
 import java.io.File;
 import java.io.IOException;
 import net.lybf.chat.system.settings;
+import net.lybf.chat.MainApplication;
 public class GuideActivity extends AppCompatActivity
   {
 
     private settings set;
+
+    private MainApplication app;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        set=new settings();
+        app=new MainApplication();
+        set=app.set;
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }
-        //	setContentView(R.layout.activity_first_guide);
+        //    setContentView(R.layout.activity_first_guide);
       }
 
 

@@ -58,6 +58,7 @@ import net.lybf.chat.adapter.CommentAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.DefaultItemAnimator;
+import net.lybf.chat.MainApplication;
 
 public class PostActivity extends AppCompatActivity
   {
@@ -71,32 +72,34 @@ public class PostActivity extends AppCompatActivity
     private Context ctx;
 
     private settings set;
+    
+    private String 帖子;
+    
+    private MyUser use;
+    
+    private DateTools DTools;
+    
+    private FloatingActionButton fab;
+          
+    private SwipeRefreshLayout refresh;
 
-	private String 帖子;
+    private RecyclerView listview;
 
-	private MyUser use;
+    private CommentAdapter adapter;
 
-	private DateTools DTools;
-
-	private FloatingActionButton fab;
-
-
-
-	private SwipeRefreshLayout refresh;
-
-	private RecyclerView listview;
-
-	private CommentAdapter adapter;
+    private MainApplication app;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        set=new settings();
-		use=BmobUser.getCurrentUser(MyUser.class);
-		if(set.isDark()){
+        app=new MainApplication();
+        set=app.set;
+        
+        use=BmobUser.getCurrentUser(MyUser.class);
+        if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{
-			setTheme(R.style.LightTheme);
-		  }
+            setTheme(R.style.LightTheme);
+          }
         setContentView(R.layout.activity_post_comment);
 
         bar=(Toolbar)findViewById(R.id.toolbar_comment);
@@ -161,17 +164,15 @@ public class PostActivity extends AppCompatActivity
             );
             listview=(RecyclerView)findViewById(R.id.comment_content);
             listview.setAdapter((adapter=new CommentAdapter(this)));
-			LinearLayoutManager Manager = new LinearLayoutManager(this); 		
-			Manager.setOrientation(LinearLayoutManager.VERTICAL);
+               LinearLayoutManager Manager = new LinearLayoutManager(this);         
+               Manager.setOrientation(LinearLayoutManager.VERTICAL);
             listview.setLayoutManager(Manager); 
             listview.setItemAnimator(new DefaultItemAnimator());
-			
-			//  listview.setFastScrollEnabled(true);
+            //  listview.setFastScrollEnabled(true);
 
             refresh=(SwipeRefreshLayout)findViewById(R.id.comment_refresh);
             refresh.setProgressViewOffset(false,0,new CommonUtil().dip2px(100f));
-
-			refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+            refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
                 @Override
                 public void onRefresh(){
                     i=0;
@@ -182,7 +183,7 @@ public class PostActivity extends AppCompatActivity
               }
             );
             /*
-             //设置手势滑动监听器。		
+             //设置手势滑动监听器。        
 
              refresh.setProgressBackgroundColor(0xFFFFFF);
              //设置进度圈的背景色。*/
@@ -214,8 +215,8 @@ public class PostActivity extends AppCompatActivity
                     post=p1;
                     bar.setTitle(""+post.getTitle());
                     user=p1.getUser();
-					adapter.setPost(post);
-				    read();
+                    adapter.setPost(post);
+                    read();
 
                   }else{
                     if(net.isNetWork()){
@@ -258,7 +259,7 @@ public class PostActivity extends AppCompatActivity
                 );
                 b.show();
                 refresh.setRefreshing(false);
-              }		
+              }        
 
             if(refresh.isRefreshing()&&i<=5){
                 runing.postDelayed(this,1000);
@@ -295,7 +296,7 @@ public class PostActivity extends AppCompatActivity
                         public void done(Object p1,BmobException p2){
                             if(p2==null){
                                 read();
-                              }else if(p2!=null){					
+                              }else if(p2!=null){                    
                                 String m=null;
                                 ErrorMessage msg=new ErrorMessage();
                                 m=msg.getMessage(p2.getErrorCode());
@@ -333,7 +334,7 @@ public class PostActivity extends AppCompatActivity
 
         print("开始扫描评论");
         adapter.removeAll();
-		adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
         final BmobQuery<Comment> query = new BmobQuery<Comment>();
         query.order("-createdAt");
         query.addWhereEqualTo("parent",帖子);
@@ -349,7 +350,7 @@ public class PostActivity extends AppCompatActivity
             public void done(List<Comment> p1,BmobException p2){
                 if(p2==null){
                     for(Comment me: p1){
-						adapter.addComment(me);
+                        adapter.addComment(me);
                       }
                     if(refresh.isRefreshing())
                       refresh.setRefreshing(false);;
@@ -365,7 +366,7 @@ public class PostActivity extends AppCompatActivity
 
 
     private void print(Object p){
-		new Utils().print(this.getClass(),p);
+        new Utils().print(this.getClass(),p);
       }
   }
-	
+    

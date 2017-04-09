@@ -39,43 +39,55 @@ import net.lybf.chat.system.BmobUtils;
 public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHolder>
   {
 
+    private OnItemClickListener onClicklistener;
+    private OnItemLongClickListener onLongClicklistener;
+    public interface OnItemClickListener
+      {
+        public void onClick(View view,int index);
+      }
+
+    public interface OnItemLongClickListener
+      {
+        public void onLong(View view,int index);
+      }
+
     //帖子
-	private ArrayList<Post> mData =new ArrayList<Post>();
+    private ArrayList<Post> mData =new ArrayList<Post>();
     //用户头像
-	private HashMap<String,Object> userIcon=new HashMap<String,Object>();
+    private HashMap<String,Object> userIcon=new HashMap<String,Object>();
     //帖子计数
-	private HashMap<String,Object> comments=new HashMap<String,Object>();
-	private Context ctx;
+    private HashMap<String,Object> comments=new HashMap<String,Object>();
+    private Context ctx;
 
     private BitmapTools BMT;
 
-	private DateTools DTL;
+    private DateTools DTL;
 
-	public MainTieAdapter(Context ctx){
-		this.ctx=ctx;
-		init();
-	  }
+    public MainTieAdapter(Context ctx){
+        this.ctx=ctx;
+        init();
+      }
 
-	public MainTieAdapter addPostCommentCount(String objectId,int i){
-		comments.put(objectId,i);
-		return this;
-	  }
+    public MainTieAdapter addPostCommentCount(String objectId,int i){
+        comments.put(objectId,i);
+        return this;
+      }
 
     private void init(){
         BMT=new BitmapTools();
-		DTL=new DateTools();
+        DTL=new DateTools();
       }
 
     public MainTieAdapter clearAll(){
         mData.clear();
-		userIcon.clear();
-		comments.clear();
-		return this;
+        userIcon.clear();
+        comments.clear();
+        return this;
       }
 
 
     public MainTieAdapter addItem(final int position,Post post){
-	    final MyUser user=post.getUser();
+        final MyUser user=post.getUser();
         BmobFile icon=user.getIcon();
         String ic=icon.getFilename();
         final File f=new File("/sdcard/lybf/MPSquare/.user/"+user.getObjectId()+"/"+icon.getFilename());
@@ -102,22 +114,22 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
 
         mData.add(position,post);
         notifyItemInserted(position);
-		return this;
+        return this;
       }
 
     public MainTieAdapter additem(Post post){
-		int j=count();
-		for(int i=0;i<j;i++){
-			Post p=mData.get(i);
-			if(post.getObjectId().equals(p.getObjectId())){
-				Date dt=DTL.String2Date(post.getUpdatedAt(),BmobUtils.BMOB_DATE_TYPE);
-				Date dt2=DTL.String2Date(p.getUpdatedAt(),BmobUtils.BMOB_DATE_TYPE);
-				if(dt.getTime()-dt2.getTime()>0){
-					mData.set(i,post);
-				  }
-				mData.set(i,post);
-			  }
-		  }
+        int j=count();
+        for(int i=0;i<j;i++){
+            Post p=mData.get(i);
+            if(post.getObjectId().equals(p.getObjectId())){
+                Date dt=DTL.String2Date(post.getUpdatedAt(),BmobUtils.BMOB_DATE_TYPE);
+                Date dt2=DTL.String2Date(p.getUpdatedAt(),BmobUtils.BMOB_DATE_TYPE);
+                if(dt.getTime()-dt2.getTime()>0){
+                    mData.set(i,post);
+                  }
+                mData.set(i,post);
+              }
+          }
         final MyUser user=post.getUser();
         BmobFile icon=user.getIcon();
         String ic=icon.getFilename();
@@ -141,32 +153,32 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
                 public void onProgress(Integer p1,long p2){
                   }   
               });
-		  }
-		mData.add(post);
-		//notifyItemChanged(mData.size()-1);
-		notifyItemInserted(mData.size()-1);
-		return this;
+          }
+        mData.add(post);
+        //notifyItemChanged(mData.size()-1);
+        notifyItemInserted(mData.size()-1);
+        return this;
       }
 
 
     public MainTieAdapter removeItem(int position){
         mData.remove(position);
         notifyItemRemoved(position);
-		return this;
+        return this;
       }
 
     public MainTieAdapter updateitem(int i,Post hm){
-		if(mData.get(i)!=hm){
-			mData.set(i,hm);
-			notifyItemChanged(i);
-		  }
-		return this;
+        if(mData.get(i)!=hm){
+            mData.set(i,hm);
+            notifyItemChanged(i);
+          }
+        return this;
       }
 
     public MainTieAdapter updateComments(int i,String postid,int num){
         comments.put(postid,num);
         notifyItemChanged(i);
-		return this;
+        return this;
       }
 
 
@@ -179,70 +191,73 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
       }
 
 
-	public MainTieAdapter sort(){
-		return this;
-	  }
+    public MainTieAdapter sort(){
+        return this;
+      }
 
-	public MainTieAdapter insert(int index){
-		notifyItemInserted(index);
-		return this;
-	  }
+    public MainTieAdapter insert(int index){
+        notifyItemInserted(index);
+        return this;
+      }
 
-	public MainTieAdapter removed(int index){
-		notifyItemRemoved(index);
-		return this;
-	  }
+    public MainTieAdapter removed(int index){
+        notifyItemRemoved(index);
+        return this;
+      }
+
+    public MainTieAdapter setOnItemClickListener(OnItemClickListener listener){
+        this.onClicklistener=listener;
+        return this;
+      }
+    public MainTieAdapter setItemOnLongClickListener(OnItemLongClickListener listener){
+        this.onLongClicklistener=listener;
+        return this;
+      }
     //创建新View，被LayoutManager所调用
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup,int viewType){
-	    View view= LayoutInflater.from(ctx).inflate(R.layout.item_main_post,viewGroup,false);
+        View view= LayoutInflater.from(ctx).inflate(R.layout.item_main_post,viewGroup,false);
         ViewHolder vh = new ViewHolder(view);
         return vh;
       }
     //将数据与界面进行绑定的操作
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder,int p2){
+    public void onBindViewHolder(ViewHolder viewHolder,final int p2){
         final Post m=(Post)mData.get(p2);
 
         MyUser user=m.getUser();
         viewHolder.name.setText(""+user.getUsername());
-		String ct =""+comments.get(m.getObjectId());
-		viewHolder.lookAllComments.setText(!ct.equals("")||!ct.equals("null")||ct.equals("0")?"共"+ct+"条评论":"");
+        String ct =""+comments.get(m.getObjectId());
+        viewHolder.lookAllComments.setText(!ct.equals("")||!ct.equals("null")||ct.equals("0")?"共"+ct+"条评论":"");
         SimpleDateFormat dat=new SimpleDateFormat(BmobUtils.BMOB_DATE_TYPE);
 
         Date d = null;
         try{
             d=dat.parse(""+m.getCreatedAt());
           }catch(Exception e){
-			print("dateFormat:"+e);
-		  }
+            print("dateFormat:"+e);
+          }
         viewHolder.date.setText(new DateTools().date(d));
         viewHolder.title.setText(""+m.getTitle());
         TextView t=viewHolder.message;
 
-		Picasso.with(ctx).load((File)userIcon.get(user.getObjectId())).into(viewHolder.hader);
-		t.setText(""+m.getMessage());
-        t.setOnClickListener(new OnClickListener(){
-            @Override
-            public void onClick(View p1){
-                Intent i=new Intent(ctx,PostActivity.class);
-                Bundle bu=new Bundle();
-                bu.putString("帖子",m.getObjectId());
-                i.putExtra("Mydata",bu);
-                ctx.startActivity(i);
-              }
-          });
+        Picasso.with(ctx).load((File)userIcon.get(user.getObjectId())).into(viewHolder.hader);
+        t.setText(""+m.getMessage());
+        if(onClicklistener!=null){
+            t.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View p1){
+                    onClicklistener.onClick(p1,p2);
+                  }
+              });
 
-		viewHolder.go.setOnClickListener(new OnClickListener(){
-            @Override
-            public void onClick(View p1){
-                Intent i=new Intent(ctx,PostActivity.class);
-                Bundle bu=new Bundle();
-                bu.putString("帖子",m.getObjectId());
-                i.putExtra("Mydata",bu);
-                ctx.startActivity(i);
-              }
-          });
+            viewHolder.go.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View p1){
+                    onClicklistener.onClick(p1,p2);
+                  }
+              });
+          }
       }
 
 
@@ -251,56 +266,56 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         return mData.size();
       }
 
-	public int count(){
-		return mData.size();
-	  }
-	private void print(Object... obj){
-		for(Object o:obj){
-			System.out.println("MainTieAdapter.class:"+o+"\n");
-		  }
-	  }
+    public int count(){
+        return mData.size();
+      }
+    private void print(Object... obj){
+        for(Object o:obj){
+            System.out.println("MainTieAdapter.class:"+o+"\n");
+          }
+      }
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素
     public  class ViewHolder extends RecyclerView.ViewHolder
       {
-		/*
-		 名称，时间，标题，内容，查看评论
-		 */
+        /*
+         名称，时间，标题，内容，查看评论
+         */
 
         public TextView name,date,title,message,lookAllComments;
-		public RelativeLayout go;
+        public RelativeLayout go;
         public ImageButton hader;
 
-		public int Position;
+        public int Position;
 
-		public int ItemViewType;
+        public int ItemViewType;
 
-		public int LayoutPosition;
+        public int LayoutPosition;
 
-		public int AdapterPosition;
+        public int AdapterPosition;
 
-		public int OldPosition;
+        public int OldPosition;
         public ViewHolder(View view){
             super(view);
             title=(TextView)view.findViewById(R.id.item_post_title);
             message=(TextView)view.findViewById(R.id.item_post_content);
-			date=(TextView)view.findViewById(R.id.item_post_time);
+            date=(TextView)view.findViewById(R.id.item_post_time);
             name=(TextView)view.findViewById(R.id.item_post_name);
-			lookAllComments=(TextView)view.findViewById(R.id.item_post_lookAllComments);
-			go=(RelativeLayout)view.findViewById(R.id.item_post_go);
-		    hader=(ImageButton)view.findViewById(R.id.item_post_header);
-			try{
-				Position=getPosition();
-				ItemViewType=getItemViewType();
-				LayoutPosition=getLayoutPosition();
-				AdapterPosition=getAdapterPosition();
-				OldPosition=getOldPosition();
+            lookAllComments=(TextView)view.findViewById(R.id.item_post_lookAllComments);
+            go=(RelativeLayout)view.findViewById(R.id.item_post_go);
+            hader=(ImageButton)view.findViewById(R.id.item_post_header);
+            try{
+                Position=getPosition();
+                ItemViewType=getItemViewType();
+                LayoutPosition=getLayoutPosition();
+                AdapterPosition=getAdapterPosition();
+                OldPosition=getOldPosition();
 
-				//notifyItemInserted(AdapterPosition);
-				insert(Position);
-			  }catch(Exception e){
-				print(e);
-			  }
+                //notifyItemInserted(AdapterPosition);
+                insert(Position);
+              }catch(Exception e){
+                print(e);
+              }
           }
       }
   }
