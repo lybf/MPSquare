@@ -58,7 +58,7 @@ public class AboutActivity extends AppCompatActivity
         net=new Network(this);
         ctx=this;
         app=new MainApplication();
-        set=app.set;
+        set=app.getSettings();
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{
@@ -114,7 +114,7 @@ public class AboutActivity extends AppCompatActivity
 
 
     private void update(){
-        if(net.isNetWork()){
+        if(net.isConnectedOrConnecting()){
             print("\n检测更新中\n");
             BmobQuery<UpdateLog> q = new BmobQuery<UpdateLog>();
             q.order("-createdAt");

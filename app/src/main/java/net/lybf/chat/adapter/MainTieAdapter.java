@@ -87,10 +87,14 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
 
 
     public MainTieAdapter addItem(final int position,Post post){
+        if(position<=-1)
+          return this;
+        mData.add(position,post);
+        notifyItemInserted(position);
         final MyUser user=post.getUser();
         BmobFile icon=user.getIcon();
         String ic=icon.getFilename();
-        final File f=new File("/sdcard/lybf/MPSquare/.user/"+user.getObjectId()+"/"+icon.getFilename());
+        final File f=new File("/sdcard/lybf/MPSquare/.user/"+user.getObjectId()+"/head/"+icon.getFilename());
         if(!f.getParentFile().exists())
           f.getParentFile().mkdirs();
         if(f.exists()){
@@ -101,19 +105,23 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
                 public void done(String p1,BmobException p2){
                     if(p2==null){
                         userIcon.put(user.getObjectId(),f);
-                        notifyItemChanged(position);
+                        notifyItemChanged(position-1);
                       }else{
                         System.out. println(p2);
                       }
                   }
                 @Override
                 public void onProgress(Integer p1,long p2){
+                    if(p1==100){
+                        userIcon.put(user.getObjectId(),f);
+                        int i=0;
+                        i=(position>=1?position-1:position);
+                        notifyItemChanged(i);
+                      }
                   }   
               });
           }
 
-        mData.add(position,post);
-        notifyItemInserted(position);
         return this;
       }
 
@@ -130,10 +138,13 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
                 mData.set(i,post);
               }
           }
+        mData.add(post);
+        //notifyItemChanged(mData.size()-1);
+        notifyItemInserted(mData.size()-1);
         final MyUser user=post.getUser();
         BmobFile icon=user.getIcon();
         String ic=icon.getFilename();
-        final File f=new File("/sdcard/lybf/MPSquare/.user/"+user.getObjectId()+"/"+icon.getFilename());
+        final File f=new File("/sdcard/lybf/MPSquare/.user/"+user.getObjectId()+"/head/"+icon.getFilename());
         if(!f.getParentFile().exists())
           f.getParentFile().mkdirs();
         if(f.exists()){
@@ -144,19 +155,21 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
                 public void done(String p1,BmobException p2){
                     if(p2==null){
                         userIcon.put(user.getObjectId(),f);
-                        notifyItemChanged((int)getItemCount());
+                        notifyItemChanged((int)getItemCount()-1);
                       }else{
                         System.out. println(p2);
                       }
                   }
                 @Override
                 public void onProgress(Integer p1,long p2){
+                    if(p1==100){
+                        userIcon.put(user.getObjectId(),f);
+                        notifyItemChanged(getItemCount()-1);
+                      }
                   }   
               });
           }
-        mData.add(post);
-        //notifyItemChanged(mData.size()-1);
-        notifyItemInserted(mData.size()-1);
+
         return this;
       }
 
@@ -286,15 +299,6 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         public RelativeLayout go;
         public ImageButton hader;
 
-        public int Position;
-
-        public int ItemViewType;
-
-        public int LayoutPosition;
-
-        public int AdapterPosition;
-
-        public int OldPosition;
         public ViewHolder(View view){
             super(view);
             title=(TextView)view.findViewById(R.id.item_post_title);
@@ -304,18 +308,7 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
             lookAllComments=(TextView)view.findViewById(R.id.item_post_lookAllComments);
             go=(RelativeLayout)view.findViewById(R.id.item_post_go);
             hader=(ImageButton)view.findViewById(R.id.item_post_header);
-            try{
-                Position=getPosition();
-                ItemViewType=getItemViewType();
-                LayoutPosition=getLayoutPosition();
-                AdapterPosition=getAdapterPosition();
-                OldPosition=getOldPosition();
 
-                //notifyItemInserted(AdapterPosition);
-                insert(Position);
-              }catch(Exception e){
-                print(e);
-              }
           }
       }
   }

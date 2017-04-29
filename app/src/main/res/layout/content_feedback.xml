@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	android:fitsSystemWindows="true"
+	android:id="@+id/login_root_Background">
+
+	<LinearLayout
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="#66000000">
+
+		<android.support.design.widget.AppBarLayout
+			android:layout_gravity="center_horizontal"
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="#00000000">
+
+			<android.support.v7.widget.Toolbar
+				xmlns:toolbar="http://schemas.android.com/apk/res-auto"
+				toolbar:title="@string/login"
+				app:layout_collapseMode="pin"
+				android:id="@+id/toolbar_feedback"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				android:theme="@style/AppTheme.AppBarOverlay"
+				app:popupTheme="@style/AppTheme.PopupOverlay"
+				android:background="#00000000"/>
+
+		</android.support.design.widget.AppBarLayout>
+
+		<ScrollView
+			android:layout_height="match_parent"
+			android:layout_width="match_parent">
+
+			<RelativeLayout
+				android:layout_height="match_parent"
+				android:layout_width="match_parent">
+
+				<com.gc.materialdesign.views.ButtonRectangle
+					android:layout_height="50dp"
+					style="?android:attr/buttonStyleSmall"
+					android:text="@string/login"
+					android:gravity="center"
+					android:layout_width="320dp"
+					android:id="@+id/login"/>
+
+			</RelativeLayout>
+
+		</ScrollView>
+
+	</LinearLayout>
+
+</RelativeLayout>
+

@@ -50,9 +50,9 @@ public class SettingsFlagment extends PreferenceFragment
     private MainApplication app;
     @Override
     public void onCreate(Bundle savedInstanceState){
-          app=new MainApplication();
+        app=new MainApplication();
         this.ctx=SettingsActivity.ctx;
-        set=app.set;
+        set=app.getSettings();
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preference_settings);
         init();
@@ -62,11 +62,11 @@ public class SettingsFlagment extends PreferenceFragment
     public SettingsFlagment(){
         app=new MainApplication();
         this.ctx=SettingsActivity.ctx;
-        set=app.set;
+        set=app.getSettings();
         //init();
       }
 
-      public void setContext(Context ctx){
+    public void setContext(Context ctx){
         this.ctx=ctx;
       }
     //初始化
@@ -191,21 +191,22 @@ public class SettingsFlagment extends PreferenceFragment
 
     public void copy(File inpath,File outPath){
         File[] g=inpath.listFiles();
-        if(g.length>=1)
-          end=g[g.length-1];
         for(File h:g){
             copyFile(h,outPath);
           }
+        Toast.makeText(ctx,"导入/出数据完成",Toast.LENGTH_SHORT)
+        .show();
+
       }
 
 
-    private File end;
 
+    
     private void copyFile(File inpath,File outpath){   
         try{
             String strname=inpath.getName();
             File nowfile=new File(outpath.getPath()+"/"+strname);
-            if(inpath.isFile()){                      //判断是否是文件     
+            if(inpath.isFile()){                         
                 nowfile.createNewFile();
                 InputStream in=new FileInputStream(inpath);
                 OutputStream out=new FileOutputStream(nowfile);
@@ -213,17 +214,27 @@ public class SettingsFlagment extends PreferenceFragment
                 int j;
                 while((j=in.read(b))!=-1)
                   out.write(b,0,j);
-              }else if(inpath.isDirectory()){         //否则如果它是一个目录
+              }else if(inpath.isDirectory()){   
+                String[] skip={
+                  "app_b_sta",
+                  "app_hola_q",
+                  "app_img_dat",
+                  "app_textures",
+                  "app_webview",
+                  "code_cache",
+                  "lib"
+                  };
+                for(int i=0;i<skip.length;i++){
+                    if(inpath.getName().equals(skip[i]))
+                      return;
+                  }
                 nowfile.mkdir();
-                File files[] = inpath.listFiles();  //声明目录下所有的文件 files[];
-                for(int i=0;i<files.length;i++){        //遍历目录下所有的文件
-                    copyFile(files[i],nowfile);       //把每个文件 用这个方法进行迭代
+                File files[] = inpath.listFiles(); 
+                for(int i=0;i<files.length;i++){        
+                    copyFile(files[i],nowfile);      
                   } 
               } 
-            if(inpath==end){
-                Toast.makeText(ctx,"导入/出数据完成",Toast.LENGTH_SHORT)
-                .show();
-              }
+
           }catch(Exception e){
           }
       }

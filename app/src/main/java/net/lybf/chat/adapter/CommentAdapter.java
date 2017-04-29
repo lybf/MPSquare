@@ -193,7 +193,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
             BmobFile file=user.getIcon();
             if(file!=null){
-                File f=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/"+file.getFilename());
+                File f=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/head/"+file.getFilename());
                 if(!f.getParentFile().exists())
                   f.getParentFile().mkdirs();
                 if(f.exists()){
@@ -231,7 +231,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             MyUser usr=m.getUser();
             BmobFile file=usr.getIcon();
             if(file!=null){
-                File f=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/"+file.getFilename());
+                File f=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/head/"+file.getFilename());
 
                 if(!f.getParentFile().exists())
                   f.getParentFile().mkdirs();

@@ -26,13 +26,7 @@ public class ChatException extends Exception
         if(msg!=null)
           this.msg=msg;
       }
-    public ChatException(int code,String message){
-        super(message);
-        if(code>-1)
-          this.code=code;
-        if(message!=null)
-          this.msg=message;
-      }
+ 
     public ChatException(Exception e,int code,String message){
         super(message,e);
         if(code>-1)

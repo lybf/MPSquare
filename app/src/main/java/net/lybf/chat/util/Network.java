@@ -9,7 +9,18 @@ public class Network
 	public Network(Context c){
 		ctx=c;
 	  }
-	public boolean isNetWork(){
+
+	public boolean isConnected(){
+		ConnectivityManager cm=(ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo info=cm.getActiveNetworkInfo();
+		if(info!=null)
+		  return info.isConnected();
+		else
+		  return false;
+	  }
+	  
+	  
+	public boolean isConnectedOrConnecting(){
 		ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
 		if(netInfo!=null&&netInfo.isConnectedOrConnecting())

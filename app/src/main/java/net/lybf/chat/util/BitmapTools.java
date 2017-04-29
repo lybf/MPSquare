@@ -12,6 +12,11 @@ import android.graphics.Bitmap.Config;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.ByteArrayOutputStream;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 
 public class BitmapTools
   {
@@ -51,8 +56,24 @@ public class BitmapTools
       }
 
 
+    public Bitmap LoadFile(File f){
+        return null;
+      }
 
+    public Bitmap Drawable2Bitmap(Drawable draw){
 
+        // int width=draw.
+        //  ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        //  bm.compress(Bitmap.CompressFormat.PNG,100,baos);
+        //  return baos.toByteArray();
+
+        //    BitmapFactory.decodeByteArray(
+        return null;
+      }
+
+    public Drawable Bitmap2Drawable(Bitmap bitmap){
+        return null;
+      }
     public static Bitmap 切圆(Bitmap bitmap){ 
         int width = bitmap.getWidth(); 
         int height = bitmap.getHeight(); 

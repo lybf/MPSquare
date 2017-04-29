@@ -44,7 +44,7 @@ public class UpdateLogActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         ctx=this;
         app=new MainApplication();
-        set=app.set;
+        set=app.getSettings();
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{
@@ -62,7 +62,7 @@ public class UpdateLogActivity extends AppCompatActivity
       }
 
     private void initData(){
-        if(net.isNetWork()){
+        if(net.isConnectedOrConnecting()){
             BmobQuery<UpdateLog> query=new BmobQuery<UpdateLog>();
             query.order("-createdAt");
             query.setLimit(1000);

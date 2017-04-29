@@ -32,7 +32,7 @@ public class ErrorActivity extends AppCompatActivity
         print("接收到错误信息");
         super.onCreate(savedInstanceState);
         app=new MainApplication();
-        set=app.set;
+        set=app.getSettings();
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{

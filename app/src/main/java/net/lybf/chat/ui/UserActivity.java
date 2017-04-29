@@ -68,7 +68,7 @@ public class UserActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         app=new MainApplication();
-        set=app.set;
+        set=app.getSettings();
         ctx=this;
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
@@ -275,7 +275,7 @@ public class UserActivity extends AppCompatActivity
                 BmobFile icon=use.getIcon();
                 final String ic=icon.getFilename();
                 new Utils().print("图片名:"+ic);
-                final File f=new File("/sdcard/lybf/MPSquare/.user/"+use.getObjectId()+"/"+ic);
+                final File f=new File("/sdcard/lybf/MPSquare/.user/"+use.getObjectId()+"/head/"+ic);
                 new Utils().print("文件路径:"+f.getAbsolutePath());
                 if(!f.getParentFile().exists())
                   f.getParentFile().mkdirs();

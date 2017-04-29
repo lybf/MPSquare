@@ -72,15 +72,15 @@ public class PostActivity extends AppCompatActivity
     private Context ctx;
 
     private settings set;
-    
+
     private String 帖子;
-    
+
     private MyUser use;
-    
+
     private DateTools DTools;
-    
+
     private FloatingActionButton fab;
-          
+
     private SwipeRefreshLayout refresh;
 
     private RecyclerView listview;
@@ -92,8 +92,8 @@ public class PostActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         app=new MainApplication();
-        set=app.set;
-        
+        set=app.getSettings();
+
         use=BmobUser.getCurrentUser(MyUser.class);
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
@@ -164,8 +164,8 @@ public class PostActivity extends AppCompatActivity
             );
             listview=(RecyclerView)findViewById(R.id.comment_content);
             listview.setAdapter((adapter=new CommentAdapter(this)));
-               LinearLayoutManager Manager = new LinearLayoutManager(this);         
-               Manager.setOrientation(LinearLayoutManager.VERTICAL);
+            LinearLayoutManager Manager = new LinearLayoutManager(this);         
+            Manager.setOrientation(LinearLayoutManager.VERTICAL);
             listview.setLayoutManager(Manager); 
             listview.setItemAnimator(new DefaultItemAnimator());
             //  listview.setFastScrollEnabled(true);
@@ -219,7 +219,7 @@ public class PostActivity extends AppCompatActivity
                     read();
 
                   }else{
-                    if(net.isNetWork()){
+                    if(net.isConnectedOrConnecting()){
                         ErrorMessage error=new ErrorMessage();
                         String s=error.getMessage(p2.getErrorCode());
                         new AlertDialog.Builder(ctx)
@@ -291,9 +291,9 @@ public class PostActivity extends AppCompatActivity
                     c.setUser(use);
                     c.setParent(帖子);
                     c.setMessage(str);
-                    c.save(new SaveListener(){
+                    c.save(new SaveListener<String>(){
                         @Override
-                        public void done(Object p1,BmobException p2){
+                        public void done(String p1,BmobException p2){
                             if(p2==null){
                                 read();
                               }else if(p2!=null){                    

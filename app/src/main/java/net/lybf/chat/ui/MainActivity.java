@@ -73,16 +73,23 @@ import org.json.JSONObject;
 import net.lybf.chat.system.ActivityResultCode;
 import android.opengl.Visibility;
 import net.lybf.chat.MainApplication;
+import net.lybf.chat.adapter.MainToolsAdapter;
+import net.lybf.chat.maps.MainTools;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
+import com.squareup.picasso.PicassoDrawable;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity
   {
 
 
-    //public static String APPID ="4eaad1f155b7ed751472ed23e05bf084";
     //Tabs
     private String[] tabs={
-      "主页",
-      "社区"};
+      "社区",
+      "工具"};
     //界面
     private List<View> mContent=new ArrayList<View>();
 
@@ -137,6 +144,10 @@ public class MainActivity extends AppCompatActivity
     private Bundle bundle;
 
     private MainApplication app;
+
+    private RecyclerView mTools;
+
+    private MainToolsAdapter ToolsAdapter;
     @Override
     public void onCreate(Bundle save){
         super.onCreate(save);
@@ -144,7 +155,7 @@ public class MainActivity extends AppCompatActivity
         //getSupportActionBar().hide();
         ctx=this;
         app=new MainApplication();
-        set=app.set;
+        set=app.getSettings();
         initViews();
       }
 
@@ -183,7 +194,8 @@ public class MainActivity extends AppCompatActivity
         .show();
       }
 
-    private class ExitApp implements DialogInterface.OnClickListener{
+    private class ExitApp implements DialogInterface.OnClickListener
+      {
         @Override
         public void onClick(DialogInterface p1,int p2){
             MainActivity.this.finish();
@@ -231,7 +243,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onActivityResult(int requestCode,int resultCode,Intent data){
-        read(true);
+        // read(true);
+        print("ActivityResult-requestCode:"+requestCode+"  resultCode:"+resultCode);
         if(requestCode==0){
 
             switch(resultCode){
@@ -293,7 +306,7 @@ public class MainActivity extends AppCompatActivity
                     BmobFile icon=use.getIcon();
                     final String ic=icon.getFilename();
                     print("图片名:"+ic);
-                    final File f=new File("/sdcard/lybf/MPSquare/.user/"+use.getObjectId()+"/"+ic);
+                    final File f=new File("/sdcard/lybf/MPSquare/.user/"+use.getObjectId()+"/head/"+ic);
                     print("文件路径:"+f.getAbsolutePath());
                     if(!f.getParentFile().exists())
                       f.getParentFile().mkdirs();
@@ -372,7 +385,7 @@ public class MainActivity extends AppCompatActivity
         mViewPager=(ViewPager)findViewById(R.id.main_viewpage);
         mTabLayout=(TabLayout)findViewById(R.id.main_tabs);
         Post=LayoutInflater.from(this).inflate(R.layout.content_main_posts,null);
-        MainPage=new View(this);
+        MainPage=LayoutInflater.from(this).inflate(R.layout.content_main_tools,null);
         mContent.add(Post);
         mContent.add(MainPage);
         mViewPagerAdapter=new MainPagerAdaptet(tabs,mContent);
@@ -408,6 +421,49 @@ public class MainActivity extends AppCompatActivity
                 print(e);
               }
 
+            try{
+                mTools=(RecyclerView)MainPage.findViewById(R.id.main_tools_listview);
+                mTools.setEnabled(true);
+                mTools.setFocusable(true);
+                GridLayoutManager manager=    new GridLayoutManager(this,3,GridLayoutManager.VERTICAL,false);
+                //manager.setOrientation(LinearLayoutManager.VERTICAL);
+                mTools.setLayoutManager(manager); 
+                mTools.setAdapter(ToolsAdapter=new MainToolsAdapter(this));
+                mTools.setItemAnimator(new DefaultItemAnimator());
+
+                Object[][] tools={
+                    {"robot",R.drawable.ic_android_black,"聊天机器人"}
+                  };
+                for(int i=0;i<tools.length;i++){
+                    MainTools mt=new MainTools();
+                    Bitmap bm=BitmapFactory.decodeResource(getResources(),tools[i][1]);
+                    mt.setBitmap(bm);
+                    mt.setTAG(""+tools[i][0]);
+                    mt.setDescribe(""+tools[i][2]);
+                    ToolsAdapter.additem(mt);
+                  }
+
+                try{
+                    ToolsAdapter.setOnItemClickListener(new MainToolsAdapter.OnItemClickListener(){
+                        @Override
+                        public void onClick(View view,int index){
+                            MainTools mt=ToolsAdapter.getItemData(index);
+                            /*
+                             Intent i=new Intent(ctx,PostActivity.class);
+                             Bundle bu=new Bundle();
+                             bu.putString("帖子",m.getObjectId());
+                             i.putExtra("Mydata",bu);
+                             ctx.startActivity(i);
+                             */
+                          }
+                      });
+                  }catch(Exception e){
+                    print(e);
+                  }
+              }catch(Exception e){
+                print("工具初始化错误");
+                print(e);
+              }
             mDrawerLayout=(DrawerLayout) findViewById(R.id.drawerlayout);
             mToolbar=(Toolbar) findViewById(R.id.toolbar);
             mNavigationView=(NavigationView) findViewById(R.id.navigationview);
@@ -492,8 +548,9 @@ public class MainActivity extends AppCompatActivity
 
 
 
-      }
 
+
+      }
 
 
     private class SendTie implements OnClickListener
@@ -552,7 +609,7 @@ public class MainActivity extends AppCompatActivity
       {
         @Override
         public void onRefresh(){
-            if(net.isNetWork()){
+            if(net.isConnectedOrConnecting()){
                 i=0;
                 refreshing.postDelayed(run,1000);
                 加载信息条数+=10;
@@ -565,6 +622,12 @@ public class MainActivity extends AppCompatActivity
                     .setTitle("没网了")
                     .setMessage("你必须连接网络才能刷新最新数据，无网将从缓存读取(不耗流量)")
                     .setPositiveButton("知道了",null)
+                    .setNeutralButton("隐藏",new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface p1,int p2){
+                            REFRESH_HINT=false;
+                          }              
+                      })
                     .setNegativeButton("设置网络",new setNetWork())  .show();
                   }else{
                     REFRESH_HINT=false;
@@ -628,7 +691,7 @@ public class MainActivity extends AppCompatActivity
                       //
 
                     case R.id.设置:
-                      startActivity(new Intent(ctx,SettingsActivity.class));
+                      startActivityForResult(new Intent(ctx,SettingsActivity.class),0);
                       break;
                   }
                 return false;
@@ -659,13 +722,13 @@ public class MainActivity extends AppCompatActivity
          query.include("image3");*/
         query.setLimit(加载信息条数);
         boolean isCache = query.hasCachedResult(Post.class);
-        if(!b||!net.isNetWork()){//离线阅读
+        if(!b||!net.isConnectedOrConnecting()){//离线阅读
             if(isCache){
                 //    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
                 query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
               }else{
                 query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
-                showError(null,"无缓存").show();//提示无缓存，为何isCache为false？
+                print("无缓存");
               }
           }else{
             if(FIRST_READ|!b){

@@ -34,10 +34,9 @@ public class SettingsActivity extends AppCompatActivity
 
     private SettingsFlagment sf;
 
-    private boolean isDark=false;
     @Override
     protected void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
+        super.onCreate(bundle=savedInstanceState);
         ctx=this;
         app=new MainApplication();
         initView();
@@ -50,13 +49,13 @@ public class SettingsActivity extends AppCompatActivity
 
 
     public void initView(){
-        set=app.set;
-        if(set.isDark()){
+        set=app.getSettings();
+		if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{
             setTheme(R.style.LightTheme);
           }
-        setContentView(R.layout.activity_settings);
+	    setContentView(R.layout.activity_settings);
         init();
       }
 
@@ -75,8 +74,7 @@ public class SettingsActivity extends AppCompatActivity
             sf.setContext(this);
             sf.setThemeChangeListener(new SettingsFlagment.ThemeChange(){
                 public void change(boolean bool){
-                    isDark=bool;
-                    recreate();
+					recreate();
                     SettingsActivity.this.setResult(ActivityResultCode.SETTINGS_CHANGE);
                   }
               });
@@ -87,7 +85,10 @@ public class SettingsActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed(){
-        //setResult(ActivityResultCode.SETTINGS_CHANGE);
+		if(app.LastTheme!=set.isDark()){
+		  setResult(ActivityResultCode.SETTINGS_CHANGE);
+		  app.LastTheme=set.isDark();
+		  }
         this.finish();
         super.onBackPressed();
       }
@@ -96,8 +97,11 @@ public class SettingsActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case android.R.id.home:
-            //  this.setResult(ActivityResultCode.SETTINGS_CHANGE);
-              finish();
+			  if(app.LastTheme!=set.isDark()){
+				  this.setResult(ActivityResultCode.SETTINGS_CHANGE);
+				  app.LastTheme=set.isDark();
+				}  
+			  finish();
               break;
           }
         return super.onOptionsItemSelected(item);

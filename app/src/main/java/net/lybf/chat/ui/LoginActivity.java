@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         app=new MainApplication();
-        set=app.set;
+        set=app.getSettings();
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{

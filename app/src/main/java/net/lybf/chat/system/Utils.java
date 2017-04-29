@@ -48,10 +48,10 @@ public class Utils
         sb.append("\n编译时间:"+Long2Date(Build.TIME));
         sb.append("\n内置存储："
         +String.format("%s/%s",getRomAvailableSize(),getRomTotalSize()));
-    
+
         sb.append("\n外置存储："
         +String.format("%s/%s",getSDAvailableSize(),getSDTotalSize()));
-        
+
         //getFileSize(ctx,Environment.getExternalStorageDirectory())));
         //sb.append("\n当前开发者代号:"+Build.VERSION.CODENAME);
         //sb.append("\n源码控制版本号:"+Build.VERSION.INCREMENTAL);
@@ -106,9 +106,8 @@ public class Utils
           }
         return root;
       }
-      
-    public long getTotalSize(String path) 
-      { 
+
+    public long getTotalSize(String path){ 
         StatFs fileStats = new StatFs(path); 
         fileStats.restat(path);
         long count= fileStats.getBlockCount();
@@ -116,9 +115,9 @@ public class Utils
         long l=count*size;
         if(l<-1)
           l=~l;
-          return l;
-        }
-      
+        return l;
+      }
+
     public String getFileSize(Context mContext,File path){
         File file =path;
         String str;
@@ -132,18 +131,18 @@ public class Utils
         return str;
 
       }
-      
+
     /**
      * 获得SD卡总大小
      * 
      * @return
      */
-    public String getSDTotalSize() {
+    public String getSDTotalSize(){
         File path = Environment.getExternalStorageDirectory();
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
         long totalBlocks = stat.getBlockCount();
-        return Formatter.formatFileSize(ctx, blockSize * totalBlocks);
+        return Formatter.formatFileSize(ctx,blockSize*totalBlocks);
       }
 
     /**
@@ -151,12 +150,12 @@ public class Utils
      * 
      * @return
      */
-    public String getSDAvailableSize() {
+    public String getSDAvailableSize(){
         File path = Environment.getExternalStorageDirectory();
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
         long availableBlocks = stat.getAvailableBlocks();
-        return Formatter.formatFileSize(ctx, blockSize * availableBlocks);
+        return Formatter.formatFileSize(ctx,blockSize*availableBlocks);
       }
 
     /**
@@ -164,12 +163,12 @@ public class Utils
      * 
      * @return
      */
-    public String getRomTotalSize() {
+    public String getRomTotalSize(){
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
         long totalBlocks = stat.getBlockCount();
-        return Formatter.formatFileSize(ctx, blockSize * totalBlocks);
+        return Formatter.formatFileSize(ctx,blockSize*totalBlocks);
       }
 
     /**
@@ -177,12 +176,12 @@ public class Utils
      * 
      * @return
      */
-    public String getRomAvailableSize() {
+    public String getRomAvailableSize(){
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
         long availableBlocks = stat.getAvailableBlocks();
-        return Formatter.formatFileSize(ctx, blockSize * availableBlocks);
+        return Formatter.formatFileSize(ctx,blockSize*availableBlocks);
       }
 
     public void print(Object obj){

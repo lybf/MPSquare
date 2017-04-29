@@ -10,52 +10,75 @@ import android.content.Context;
 import android.app.Activity;
 import net.lybf.chat.util.CrashHandler;
 import net.lybf.chat.system.settings;
+import net.lybf.chat.system.Utils;
+import cn.bmob.v3.BmobACL;
 public class MainApplication extends Application
   {
-    private static String APPID ="4eaad1f155b7ed751472ed23e05bf084";
-	private static Context mContext;
+    private static Context mContext;
 
-	private CrashHandler crash;
+    private CrashHandler crash;
 
-	public settings set=new settings(this);
-	@Override
+    public settings set;
+
+    public boolean LastTheme;
+    @Override
     public void onCreate(){
-        Bmob.initialize(this,APPID);
-		mContext=this;
+        try{
+            String key=getkey();
+            if(key!=null){
+                Bmob.initialize(this,key);
+              }else{
+                print("Key获取失败");
+                //Bmob.initialize(this,APPID);
+              }
+          }catch(Exception e){
+            print(e);
+          }
+        mContext=this;
         super.onCreate();
         crash=new CrashHandler(this);
-		crash.init();
-		set=new settings(this);
-		if(set.isDark()){
-			setTheme(R.style.DarkTheme);
-		  }else{
-			setTheme(R.style.LightTheme);
-		  }
+        crash.init();
+    //    set=new settings(this);
+        
       }
 
 
-	public Context getContext(){
-		return mContext;
-	  }
+    public Context getContext(){
+        return mContext;
+      }
 
-	public Application getApplication(){
-		return this;
-	  }
+    public Application getApplication(){
+        return this;
+      }
 
-	public settings getSettings(){
-		if(set==null){
-			print("SettingsIsNull");
-			set=new settings(this);
-		  }
-		return this.set;
-	  }
+    public settings getSettings(){
+        if(set==null){
+            print("Settings Is Null");
+            set=new settings(this);
+          }
+        /*if(LastTheme!=set.isDark())
+          LastTheme=set.isDark();
+          */
+        return this.set;
+      }
 
+    static{
+        try{
+            System.loadLibrary("system");
+          }catch(Exception e){
+            new Utils().print("MainApplication",e);
+          }
+      }
 
-	private void print(Object... obj){
-		StringBuilder build=new StringBuilder();
-		for(Object o:obj){
-			build.append(o.toString());
-		  }
-		System.out.println("MainApplication.class:"+build.toString());
-	  }
+    public native String getkey();
+
+    public native boolean BmobInitialize(Context ctx);
+
+    private void print(Object... obj){
+        StringBuilder build=new StringBuilder();
+        for(Object o:obj){
+            build.append(o.toString());
+          }
+        System.out.println("MainApplication.class:"+build.toString());
+      }
   }

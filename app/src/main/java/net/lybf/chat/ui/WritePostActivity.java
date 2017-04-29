@@ -58,7 +58,7 @@ public class WritePostActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         app=new MainApplication();
-        set=app.set;
+        set=app.getSettings();
 
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
