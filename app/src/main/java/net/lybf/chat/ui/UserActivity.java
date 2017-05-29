@@ -49,6 +49,8 @@ import android.support.design.widget.TextInputEditText;
 import android.widget.EditText;
 import android.support.design.widget.TextInputLayout;
 import net.lybf.chat.MainApplication;
+import net.lybf.chat.system.BmobUtils;
+import net.lybf.chat.system.Paths;
 
 public class UserActivity extends AppCompatActivity
   {
@@ -275,7 +277,7 @@ public class UserActivity extends AppCompatActivity
                 BmobFile icon=use.getIcon();
                 final String ic=icon.getFilename();
                 new Utils().print("图片名:"+ic);
-                final File f=new File("/sdcard/lybf/MPSquare/.user/"+use.getObjectId()+"/head/"+ic);
+                final File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+ic);
                 new Utils().print("文件路径:"+f.getAbsolutePath());
                 if(!f.getParentFile().exists())
                   f.getParentFile().mkdirs();

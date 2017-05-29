@@ -8,6 +8,11 @@ import net.lybf.chat.system.Utils;
 
 public class DateTools
   {
+
+    public String format(Date date,String pattern){
+        return new SimpleDateFormat(pattern).format(date);
+      }
+    
 	public Date String2Date(String date,String type){
 		SimpleDateFormat f=new SimpleDateFormat();
 		f.applyPattern(type);
@@ -19,11 +24,13 @@ public class DateTools
 		  }
 		return dat;
 	  }
+      
 	public long Date2Long(Date date){
 		if(date!=null)
 		  return date.getTime();
 		return 0;
 	  }
+      
 	public  String date(Date startDate){ 
 		Date endDate=new Date(System.currentTimeMillis());
 		if(startDate==null||endDate==null)

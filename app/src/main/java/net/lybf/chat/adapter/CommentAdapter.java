@@ -26,6 +26,7 @@ import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.exception.BmobException;
 import java.util.Date;
 import net.lybf.chat.system.Paths;
+import net.lybf.chat.system.BmobUtils;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>
   {
@@ -179,7 +180,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             if(user.getUsername()!=null)
               v.name.setText(""+user.getUsername());
             if(post.getCreatedAt()!=null){
-                SimpleDateFormat da=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat da=new SimpleDateFormat(BmobUtils.BMOB_DATE_TYPE);
                 Date datt = null;
                 try{
                     datt=(Date) da.parse(post.getCreatedAt());
@@ -261,7 +262,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                   }
               }
             v.name.setText(""+usr.getUsername());
-            SimpleDateFormat da=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat da=new SimpleDateFormat(BmobUtils.BMOB_DATE_TYPE);
             Date dp = null;
             try{
                 dp=(Date) da.parse(""+m.getCreatedAt());

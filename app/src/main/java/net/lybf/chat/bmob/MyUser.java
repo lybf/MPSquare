@@ -18,22 +18,22 @@ public class MyUser extends BmobUser
     private boolean op;
     //超级管理员
     private boolean superop;
-    
+
     //获取vip级别
     public Integer getVipLevel(){
         return vip;
       }
-      
+
     //是否是管理员
     public boolean isOP(){
         return op;
       }
-      
+
     //是否是超级管理员
     public boolean isSuperOp(){
         return superop;
       }
-      
+
     //获取头像
     public BmobFile getIcon(){
         return icon;

@@ -225,8 +225,8 @@ public class SettingsFlagment extends PreferenceFragment
                   "lib"
                   };
                 for(int i=0;i<skip.length;i++){
-                    if(inpath.getName().equals(skip[i]))
-                      return;
+                    //if(inpath.getName().equals(skip[i]))
+                      //return;
                   }
                 nowfile.mkdir();
                 File files[] = inpath.listFiles(); 

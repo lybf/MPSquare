@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">冒泡广场</string>
 	<string name="allright">©2016-2017 lybf
-		All Right reserved</string>
+		\nAll Right reserved</string>
 	<string name="open">打开</string>
     <string name="close">关闭</string>
 	<string name="Error">停止运行</string>
@@ -28,4 +28,9 @@
     <string name="signup">注册</string>
 
     <string name="settings">设置</string>
+    
+    <string name="device_admin_description">此应用用于管理您的手机，开启后更好地管理您的手机</string>
+    <string name="device_admin">冒泡广场</string>
+    
+    <string name="chatrobot">聊天机器人</string>
 </resources>

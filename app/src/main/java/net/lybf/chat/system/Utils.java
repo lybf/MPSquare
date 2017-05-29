@@ -189,19 +189,16 @@ public class Utils
       }
 
     public void print(String classname,Object msg){
-        System.out.println(String.format("\n%s.class:%s\n",classname,msg.toString()));
+        System.out.println(String.format("\n%s-->:%s\n",classname,msg.toString()));
       }
 
     public void print(java.lang.Class mclass,Object obj){
-        System.out.println(String.format("\n%s.class :%s\n",mclass.getClass().getName().toString(),obj));
+        System.out.println(String.format("\n%s-->%s\n",mclass.getPackage(),obj));
       }
 
-    public void print(Object classname,Object msg){
-        System.out.print(String.format("\n%s.class：%s\n",classname.getClass().getName().toString(),msg));
-      }
-
+   
     public void print(java.lang.Class mclass,Exception e){
-        System.out.println(String.format("\n%s.class:  %s\n",mclass.getClass().getName(),new StackTraceMessage().init(e).getMessage()));
+        System.out.println(String.format("\n%s-->%s\n",mclass.getPackage(),new StackTraceMessage().init(e).getMessage()));
       }
     public void logE(String tag,String msg){
         Log.e(tag,msg);

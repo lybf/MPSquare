@@ -116,6 +116,19 @@ public class MainToolsAdapter extends RecyclerView.Adapter<MainToolsAdapter.View
                     onClicklistener.onClick(viewHolder.root,p2);
                   }
               });
+              
+            viewHolder.describe.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View p1){
+                    onClicklistener.onClick(viewHolder.root,p2);
+                  }
+              });
+            viewHolder.hader.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View p1){
+                    onClicklistener.onClick(viewHolder.root,p2);
+                  }
+              });
           }
       }
 

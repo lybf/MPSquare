@@ -148,6 +148,14 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView mTools;
 
     private MainToolsAdapter ToolsAdapter;
+
+    @Override
+    protected void onStart(){
+        // TODO: Implement this method
+        super.onStart();
+      }
+    
+    
     @Override
     public void onCreate(Bundle save){
         super.onCreate(save);
@@ -159,6 +167,26 @@ public class MainActivity extends AppCompatActivity
         initViews();
       }
 
+    @Override
+    protected void onStop(){
+        // TODO: Implement this method
+        super.onStop();
+      }
+
+    @Override
+    protected void onPause(){
+        // TODO: Implement this method
+        super.onPause();
+      }
+
+      
+    @Override
+    protected void onDestroy(){
+        // TODO: Implement this method
+        super.onDestroy();
+      }
+
+      
     @Override
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
@@ -431,10 +459,12 @@ public class MainActivity extends AppCompatActivity
                 mTools.setAdapter(ToolsAdapter=new MainToolsAdapter(this));
                 mTools.setItemAnimator(new DefaultItemAnimator());
 
-                Object[][] tools={
-                    {"robot",R.drawable.ic_android_black,"聊天机器人"}
+                final Object[][] tools={
+                    {"robot",R.drawable.ic_android_black,"聊天机器人"},
+                    {"count",R.drawable.ic_contrast,"统计"}
                   };
                 for(int i=0;i<tools.length;i++){
+                 
                     MainTools mt=new MainTools();
                     Bitmap bm=BitmapFactory.decodeResource(getResources(),tools[i][1]);
                     mt.setBitmap(bm);
@@ -448,13 +478,16 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void onClick(View view,int index){
                             MainTools mt=ToolsAdapter.getItemData(index);
-                            /*
-                             Intent i=new Intent(ctx,PostActivity.class);
-                             Bundle bu=new Bundle();
-                             bu.putString("帖子",m.getObjectId());
-                             i.putExtra("Mydata",bu);
-                             ctx.startActivity(i);
-                             */
+                            switch(mt.getTAG()){
+                                case "robot":
+                                  Intent i=new Intent(ctx,ChatRobotActivity.class);
+                                  ctx.startActivity(i);
+                                  break;
+                                 
+                                case "count":
+                                  
+                                  break;
+                              }
                           }
                       });
                   }catch(Exception e){
@@ -784,7 +817,6 @@ public class MainActivity extends AppCompatActivity
 
     private void print(Object o){
         new Utils().print(this.getClass(),o);
-        new Utils().print(this,"test");;
       }
 
 

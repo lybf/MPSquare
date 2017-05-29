@@ -56,25 +56,19 @@ public class BitmapTools
       }
 
 
-    public Bitmap LoadFile(File f){
-        return null;
-      }
 
     public Bitmap Drawable2Bitmap(Drawable draw){
-
-        // int width=draw.
-        //  ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        //  bm.compress(Bitmap.CompressFormat.PNG,100,baos);
-        //  return baos.toByteArray();
-
-        //    BitmapFactory.decodeByteArray(
-        return null;
+        BitmapDrawable drawable=(BitmapDrawable) draw;
+        Bitmap bitmap=drawable.getBitmap();
+        return bitmap;
       }
 
     public Drawable Bitmap2Drawable(Bitmap bitmap){
-        return null;
+        BitmapDrawable drawable=new BitmapDrawable(bitmap);
+        return drawable;
       }
-    public static Bitmap 切圆(Bitmap bitmap){ 
+
+    public static Bitmap getCircle(Bitmap bitmap){ 
         int width = bitmap.getWidth(); 
         int height = bitmap.getHeight(); 
         int left = 0, top = 0, right = width, bottom = height; 
@@ -110,24 +104,16 @@ public class BitmapTools
 
 
 
-    public Bitmap 切圆2(Bitmap bitmap){
-        int width=bitmap.getWidth();
-        int height=bitmap.getHeight();
-        int r=0;
-        if(width<height)
-          r=width;
-        else
-          r=height;
-        Bitmap backgroundBm=Bitmap.createBitmap(width,height,Config.ARGB_8888);
-        Canvas canvas=new Canvas(backgroundBm);
-        Paint p=new Paint();
-        p.setAntiAlias(true);
-        RectF rect=new RectF(0,0,r,r);
-        canvas.drawRoundRect(rect,r/2,r/2,p);
-        p.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap,null,rect,p);
-        return backgroundBm;
-      }
 
+
+
+    public Bitmap compressImage(Bitmap image,int percent){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int options = percent;
+        image.compress(Bitmap.CompressFormat.JPEG,options,baos);//这里压缩options%，把压缩后的数据存放到baos中
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm,null,null);//把ByteArrayInputStream数据生成图片
+        return bitmap;
+      }
 
   }

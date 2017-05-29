@@ -3,6 +3,10 @@ applicationId 'net.lybf.chat'
 android {
     compileSdkVersion 19
     buildToolsVersion "25.0.0"
+    
+    sourceSets{
+        main.jniLibs.srcDirs = ['jnilibs']
+        }
 
 	
     defaultConfig {

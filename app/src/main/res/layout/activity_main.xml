@@ -19,29 +19,27 @@
 			android:layout_height="wrap_content">
 
 			<android.support.v7.widget.Toolbar
-				app:layout_scrollFlags="scroll|enterAlways"
 				app:title="@string/app_name"
 				app:layout_collapseMode="pin"
 				android:id="@+id/toolbar"
 				android:layout_width="match_parent"
 				android:layout_height="?attr/actionBarSize"
 				android:theme="@style/AppTheme.AppBarOverlay"/>
-			<android.support.design.widget.TabLayout
-				android:id="@+id/main_tabs"
-				android:layout_height="wrap_content"
-				android:layout_width="match_parent"
-				app:tabIndicatorColor="@color/transparent"
-				app:tabSelectedTextColor="@color/white"
-				app:tabTextColor="@color/blue"/>
-
+            <android.support.design.widget.TabLayout
+                android:id="@+id/main_tabs"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:tabIndicatorColor="@color/white"
+                app:tabSelectedTextColor="@color/orange"
+                app:tabTextColor="@color/white"/>
+            
 		</android.support.design.widget.AppBarLayout>
 
-		<LinearLayout
+		<RelativeLayout
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
 			app:layout_behavior="@string/appbar_scrolling_view_behavior"
 			android:orientation="vertical">
-
 
 			<android.support.v4.view.ViewPager
 				android:layout_height="match_parent"
@@ -49,7 +47,8 @@
 				app:layout_behavior="@string/appbar_scrolling_view_behavior"
 				android:id="@+id/main_viewpage"/>
 
-		</LinearLayout>
+			
+		</RelativeLayout>
 
 		<android.support.design.widget.FloatingActionButton
 			android:id="@+id/main_fab"
@@ -67,6 +66,7 @@
 			app:rippleColor="@color/primary"
 			android:paddingRight="20dp"
 			android:paddingBottom="20dp"/>
+
 	</android.support.design.widget.CoordinatorLayout>
 
 	<android.support.design.widget.NavigationView

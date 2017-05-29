@@ -25,6 +25,7 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
     private ArrayList<Robot> views=new ArrayList<Robot>();
     private OnItemClickListener onClicklistener;
     private OnItemLongClickListener onLongClicklistener;
+
     public interface OnItemClickListener
       {
         public void onClick(View view,int index);
@@ -35,6 +36,11 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
         public void onLong(View view,int index);
       }
 
+    public interface OnItemScrollListener
+      {
+
+      }
+    
     private Context ctx;
 
     private BitmapTools BMT;
@@ -119,6 +125,8 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder,final int p2){
         Robot too=getItemData(p2);
+        viewHolder.content.setText(""+too.getText());
+        viewHolder.name.setText(""+too.getName());
         if(onClicklistener!=null){
             viewHolder.root.setOnClickListener(new OnClickListener(){
                 @Override

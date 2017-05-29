@@ -11,8 +11,17 @@ public class Robot
     private int code;
     private String text;
     private String url;
+    private String name;
     private ArrayList<RobotList> list;
+    
+    public Robot setName(String name){
+        this.name=name;
+        return this;
+      }
 
+    public String getName(){
+        return this.name;
+      }
 
     public Robot setFlag(int flag){
       this.flag=flag;

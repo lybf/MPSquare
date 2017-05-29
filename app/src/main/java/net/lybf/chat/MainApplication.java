@@ -18,15 +18,16 @@ public class MainApplication extends Application
 
     private CrashHandler crash;
 
-    public settings set;
+    public settings set=new settings(this);
 
     public boolean LastTheme;
     @Override
     public void onCreate(){
         try{
+           System.out.println("init Bmob:"+(true==BmobInitialize(this)));
             String key=getkey();
             if(key!=null){
-                Bmob.initialize(this,key);
+                 // Bmob.initialize(this,key);
               }else{
                 print("Key获取失败");
                 //Bmob.initialize(this,APPID);
@@ -38,8 +39,8 @@ public class MainApplication extends Application
         super.onCreate();
         crash=new CrashHandler(this);
         crash.init();
-    //    set=new settings(this);
-        
+        //    set=new settings(this);
+
       }
 
 
@@ -56,9 +57,11 @@ public class MainApplication extends Application
             print("Settings Is Null");
             set=new settings(this);
           }
+
+        LastTheme=set.isDark();
         /*if(LastTheme!=set.isDark())
-          LastTheme=set.isDark();
-          */
+         LastTheme=set.isDark();
+         */
         return this.set;
       }
 
