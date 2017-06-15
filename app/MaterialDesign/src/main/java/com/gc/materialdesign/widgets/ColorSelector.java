@@ -20,8 +20,15 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.view.Menu;
 import java.util.List;
+import android.view.KeyboardShortcutGroup;
 public class ColorSelector extends android.app.Dialog implements OnValueChangedListener
   {
+
+    @Override
+    public void onProvideKeyboardShortcuts(List<KeyboardShortcutGroup> data,Menu menu,int deviceId){
+        // TODO: Implement this method
+      }
+
 	int color = Color.BLACK;
 	Context context;
 	View colorView;

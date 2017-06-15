@@ -7,16 +7,13 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import android.graphics.Bitmap.Config;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.io.ByteArrayOutputStream;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.BitmapDrawable;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.ByteArrayInputStream;
 
 public class BitmapTools
   {

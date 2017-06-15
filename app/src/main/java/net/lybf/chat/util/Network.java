@@ -2,13 +2,20 @@ package net.lybf.chat.util;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.content.Context;
+import net.lybf.chat.MainApplication;
 
 public class Network
   {
-	Context ctx;
+	private Context ctx
+    ;
 	public Network(Context c){
 		ctx=c;
 	  }
+
+    public Network(){
+        ctx=new MainApplication().getContext();
+      }
+
 
 	public boolean isConnected(){
 		ConnectivityManager cm=(ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -18,8 +25,8 @@ public class Network
 		else
 		  return false;
 	  }
-	  
-	  
+
+
 	public boolean isConnectedOrConnecting(){
 		ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();

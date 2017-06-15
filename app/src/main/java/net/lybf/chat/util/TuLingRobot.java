@@ -1,32 +1,24 @@
 package net.lybf.chat.util;
+import android.content.Context;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
+import cn.bmob.v3.BmobUser;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import org.apache.http.HttpClientConnection;
-import net.lybf.chat.maps.Robot;
-import org.json.JSONObject;
-import org.json.JSONException;
-import org.json.JSONArray;
-import net.lybf.chat.maps.RobotList;
-import java.util.ArrayList;
-import net.lybf.chat.bmob.MyUser;
-import cn.bmob.v3.BmobUser;
-import android.os.Build;
-import java.net.HttpURLConnection;
 import java.io.OutputStreamWriter;
-import net.lybf.chat.MainApplication;
-import android.content.Context;
-import android.telephony.TelephonyManager;
-import android.provider.Telephony;
-import android.telephony.CellLocation;     
-import android.telephony.PhoneStateListener;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Random;
-import net.lybf.chat.util.TuLingRobot.TuLingRobotListener;
-import android.os.Handler;
-import android.os.Message;  
+import net.lybf.chat.MainApplication;
+import net.lybf.chat.bmob.MyUser;
+import net.lybf.chat.maps.Robot;
+import net.lybf.chat.maps.RobotList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;  
 public class TuLingRobot
 
   {
@@ -42,10 +34,12 @@ public class TuLingRobot
 
     private static final int success=100;
 
+    private Network net;
     public TuLingRobot(){
         user=BmobUser.getCurrentUser(MyUser.class);
         app=new MainApplication();
         ctx=app.getContext();
+        net=new Network(ctx);
       }
 
     public interface TuLingRobotListener
@@ -161,6 +155,9 @@ public class TuLingRobot
                         json.put("name","聊天机器人");
                       }else{
                         json=new JSONObject("{\"name\":\"系统\",\"code\":404,\"text\":\"未知错误\"}");
+                        if(!net.isConnected()){
+                            json.put("text","网络似乎出了点问题～请检查你的网络！");
+                          }
                       }
                     robot=new Robot();
                     robot.setFlag(robot.FLAG_ROBOT);
@@ -177,6 +174,7 @@ public class TuLingRobot
                                 JSONObject obj=(JSONObject) array.opt(i);
                                 if(obj!=null){
                                     RobotList list=new RobotList();
+                                    //new Gson().fromJson(obj.toString(),RobotList.class);
                                     list.setArticle(""+obj.opt("article"))
                                     .setDetailUrl(""+obj.opt("detailurl"))
                                     .setFlag(0)

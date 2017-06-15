@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 public class ErrorMessage
   {
-    //AndroidSDK错误码列表
+    //BmobSDK错误码列表
     private Map<String,String> msg=new HashMap<String,String>();
     public ErrorMessage(){
         msg.put("9001","Application Id为空，请初始化.");
@@ -49,7 +49,7 @@ public class ErrorMessage
     //获取错误信息
     public String getMessage(int ErrorCode){
         if(ErrorCode>-1)
-          return msg.get(""+ErrorCode);
+          return msg.get(String.valueOf(ErrorCode));
         else
           return null;
       }

@@ -1,22 +1,17 @@
 
 package net.lybf.chat.adapter;
-import android.support.v7.widget.RecyclerView;
-import java.util.ArrayList;
-import android.view.View;
-import net.lybf.chat.bmob.Post;
-import java.util.HashMap;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import java.util.ArrayList;
+import net.lybf.chat.R;
+import net.lybf.chat.maps.Robot;
 import net.lybf.chat.util.BitmapTools;
 import net.lybf.chat.util.DateTools;
-import android.view.ViewGroup;
-import android.view.LayoutInflater;
-import net.lybf.chat.R;
-import android.widget.TextView;
-import android.widget.ImageButton;
-import net.lybf.chat.maps.Robot;
-import android.view.View.OnClickListener;
-import com.squareup.picasso.Picasso;
-import android.widget.ImageView;
 import net.lybf.chat.widget.CircleImageView;
 
 public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
@@ -40,7 +35,7 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
       {
 
       }
-    
+
     private Context ctx;
 
     private BitmapTools BMT;
@@ -58,6 +53,8 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
       }
 
     public RobotAdapter clearAll(){
+        views.clear();
+        notifyDataSetChanged();
         return this;
       }
 
@@ -76,6 +73,7 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
 
 
     public RobotAdapter removeItem(int position){
+        views.remove(position);
         notifyItemRemoved(position);
         return this;
       }
@@ -138,10 +136,8 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
       }
 
     public Robot getItemData(int position){
-        if(position>-1&&position<=position){
-            return views.get(position);
-          }
-        return null;
+        Robot chat=views.get(position);
+        return chat;
       }
 
     @Override

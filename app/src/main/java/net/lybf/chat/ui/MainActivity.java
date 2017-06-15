@@ -7,27 +7,27 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,47 +40,30 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.FindListener;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-import net.lybf.chat.adapter.MainTieAdapter;
-import net.lybf.chat.bmob.MyUser;
+import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
-import net.lybf.chat.bmob.UpdateLog;
-import net.lybf.chat.bmob.Comment;
-import net.lybf.chat.bmob.Post;
+import net.lybf.chat.adapter.MainPagerAdaptet;
+import net.lybf.chat.adapter.MainTieAdapter;
+import net.lybf.chat.adapter.MainToolsAdapter;
 import net.lybf.chat.bmob.ErrorMessage;
+import net.lybf.chat.bmob.MyUser;
+import net.lybf.chat.bmob.Post;
+import net.lybf.chat.maps.MainTools;
+import net.lybf.chat.system.ActivityResultCode;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
-import net.lybf.chat.system.update;
 import net.lybf.chat.ui.MainActivity;
 import net.lybf.chat.ui.SettingsActivity;
-import net.lybf.chat.util.BitmapTools;
+import net.lybf.chat.util.CommentCount;
 import net.lybf.chat.util.CommonUtil;
 import net.lybf.chat.util.Network;
 import net.lybf.chat.widget.CircleImageView;
-import java.util.ArrayList;
-import android.view.LayoutInflater;
-import android.support.v4.view.ViewPager;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.PagerAdapter;
-import net.lybf.chat.adapter.MainPagerAdaptet;
-import net.lybf.chat.util.CommentCount;
-import org.json.JSONObject;
-import net.lybf.chat.system.ActivityResultCode;
-import android.opengl.Visibility;
-import net.lybf.chat.MainApplication;
-import net.lybf.chat.adapter.MainToolsAdapter;
-import net.lybf.chat.maps.MainTools;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.GridLayoutManager;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.BitmapDrawable;
-import com.squareup.picasso.PicassoDrawable;
-import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity
   {
@@ -149,44 +132,44 @@ public class MainActivity extends AppCompatActivity
 
     private MainToolsAdapter ToolsAdapter;
 
+    private boolean themechange;
     @Override
     protected void onStart(){
         // TODO: Implement this method
         super.onStart();
       }
-    
-    
+
+
     @Override
     public void onCreate(Bundle save){
         super.onCreate(save);
         bundle=save;
         //getSupportActionBar().hide();
         ctx=this;
-        app=new MainApplication();
+        // app=new MainApplication();
+        app=(MainApplication) getApplication();
         set=app.getSettings();
+        themechange=set.isDark();
         initViews();
       }
 
     @Override
     protected void onStop(){
-        // TODO: Implement this method
         super.onStop();
       }
 
     @Override
     protected void onPause(){
-        // TODO: Implement this method
         super.onPause();
       }
 
-      
+
     @Override
     protected void onDestroy(){
-        // TODO: Implement this method
         super.onDestroy();
       }
 
-      
+
     @Override
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
@@ -283,6 +266,7 @@ public class MainActivity extends AppCompatActivity
 
                 case ActivityResultCode.SETTINGS_CHANGE:
                   print("SettingsChange");
+                //  settings st=new settings(this);
                   recreate();
                   //initViews();
                   break;
@@ -464,7 +448,7 @@ public class MainActivity extends AppCompatActivity
                     {"count",R.drawable.ic_contrast,"统计"}
                   };
                 for(int i=0;i<tools.length;i++){
-                 
+
                     MainTools mt=new MainTools();
                     Bitmap bm=BitmapFactory.decodeResource(getResources(),tools[i][1]);
                     mt.setBitmap(bm);
@@ -483,9 +467,9 @@ public class MainActivity extends AppCompatActivity
                                   Intent i=new Intent(ctx,ChatRobotActivity.class);
                                   ctx.startActivity(i);
                                   break;
-                                 
+
                                 case "count":
-                                  
+
                                   break;
                               }
                           }
@@ -727,7 +711,7 @@ public class MainActivity extends AppCompatActivity
                       startActivityForResult(new Intent(ctx,SettingsActivity.class),0);
                       break;
                   }
-                return false;
+                return true;
               }
           }
         );
@@ -749,10 +733,7 @@ public class MainActivity extends AppCompatActivity
         BmobQuery<Post> query = new BmobQuery<Post>();
         query.addWhereEqualTo("type","0");
         query.order("-createdAt");
-        query.include("user");
-        /* query.include("image");
-         query.include("image2");
-         query.include("image3");*/
+        query.include("user,image,image2,image3");
         query.setLimit(加载信息条数);
         boolean isCache = query.hasCachedResult(Post.class);
         if(!b||!net.isConnectedOrConnecting()){//离线阅读

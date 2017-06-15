@@ -1,18 +1,18 @@
 package net.lybf.chat.system;
-import org.json.JSONObject;
-import java.io.File;
-import android.os.storage.StorageManager;
 import android.content.Context;
-import java.io.InputStream;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import org.json.JSONException;
-import net.lybf.chat.MainApplication;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.TimeZone;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class settings
   {
@@ -31,6 +31,10 @@ public class settings
     public settings(Context ctx){
         this.ctx=ctx;
         init();
+      }
+
+    public String getUpdatedAt(){
+        return ""+root.opt("updatedAt");
       }
 
 
@@ -63,7 +67,7 @@ public class settings
 
 
 
-    public void setRandomBackground(boolean can) throws JSONException{
+    public void setRandomBackground(boolean can)throws JSONException{
         root.put("RandomBackground",can);
         save();
       }
@@ -79,11 +83,24 @@ public class settings
         return b;
       }
 
-    public void setDarkTheme(boolean b) throws JSONException{
+    public void setDarkTheme(boolean b)throws JSONException{
         root.put("DarkTheme",b);
         save();
       }
 
+
+    public void updateTheme(){
+        increment("SettingsChange");
+      }
+
+    private void increment(String key){
+        int p=root.opt(key);
+        try{
+            root.put(key,(p+1));
+          }catch(JSONException e){
+            e.printStackTrace();
+          }
+      }
 
     public void refresh(){
         init();
@@ -91,19 +108,32 @@ public class settings
 
 
     public String format(){
+        Date d=new Date(System.currentTimeMillis());
+        SimpleDateFormat p=new SimpleDateFormat(BmobUtils.BMOB_DATE_TYPE);
+        p.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
+        String date=p.format(d);
+        print("date:"+date);
+        try{
+            root.put("updatedAt",""+date);
+          }catch(JSONException e){
+            Utils.print(this.getClass(),e);
+          }
         Gson gson3 = new GsonBuilder().setPrettyPrinting().create();
         JsonParser jp = new JsonParser();
         JsonElement je = jp.parse(""+root.toString());
         String format= gson3.toJson(je);
         return format;
       }
+
+
     public void save(){
         try{
+
             FileOutputStream out=new FileOutputStream(file);
             out.write(format().getBytes());
           }catch(Exception e){
             print(e);
-             }
+          }
       }
 
     public interface SaveListener
@@ -111,19 +141,20 @@ public class settings
         public void done(Exception e);
       }
 
-    SaveListener savelistener;
+    private SaveListener savelistener;
     public void save(SaveListener listener){
         savelistener=listener;
         try{
             FileOutputStream out=new FileOutputStream(file);
             out.write(format().getBytes());
-            savelistener.done(null);
+            if(savelistener!=null)
+              savelistener.done(null);
           }catch(Exception e){
             print(e);
             savelistener.done(e);
           }
       }
     private void print(Object o){
-        new Utils().print(this.getClass(),o);
+        Utils.print(this.getClass(),o);
       }
   }

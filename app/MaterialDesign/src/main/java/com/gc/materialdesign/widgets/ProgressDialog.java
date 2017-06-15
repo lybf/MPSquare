@@ -17,8 +17,15 @@ import com.gc.materialdesign.views.ButtonFlat;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import android.view.Menu;
 import java.util.List;
+import android.view.KeyboardShortcutGroup;
 public class ProgressDialog extends android.app.Dialog
   {
+
+    @Override
+    public void onProvideKeyboardShortcuts(List<KeyboardShortcutGroup> data,Menu menu,int deviceId){
+        // TODO: Implement this method
+      }
+
 	Context context;
 	View view;
 	View backView;

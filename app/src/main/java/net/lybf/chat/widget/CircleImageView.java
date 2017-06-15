@@ -19,9 +19,8 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
-import android.widget.ImageView;
-import net.lybf.chat.R;
 import android.widget.ImageButton;
+import net.lybf.chat.R;
 
 public class CircleImageView extends ImageButton
   /*ImageView*/ {

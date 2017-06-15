@@ -1,33 +1,32 @@
 package net.lybf.chat.ui;
-import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
-import android.view.View;
 import android.content.Context;
 import android.os.Bundle;
-import net.lybf.chat.R;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import cn.bmob.v3.BmobQuery;
-import net.lybf.chat.bmob.UpdateLog;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import java.util.List;
-import cn.bmob.v3.exception.BmobException;
-import net.lybf.chat.system.Utils;
-import net.lybf.chat.system.update;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.LinearLayoutManager;
-import net.lybf.chat.adapter.UpdateLogAdapter;
-import android.support.v7.widget.DefaultItemAnimator;
-import net.lybf.chat.util.Network;
-import net.lybf.chat.system.settings;
 import net.lybf.chat.MainApplication;
+import net.lybf.chat.R;
+import net.lybf.chat.adapter.UpdateLogAdapter;
+import net.lybf.chat.bmob.UpdateLog;
+import net.lybf.chat.system.Utils;
+import net.lybf.chat.system.settings;
+import net.lybf.chat.system.update;
+import net.lybf.chat.util.Network;
 
 public class UpdateLogActivity extends AppCompatActivity
   {
 
     public static Context ctx;
-    
+
     private Toolbar bar;
+    
     private net.lybf.chat.util.UpdateLog log;
 
     private RecyclerView mListView;
@@ -39,6 +38,7 @@ public class UpdateLogActivity extends AppCompatActivity
     private settings set;
 
     private MainApplication app;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -88,6 +88,12 @@ public class UpdateLogActivity extends AppCompatActivity
                           }
                       }else{
                         print(e);
+                        if(log.count()>0){
+                            List<update> l=log.getAllUpdateLog();
+                            for(int i=0;i<l.size();i++){
+                                adapter.addItem(l.get(i));
+                              }
+                          }
                       }
                   }
               });

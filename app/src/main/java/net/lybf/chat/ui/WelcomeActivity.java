@@ -1,7 +1,6 @@
 package net.lybf.chat.ui;
 import android.content.Intent;
 import android.os.Bundle;
-import net.lybf.chat.R;
 import android.support.v7.app.AppCompatActivity;
 import net.lybf.chat.system.settings;
 

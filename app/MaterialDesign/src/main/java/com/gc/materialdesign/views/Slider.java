@@ -23,7 +23,8 @@ import com.gc.materialdesign.R;
 import com.gc.materialdesign.utils.Utils;
 import com.nineoldandroids.view.ViewHelper;
 import android.view.Menu;
-import java.util.List;;
+import java.util.List;
+import android.view.KeyboardShortcutGroup;;
 
 public class Slider extends CustomView {
 
@@ -396,6 +397,12 @@ public class Slider extends CustomView {
 
     class NumberIndicator extends Dialog
 	  {
+
+        @Override
+        public void onProvideKeyboardShortcuts(List<KeyboardShortcutGroup> data,Menu menu,int deviceId){
+            // TODO: Implement this method
+          }
+
         Indicator indicator;
         TextView  numberIndicator;
 

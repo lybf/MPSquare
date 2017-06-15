@@ -1,5 +1,6 @@
 package net.lybf.chat.flagment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -7,34 +8,21 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import net.lybf.chat.R;
-import net.lybf.chat.system.settings;
-import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
-import android.os.Handler;
-import android.os.Message;
-import java.util.Map;
-import android.content.res.ObbInfo;
-import android.support.v7.app.AlertDialog;
-import android.content.DialogInterface;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
-import android.app.Dialog;
-import java.text.DecimalFormat;
-import android.support.design.widget.Snackbar;
-import android.widget.Toast;
-import org.json.JSONException;
-import net.lybf.chat.flagment.SettingsFlagment.ThemeChange;
 import net.lybf.chat.MainApplication;
+import net.lybf.chat.R;
+import net.lybf.chat.system.Utils;
+import net.lybf.chat.system.settings;
 import net.lybf.chat.ui.SettingsActivity;
+import org.json.JSONException;
 
 public class SettingsFlagment extends PreferenceFragment
   {
@@ -156,7 +144,9 @@ public class SettingsFlagment extends PreferenceFragment
                     set.setDarkTheme(checkbox_darktheme.isChecked());
                     if(listener!=null)
                       listener.change(set.isDark());
-                  }catch(JSONException e){}
+                  }catch(JSONException e){
+                    new Utils().print(this.getClass(),e);
+                  }
                 return false;
               } 
           });
@@ -167,6 +157,8 @@ public class SettingsFlagment extends PreferenceFragment
     public void setThemeChangeListener(ThemeChange listener){
         this.listener=listener;
       }
+      
+      
     public interface ThemeChange
       {
         public void change(boolean isDark);
@@ -236,6 +228,7 @@ public class SettingsFlagment extends PreferenceFragment
               } 
 
           }catch(Exception e){
+            new Utils().print(this.getClass(),e);
           }
       }
 

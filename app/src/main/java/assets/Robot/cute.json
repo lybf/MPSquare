@@ -1,0 +1,22 @@
+{
+  //作者
+  "auther":"lybf",
+  //兼容版本
+  "compat":1.4,
+  //名称
+  "name":"机器人中文(卖萌)词库",
+  //版本号
+  "versionCode":1,
+  //版本名
+  "versionName":"1.0",
+  "useLibrary":"this",
+  "useLibraries":[],
+  //字典
+  "dictionary":{
+    //word result
+    "萌萌哒":[
+      "萌萌哒！",
+      "你在说我吗？(๑• . •๑)"
+      "卖萌真的好嘛？(๑• . •๑)"] 
+  }//dictionary end
+}

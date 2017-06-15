@@ -1,8 +1,7 @@
 package net.lybf.chat.util;
-import java.text.DecimalFormat;
 import android.content.Context;
-import net.lybf.chat.MainApplication;
 import android.text.format.Formatter;
+import net.lybf.chat.MainApplication;
 
 public class FileSize
   {

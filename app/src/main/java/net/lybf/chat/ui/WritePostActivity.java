@@ -1,37 +1,25 @@
 package net.lybf.chat.ui;
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import net.lybf.chat.R;
-import android.view.View;
-import android.widget.EditText;
-import android.text.TextWatcher;
-import android.text.Editable;
-import android.widget.Button;
-import android.view.View.OnTouchListener;
-import android.view.MotionEvent;
-import cn.bmob.v3.listener.SaveListener;
 import android.support.v7.app.AlertDialog;
-import cn.bmob.v3.BmobUser;
-import net.lybf.chat.bmob.MyUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.BmobBatch;
-import cn.bmob.v3.listener.QueryListListener;
-import cn.bmob.v3.datatype.BatchResult;
-import java.util.List;
-import cn.bmob.v3.BmobObject;
-import net.lybf.chat.bmob.Post;
-import net.lybf.chat.bmob.ErrorMessage;
 import android.support.v7.app.AppCompatActivity;
-import com.gc.materialdesign.views.ButtonRectangle;
-import android.view.View.OnClickListener;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.Toast;
-import android.content.Context;
-import net.lybf.chat.system.settings;
-import net.lybf.chat.system.Utils;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+import com.gc.materialdesign.views.ButtonRectangle;
 import net.lybf.chat.MainApplication;
+import net.lybf.chat.R;
+import net.lybf.chat.bmob.ErrorMessage;
+import net.lybf.chat.bmob.MyUser;
+import net.lybf.chat.bmob.Post;
+import net.lybf.chat.system.Utils;
+import net.lybf.chat.system.settings;
 
 public class WritePostActivity extends AppCompatActivity
   {
@@ -144,6 +132,7 @@ public class WritePostActivity extends AppCompatActivity
                         Toast.makeText(ctx,"发送成功",Toast.LENGTH_SHORT);
                         finish();
                       }else{
+                        Utils.print(this.getClass(),p2.getErrorCode());
                         ErrorMessage msg=new ErrorMessage();
                         String s=null;
                         s=msg.getMessage(p2.getErrorCode());

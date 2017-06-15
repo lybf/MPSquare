@@ -11,9 +11,9 @@
 
 		<net.lybf.chat.widget.CircleImageView
 			android:layout_gravity="center"
-			android:layout_width="50dp"
+			android:layout_width="35dp"
 			android:src="@drawable/ic_launcher"
-			android:layout_height="50dp"
+			android:layout_height="35dp"
 			android:id="@+id/item_robot_myself_header"
 			android:layout_alignParentRight="true"
 			android:layout_margin="5dp"/>

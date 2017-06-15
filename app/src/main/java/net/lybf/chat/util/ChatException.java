@@ -1,4 +1,5 @@
 package net.lybf.chat.util;
+import android.util.Log;
 
 public class ChatException extends Exception
   {
@@ -7,12 +8,20 @@ public class ChatException extends Exception
     private int code=0;
     private String msg="其他错误";
 
+    private String TAG="ChatException";
+
     public ChatException(String msg){
         super(msg);
         if(msg!=null)
           this.msg=msg;
       }
 
+      public ChatException(String msg,int code){
+        super(msg);
+        this.msg=msg;
+        this.code=code;
+      }
+      
     public ChatException(Exception e){
         super(e);
       }
@@ -26,7 +35,7 @@ public class ChatException extends Exception
         if(msg!=null)
           this.msg=msg;
       }
- 
+
     public ChatException(Exception e,int code,String message){
         super(message,e);
         if(code>-1)
@@ -44,6 +53,18 @@ public class ChatException extends Exception
       }
 
     public String toString(){
-        return String.format("code:%s,message:%s",code,msg);
+        return String.format("code:%s,error:%s",code,msg);
       }
+
+    @Override
+    public void printStackTrace(){
+        StringBuilder build=new StringBuilder();
+        build.append("\n");
+        build.append(((Exception)this).toString());
+        build.append("\n");
+        build.append(new StackTraceMessage().init(this).getMessage().toString());
+        build.append("\n");
+        Log.e(TAG,build.toString());
+      }
+
   }

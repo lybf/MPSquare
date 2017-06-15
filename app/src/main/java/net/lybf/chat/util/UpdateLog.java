@@ -1,24 +1,20 @@
 package net.lybf.chat.util;
-import net.lybf.chat.system.update;
-import org.json.JSONObject;
-import java.io.File;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import org.json.JSONArray;
-import java.util.List;
-import java.util.ArrayList;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import org.json.JSONException;
-import net.lybf.chat.system.Utils;
-import java.io.FileOutputStream;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.text.ParseException;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import net.lybf.chat.system.Utils;
+import net.lybf.chat.system.update;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class UpdateLog
   {

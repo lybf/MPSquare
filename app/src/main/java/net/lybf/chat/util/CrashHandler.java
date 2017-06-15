@@ -1,9 +1,9 @@
 package net.lybf.chat.util;
 import android.content.Context;
-import java.lang.Thread.UncaughtExceptionHandler;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Process;
+import java.lang.Thread.UncaughtExceptionHandler;
 import net.lybf.chat.system.Utils;
 public class CrashHandler implements UncaughtExceptionHandler
   {
@@ -18,21 +18,28 @@ public class CrashHandler implements UncaughtExceptionHandler
 	public void init(){
 		Thread.setDefaultUncaughtExceptionHandler(this);
 	  }
+
+    public Context getContext(){
+        return this.m;
+      }
+
 	@Override
 	public void uncaughtException(Thread thread,Throwable ex){
-		if(!handleException(ex)&&mDefaultHandler!=null){ 
+        if(!handleException(ex,thread)&&mDefaultHandler!=null){ 
 			mDefaultHandler.uncaughtException(thread,ex); 
 		  }
 	  }
 
-	private boolean handleException(Throwable ex){
+	private boolean handleException(Throwable ex,Thread thread){
 		if(ex==null){
 			return false;
 		  }else{
 			StackTraceMessage msg=new StackTraceMessage();
 			msg.init(ex);
 			StringBuilder builder=msg.getMessage();
-
+            if(listener!=null){
+                listener.onError(builder.toString(),(Exception)ex,thread);
+              }
 			try{
 				new Utils().print(this.getClass(),ex.toString());
 				Intent i=new Intent(m,Class.forName("net.lybf.chat.ui.ErrorActivity"));
@@ -42,6 +49,7 @@ public class CrashHandler implements UncaughtExceptionHandler
 				b.putString("error",builder.toString());
 				i.putExtra("Error",b);
 				m.startActivity(i);
+
 				Process.killProcess(Process.myPid());
 			  }catch(Exception e){
 				new Utils().print(this.getClass(),e);
@@ -52,5 +60,21 @@ public class CrashHandler implements UncaughtExceptionHandler
 			  return false;
 		  }
 	  }	
-	
+
+
+
+
+    public interface ErrorListener
+      {
+        void onError(String string,Exception e,Thread thread);
+      }
+
+    private ErrorListener listener;
+    public void setErrorListener(ErrorListener listener){
+        this.listener=listener;
+      }
+
+    public void unregisterErrorListener(){
+        this.listener=null;
+      }
   }

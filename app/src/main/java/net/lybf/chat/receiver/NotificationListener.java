@@ -63,12 +63,13 @@ public class NotificationListener extends AccessibilityService
 
 
     @Override
-    public FileInputStream openFileInput(String name) throws FileNotFoundException{
+    public FileInputStream openFileInput(String name)throws FileNotFoundException{
         return super.openFileInput(name);
       }
 
     @Override
-    public FileOutputStream openFileOutput(String name,int mode) throws FileNotFoundException{
+    public FileOutputStream openFileOutput(String name,int mode) 
+      throws FileNotFoundException{
         return super.openFileOutput(name,mode);
       }
 

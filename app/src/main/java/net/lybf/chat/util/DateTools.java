@@ -1,17 +1,27 @@
 package net.lybf.chat.util;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
-import android.text.format.DateFormat;
-import java.text.ParseException;
 import net.lybf.chat.system.Utils;
 
 public class DateTools
   {
+    public static final String YEAR="yyyy";
+    public static final String MOTHER="MM";
+    public static final String DAY="dd";
+    public static final String HOURS="HH";
+    public static final String MINUTES="mm";
+    public static final String SECONDS="ss";
 
     public String format(Date date,String pattern){
         return new SimpleDateFormat(pattern).format(date);
       }
+
+    public String format(long date,String pattern){
+        Date dat=new Date(date);
+        return new SimpleDateFormat(pattern).format(dat);
+      }
+
     
 	public Date String2Date(String date,String type){
 		SimpleDateFormat f=new SimpleDateFormat();
@@ -24,13 +34,30 @@ public class DateTools
 		  }
 		return dat;
 	  }
-      
-	public long Date2Long(Date date){
+
+    public Date getDate(String date,String pattern){
+        SimpleDateFormat f=new SimpleDateFormat();
+        f.applyPattern(pattern);
+        Date dat = null;
+        try{
+            dat=f.parse(date);
+          }catch(Exception e){
+            new Utils().print(this.getClass(),e);
+          }
+        return dat;
+      }
+
+	public long getLong(Date date){
 		if(date!=null)
 		  return date.getTime();
 		return 0;
 	  }
-      
+
+    public long getLong(String date,String pattern){
+        Date dt=getDate(date,pattern);
+        return dt.getTime();
+      }
+
 	public  String date(Date startDate){ 
 		Date endDate=new Date(System.currentTimeMillis());
 		if(startDate==null||endDate==null)

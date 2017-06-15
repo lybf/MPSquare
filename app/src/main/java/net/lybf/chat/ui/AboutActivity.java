@@ -1,34 +1,33 @@
 package net.lybf.chat.ui;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import net.lybf.chat.R;
-import android.widget.TextView;
-import net.lybf.chat.util.Network;
-import net.lybf.chat.system.Utils;
-import cn.bmob.v3.BmobQuery;
-import net.lybf.chat.bmob.UpdateLog;
-import cn.bmob.v3.listener.FindListener;
-import java.util.List;
-import cn.bmob.v3.exception.BmobException;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageInfo;
-import android.content.Context;
-import android.content.pm.PackageManager.NameNotFoundException;
-import net.lybf.chat.bmob.ErrorMessage;
-import android.content.DialogInterface;
 import android.content.ClipboardManager;
-import android.support.v7.app.AlertDialog;
-import android.view.MenuItem;
-import android.widget.Button;
-import android.view.View.OnClickListener;
-import android.view.View;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import net.lybf.chat.system.update;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.util.Linkify;
-import net.lybf.chat.system.settings;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import java.util.List;
 import net.lybf.chat.MainApplication;
+import net.lybf.chat.R;
+import net.lybf.chat.bmob.ErrorMessage;
+import net.lybf.chat.bmob.UpdateLog;
+import net.lybf.chat.system.Utils;
+import net.lybf.chat.system.settings;
+import net.lybf.chat.system.update;
+import net.lybf.chat.util.Network;
 
 public class AboutActivity extends AppCompatActivity
   {
@@ -43,6 +42,7 @@ public class AboutActivity extends AppCompatActivity
     private Network net;
 
     private PackageManager pm ;
+    
     private PackageInfo pi ;
 
     private Button CheckUpdate;

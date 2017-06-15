@@ -1,9 +1,10 @@
 package net.lybf.chat.system;
 import android.app.admin.DevicePolicyManager;
-import android.content.Context;
 import android.content.ComponentName;
-import net.lybf.chat.receiver.AdminReceiver;
+import android.content.Context;
 import android.content.Intent;
+import java.lang.reflect.Method;
+import net.lybf.chat.receiver.AdminReceiver;
 
 public class AdminManager
   {
@@ -27,13 +28,23 @@ public class AdminManager
     public ComponentName getComponetName(){
         return mDeviceAdminSample;
       }
-    
+
     public Intent startAdmin(){
         Intent intent = null;
         if(!isOpen()){
             intent=new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN,mDeviceAdminSample);
             intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,"开启后就可以全面管理手机啦");
+            
+            Class css=ctx.getClass();
+            Method method;
+            try{
+                method=css.getDeclaredMethod("startActivity",css);
+                method.setAccessible(true);
+                method.invoke(intent);
+              }catch(Exception e){
+                Utils.print(this.getClass(),e);
+              }
           }
         return intent;
       }

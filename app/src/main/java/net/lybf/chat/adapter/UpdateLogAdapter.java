@@ -1,21 +1,19 @@
 package net.lybf.chat.adapter;
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
-import java.util.ArrayList;
-import net.lybf.chat.system.update;
-import java.util.List;
 import android.content.Context;
-import android.view.View;
-import android.widget.TextView;
-import net.lybf.chat.R;
-import android.view.LayoutInflater;
-import android.text.Html;
-import android.view.ViewStub.OnInflateListener;
-import android.view.View.OnClickListener;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.util.Linkify;
-import android.media.tv.TvInputService;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.List;
+import net.lybf.chat.R;
+import net.lybf.chat.system.update;
 
 public class UpdateLogAdapter extends RecyclerView.Adapter<UpdateLogAdapter.ViewHolder>
   {

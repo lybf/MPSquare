@@ -1,5 +1,4 @@
 package net.lybf.chat.ui;
-import net.lybf.chat.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +8,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import net.lybf.chat.MainApplication;
+import net.lybf.chat.R;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
-import net.lybf.chat.MainApplication;
 
 public class ErrorActivity extends AppCompatActivity
   {

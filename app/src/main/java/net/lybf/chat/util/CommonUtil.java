@@ -1,7 +1,7 @@
 package net.lybf.chat.util;
 import android.content.Context;
-import net.lybf.chat.MainApplication;
 import android.util.Log;
+import net.lybf.chat.MainApplication;
 
 public class CommonUtil
   {

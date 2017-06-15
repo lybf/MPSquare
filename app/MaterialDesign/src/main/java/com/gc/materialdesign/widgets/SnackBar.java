@@ -18,10 +18,17 @@ import android.widget.TextView;
 import com.gc.materialdesign.R;
 import com.gc.materialdesign.views.ButtonFlat;
 import android.view.Menu;
-import java.util.List;;
+import java.util.List;
+import android.view.KeyboardShortcutGroup;;
 
 public class SnackBar extends Dialog
   {
+
+    @Override
+    public void onProvideKeyboardShortcuts(List<KeyboardShortcutGroup> data,Menu menu,int deviceId){
+        // TODO: Implement this method
+      }
+
 
 	String text;
 	float textSize = 14;//Roboto Regular 14sp 
