@@ -6,12 +6,12 @@ import net.lybf.chat.system.Utils;
 
 public class DateTools
   {
-    public static final String YEAR="yyyy";
-    public static final String MOTHER="MM";
-    public static final String DAY="dd";
-    public static final String HOURS="HH";
-    public static final String MINUTES="mm";
-    public static final String SECONDS="ss";
+    public static final String TIME_YEAR="yyyy";
+    public static final String TIME_MOTHER="MM";
+    public static final String TIME_DAY="dd";
+    public static final String TIME_HOURS="HH";
+    public static final String TIME_MINUTES="mm";
+    public static final String TIME_SECONDS="ss";
 
     public String format(Date date,String pattern){
         return new SimpleDateFormat(pattern).format(date);
@@ -22,7 +22,7 @@ public class DateTools
         return new SimpleDateFormat(pattern).format(dat);
       }
 
-    
+
 	public Date String2Date(String date,String type){
 		SimpleDateFormat f=new SimpleDateFormat();
 		f.applyPattern(type);
@@ -30,7 +30,7 @@ public class DateTools
 		try{
 			dat=f.parse(date);
 		  }catch(Exception e){
-			new Utils().print(this.getClass(),e);
+            Utils.print(this.getClass(),e);
 		  }
 		return dat;
 	  }
@@ -42,7 +42,7 @@ public class DateTools
         try{
             dat=f.parse(date);
           }catch(Exception e){
-            new Utils().print(this.getClass(),e);
+            Utils.print(this.getClass(),e);
           }
         return dat;
       }

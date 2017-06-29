@@ -31,12 +31,12 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
     private OnItemLongClickListener onLongClicklistener;
     public interface OnItemClickListener
       {
-        public void onClick(View view,int index);
+        void onClick(View view,int index);
       }
 
     public interface OnItemLongClickListener
       {
-        public void onLong(View view,int index);
+        void onLong(View view,int index);
       }
 
     //帖子

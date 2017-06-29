@@ -52,7 +52,7 @@ public class CrashHandler implements UncaughtExceptionHandler
 
 				Process.killProcess(Process.myPid());
 			  }catch(Exception e){
-				new Utils().print(this.getClass(),e);
+				Utils.print(this.getClass(),e);
 			  }
 			if(builder.toString().length()>1)
 			  return true;

@@ -138,7 +138,7 @@ public class settings
 
     public interface SaveListener
       {
-        public void done(Exception e);
+        void done(Exception e);
       }
 
     private SaveListener savelistener;

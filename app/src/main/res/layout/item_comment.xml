@@ -1,69 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="wrap_content"
-	android:layout_width="match_parent"
-	android:orientation="vertical">
 
-	<LinearLayout
-		android:layout_height="match_parent"
-		android:layout_width="match_parent"
-		android:orientation="vertical">
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
 
-		<LinearLayout
-			android:layout_height="match_parent"
-			android:layout_width="match_parent"
-			android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="2dp"
+    app:cardMaxElevation="2dp"
+    app:cardElevation="2dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true"
+    android:layout_margin="2dp">
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:orientation="horizontal">
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
 
-				<net.lybf.chat.widget.CircleImageView
-					android:layout_height="40dp"
-					android:layout_width="40dp"
-					android:id="@+id/comment_header"
-					android:src="@drawable/ic_launcher"
-					android:layout_margin="8dp"/>
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
 
-				<LinearLayout
-					android:layout_height="wrap_content"
-					android:layout_width="match_parent"
-					android:orientation="vertical">
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:orientation="vertical">
 
-					<TextView
-						android:layout_height="wrap_content"
-						android:textAppearance="?android:attr/textAppearanceMedium"
-						android:layout_width="match_parent"
-						android:id="@+id/comment_name"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-					<TextView
-						android:layout_height="wrap_content"
-						android:textAppearance="?android:attr/textAppearanceSmall"
-						android:layout_width="match_parent"
-						android:id="@+id/comment_time"/>
+                    <net.lybf.chat.widget.CircleImageView
+                        android:layout_height="40dp"
+                        android:layout_width="40dp"
+                        android:id="@+id/comment_header"
+                        android:src="@drawable/ic_launcher"
+                        android:layout_margin="8dp"/>
 
-					<TextView
-						android:layout_height="wrap_content"
-						android:textAppearance="?android:attr/textAppearanceSmall"
-						android:layout_width="match_parent"
-						android:id="@+id/comment_content"
-						android:autoLink="web"
-						android:textIsSelectable="true"/>
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical">
 
-					<View
-						android:background="?android:attr/dividerVertical"
-						android:layout_height="1dp"
-						android:layout_width="match_parent"/>
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:layout_width="match_parent"
+                            android:id="@+id/comment_name"/>
 
-				</LinearLayout>
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:layout_width="match_parent"
+                            android:id="@+id/comment_time"/>
 
-			</LinearLayout>
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:layout_width="match_parent"
+                            android:id="@+id/comment_content"
+                            android:autoLink="web"
+                            android:textIsSelectable="true"/>
 
-		</LinearLayout>
+                        <View
+                            android:layout_height="1dp"
+                            android:layout_width="match_parent"/>
 
-	</LinearLayout>
+                    </LinearLayout>
 
-</LinearLayout>
+                </LinearLayout>
 
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

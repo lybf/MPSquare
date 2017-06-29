@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity
     //图片工具
     //private BitMapTools bitmaptools;
     private int 加载信息条数=30;
+    //网络类
     private Network net;
     //配置类
     private settings set;

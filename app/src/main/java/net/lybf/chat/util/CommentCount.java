@@ -8,14 +8,14 @@ import net.lybf.chat.system.Utils;
 public class CommentCount
   {
     private String id;
-    
+
     private  CommentCountListener listener;
-    
+
     private Utils utils;
-    
+
     public interface  CommentCountListener
       {
-        public void done(int i,BmobException e);
+         void done(int i,BmobException e);
       }
     public CommentCount setPostID(String postid){
         id=postid;
@@ -47,5 +47,5 @@ public class CommentCount
           });
       }
 
-      
+
   }

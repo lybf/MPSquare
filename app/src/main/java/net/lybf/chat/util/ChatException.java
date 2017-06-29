@@ -25,11 +25,13 @@ public class ChatException extends Exception
     public ChatException(Exception e){
         super(e);
       }
+      
     public ChatException(Exception e,String msg){
         super(msg,e);
         if(msg!=null)
           this.msg=msg;
       }
+      
     public ChatException(Throwable e,String msg){
         super(msg,e);
         if(msg!=null)

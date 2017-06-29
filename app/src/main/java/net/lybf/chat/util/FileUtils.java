@@ -31,7 +31,15 @@ public class FileUtils
       }
 
     public void deleteNullDirectory(){
-        
+        List<File> l=getAllFile();
+        for(File file:l){
+            if(file.isDirectory()){
+                File[] files=file.listFiles();
+                if(files.length==0){
+                    file.delete();
+                  }
+              }
+          }
       }
 
     private void collectFile(List<File> list,File file){

@@ -11,14 +11,14 @@ public class PhotosPickerActivity extends AppCompatActivity
     private settings set;
 
     private MainApplication app;
-      @Override
-      protected void onCreate(Bundle savedInstanceState){
-         super.onCreate(savedInstanceState);
-          app=new MainApplication();
-          set=app.getSettings();
-          if(set.isDark()){
-              setTheme(R.style.DarkTheme);
-            }
-          
-         }
-}
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        app=new MainApplication();
+        set=app.getSettings();
+        if(set.isDark()){
+            setTheme(R.style.DarkTheme);
+          }
+
+      }
+  }

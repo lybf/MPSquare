@@ -13,28 +13,33 @@ import net.lybf.chat.maps.Robot;
 import net.lybf.chat.util.BitmapTools;
 import net.lybf.chat.util.DateTools;
 import net.lybf.chat.widget.CircleImageView;
+import net.lybf.chat.util.UserManager;
+import net.lybf.chat.bmob.MyUser;
+import cn.bmob.v3.BmobUser;
+import java.io.File;
+import net.lybf.chat.system.Paths;
+import com.squareup.picasso.Picasso;
 
 public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
   {
     //CreatedAt 2017/4/24 00:10
     private ArrayList<Robot> views=new ArrayList<Robot>();
+
     private OnItemClickListener onClicklistener;
+
     private OnItemLongClickListener onLongClicklistener;
 
     public interface OnItemClickListener
       {
-        public void onClick(View view,int index);
+        void onClick(View view,int index);
       }
 
     public interface OnItemLongClickListener
       {
-        public void onLong(View view,int index);
+        void onLong(View view,int index);
       }
 
-    public interface OnItemScrollListener
-      {
 
-      }
 
     private Context ctx;
 
@@ -42,9 +47,11 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
 
     private DateTools DTL;
 
+    private MyUser user;
     public RobotAdapter(Context ctx){
         this.ctx=ctx;
         init();
+        user=BmobUser.getCurrentUser(MyUser.class);
       }
 
     private void init(){
@@ -98,10 +105,12 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
         this.onClicklistener=listener;
         return this;
       }
+
     public RobotAdapter setItemOnLongClickListener(OnItemLongClickListener listener){
         this.onLongClicklistener=listener;
         return this;
       }
+
     //创建新View，被LayoutManager所调用
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup,int viewType){
@@ -120,11 +129,19 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
         return vh;
       }
     //将数据与界面进行绑定的操作
+
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder,final int p2){
         Robot too=getItemData(p2);
         viewHolder.content.setText(""+too.getText());
         viewHolder.name.setText(""+too.getName());
+        if(viewHolder.flag==viewHolder.FLAG_MYSELF){
+            File file=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/head/"+user.getIcon().getFilename());
+            if(file.exists())
+              Picasso.with(ctx).load(file).into(viewHolder.header);
+            else
+              Picasso.with(ctx).load(R.drawable.ic_launcher).into(viewHolder.header);
+          }
         if(onClicklistener!=null){
             viewHolder.root.setOnClickListener(new OnClickListener(){
                 @Override
@@ -163,8 +180,12 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
 
     public  class ViewHolder extends RecyclerView.ViewHolder
       {
-        public static final int FLAG_ROBOT=0;
-        public static final int FLAG_MYSELF=1;
+        public static final int FLAG_ROBOT=Robot.FLAG_ROBOT;
+
+        public static final int FLAG_MYSELF=Robot.FLAG_MYSELF;
+
+        public int flag;
+
         public View root;
 
         public TextView name;
@@ -172,9 +193,11 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
         public CircleImageView header;
 
         public TextView content;
+        
         public ViewHolder(View view,int flag){
             super(view);
             this.root=view;
+            this.flag=flag;
             if(flag==FLAG_ROBOT){
                 header=(CircleImageView)view.findViewById(R.id.item_robot_robot_header);
                 name=(TextView)view.findViewById(R.id.item_robot_robot_name);

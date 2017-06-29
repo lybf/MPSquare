@@ -26,8 +26,7 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.UpdateListener;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import cn.bmob.v3.listener.UploadFileListener;
 import java.io.File;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
@@ -52,6 +51,7 @@ public class UserActivity extends AppCompatActivity
     private boolean UserInfoChange=false;
 
     private MainApplication app;
+    
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -131,10 +131,7 @@ public class UserActivity extends AppCompatActivity
                       );  
                       snackbar.show();
                       UserActivity.this.setResult(ActivityResultCode.USER_REFRESH);
-                     // setResult(ActivityResultCode.USER_REFRESH);
-                      
                       UserActivity.this.finish();
-                      //  refreshData();
                     }
                 }
               )
@@ -321,7 +318,6 @@ public class UserActivity extends AppCompatActivity
             String t=data.getData().getPath();
             File F=new File(t);
             if(F.exists()){}
-            //获取图(F);
           }
         super.onActivityResult(requestCode,resultCode,data);
       }
@@ -337,22 +333,32 @@ public class UserActivity extends AppCompatActivity
 
     private void upIcon(File f){
         final BmobFile bmobFile=new BmobFile(f);
+        bmobFile.upload(new UploadFileListener(){
+            @Override
+            public void done(BmobException p){
+                if(p==null){
+                    MyUser u=BmobUser.getCurrentUser(MyUser.class);
+                    if(u!=null){
+                        u.setIcon(bmobFile);
+                        u.update(new UpdateListener(){
+                            @Override
+                            public void done(BmobException p){
+                                if(p==null)
+                                  new Utils().print(this.getClass(),"成功");
+                                else
+                                  alert("错误","状态码："+p.getErrorCode()+"\n错误信息:\n"+p.getMessage());   
+                              }
+                          }
+                        );
 
-        MyUser u=BmobUser.getCurrentUser(MyUser.class);
-        if(u!=null){
-            u.setIcon(bmobFile);
-            u.update(new UpdateListener(){
-                @Override
-                public void done(BmobException p){
-                    if(p==null){
-                        new Utils().print(this.getClass(),"成功");
-                      }else{
-                        alert("错误","状态码："+p.getErrorCode()+"\n错误信息:\n"+p.getMessage());
                       }
+
+                  }else{
+                    alert("错误","状态码:"+p.getErrorCode()+"\n错误信息:\n"+p.getMessage());
                   }
               }
-            );
-          }
+          });
+
       }
 
 
@@ -367,21 +373,5 @@ public class UserActivity extends AppCompatActivity
       }
 
 
-    private Bitmap compressImage(Bitmap image){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG,100,baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-        int options = 100;
-        while(baos.toByteArray().length/1024>100){
-            new Utils().print(this.getClass(),"压图操作:百分比:"+options+"%");
-            //循环判断如果压缩后图片是否大于100kb,大于继续压缩        
-            baos.reset();//重置baos即清空baos
-            options-=10;//每次都减少10
-            image.compress(Bitmap.CompressFormat.JPEG,options,baos);//这里压缩options%，把压缩后的数据存放到baos中
-
-          }
-        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
-        Bitmap bitmap = BitmapFactory.decodeStream(isBm,null,null);//把ByteArrayInputStream数据生成图片
-        return bitmap;
-      }
 
   }

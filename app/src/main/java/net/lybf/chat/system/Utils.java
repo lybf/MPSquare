@@ -209,12 +209,22 @@ public class Utils
       }
 
     public static void print(String classname,Object msg){
-        System.out.println(String.format("\n%s-->:%s\n",classname,msg.toString()));
+        String pkg=classname;
+        System.out.println();
+        System.out.println("\n\n-----------"+pkg+"---------");
+        System.out.println(String.format("\n%s-->\n    %s\n",pkg,msg.toString()));
+        System.out.println("\n-----------"+pkg+"---------");
+        System.out.println();   
       }
 
     public static void print(java.lang.Class mclass,Object obj){
-        System.out.println(String.format("\n%s-->%s\n",mclass.getPackage().getName(),obj));
-      }
+        String pkg=mclass.getName();
+        System.out.println();
+        System.out.println("\n\n-----------"+pkg+"---------");
+        System.out.println(String.format("\n%s-->\n    %s\n",pkg,obj.toString()));
+        System.out.println("\n-----------"+pkg+"---------");
+        System.out.println();
+        }
 
 
     public static void print(java.lang.Class mclass,Exception e){

@@ -33,6 +33,7 @@ public class AboutActivity extends AppCompatActivity
   {
 
     private Context ctx;
+    
     private Toolbar bar;
 
     private TextView Name;
@@ -52,6 +53,7 @@ public class AboutActivity extends AppCompatActivity
     private settings set;
 
     private MainApplication app;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

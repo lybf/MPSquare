@@ -76,7 +76,6 @@ public class UserManager
         File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+filename);
         if(!f.exists())
           DownLoadHeader();
-
         Bitmap mp = null;
         if(f.exists()){
             try{
