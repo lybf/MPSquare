@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -33,7 +34,7 @@ public class AboutActivity extends AppCompatActivity
   {
 
     private Context ctx;
-    
+
     private Toolbar bar;
 
     private TextView Name;
@@ -43,7 +44,7 @@ public class AboutActivity extends AppCompatActivity
     private Network net;
 
     private PackageManager pm ;
-    
+
     private PackageInfo pi ;
 
     private Button CheckUpdate;
@@ -53,7 +54,7 @@ public class AboutActivity extends AppCompatActivity
     private settings set;
 
     private MainApplication app;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -67,7 +68,7 @@ public class AboutActivity extends AppCompatActivity
             setTheme(R.style.LightTheme);
           }
         setContentView(R.layout.activity_about);
-        
+
         pm=ctx.getPackageManager();
         try{
             pi=pm.getPackageInfo(ctx.getPackageName(),0);
@@ -141,9 +142,7 @@ public class AboutActivity extends AppCompatActivity
                             up.setTitle(l.getTile());
 
                             try{
-
                                 int i=pi.versionCode;
-
                                 String ii=pi.versionName;
                                 if(i-up.getVersionCode().intValue()<0){
                                     showAppUpdateMessage(up);
@@ -155,7 +154,7 @@ public class AboutActivity extends AppCompatActivity
 
 
                       }else{
-
+                        Snackbar.make(bar,"什么事也没发生",Snackbar.LENGTH_SHORT).show();
                         print(new ErrorMessage().getMessage(er.getErrorCode()));
                       }
                   }

@@ -66,6 +66,7 @@ public class PostActivity extends AppCompatActivity
     private CommentAdapter adapter;
 
     private MainApplication app;
+    
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

@@ -12,6 +12,8 @@ import net.lybf.chat.system.BmobUtils;
 import net.lybf.chat.system.settings;
 import net.lybf.chat.util.CrashHandler;
 import net.lybf.chat.util.DateTools;
+import cn.bmob.v3.Bmob;
+import net.lybf.chat.system.Utils;
 public class MainApplication extends Application
   {
     private static Context mContext;
@@ -21,53 +23,23 @@ public class MainApplication extends Application
     public settings set=new settings(this);
 
     public boolean LastTheme;
+
+
     @Override
     public void onCreate(){
-        try{
-            System.out.println("init Bmob:"+(true==BmobInitialize(this)));
-            String key=getkey();
-
-            try{
-                if(key!=null){
-                    BmobInstallation install= BmobInstallation.getCurrentInstallation();
-                    if(true){
-                        install.save();
-                        MyUser user=BmobUser.getCurrentUser(MyUser.class);
-                        if(user!=null){
-                            install.setValue("user",user);
-                            install.update(install.getObjectId(),new UpdateListener(){
-                                @Override
-                                public void done(BmobException p1){
-                                    if(p1!=null){
-                                        print("BmobInstallation init Success");
-                                        Log.w("MainApplication",p1.getMessage());
-                                      }else{
-                                        print("BmobInstalla init error  -->"+new ErrorMessage().getMessage(p1.getErrorCode()));
-                                      }
-                                  }         
-                              });
-
-                          }else{
-                            install.save();
-                          }
-                      }
-                  }else{
-                    print("Key获取失败");
-                  }
-
-              }catch(Exception e){
-                print(e);
-              }
-          }catch(Exception e){
-            print(e);
-          }
-        mContext=this;
         super.onCreate();
-        crash=new CrashHandler(this);
-        crash.init();
+        crash=CrashHandler.getInstance();
+     /*   System.out.println("init Bmob:"+(true==BmobInitialize(this)));
+        BmobInstallation in=BmobInstallation.getCurrentInstallation();
+        in.save();*/
+        mContext=this;
         if(set==null)
           set=new settings(this);
         updateSettings();
+       // crash.init(this);
+        crash.startLogcat();
+        
+        //super.onCreate();
       }
 
 
@@ -99,6 +71,8 @@ public class MainApplication extends Application
             set=sett;
           }
       }
+
+
     static{
         System.loadLibrary("system");
       }
@@ -112,6 +86,8 @@ public class MainApplication extends Application
         for(Object o:obj){
             build.append(o.toString());
           }
-        System.out.println("MainApplication.class:"+build.toString());
+        Utils.print(this.getClass(),build.toString());
+
       }
+
   }

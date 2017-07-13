@@ -204,54 +204,90 @@ public class Utils
       }
 
 
-    public static void print(Object obj){
+    public static  void print(){
+        System.out.println();
+      }
+
+    public static  void print(Object obj){
         System.out.println(obj);
       }
 
-    public static void print(String classname,Object msg){
+
+    public static  String print(String classname,Object msg){
         String pkg=classname;
-        System.out.println();
-        System.out.println("\n\n-----------"+pkg+"---------");
-        System.out.println(String.format("\n%s-->\n    %s\n",pkg,msg.toString()));
-        System.out.println("\n-----------"+pkg+"---------");
-        System.out.println();   
+        String fo=format(pkg,msg.toString());
+        print(pkg,fo);
+        return fo;
       }
 
-    public static void print(java.lang.Class mclass,Object obj){
+    public static  String print(java.lang.Class mclass,Object obj){
         String pkg=mclass.getName();
-        System.out.println();
-        System.out.println("\n\n-----------"+pkg+"---------");
-        System.out.println(String.format("\n%s-->\n    %s\n",pkg,obj.toString()));
-        System.out.println("\n-----------"+pkg+"---------");
-        System.out.println();
-        }
-
-
-    public static void print(java.lang.Class mclass,Exception e){
-        String pkg=mclass.getName();
-        System.out.println();
-        System.out.println("\n\n-----------"+pkg+"---------");
-        System.out.println(String.format("\n%s-->\n    %s\n",pkg,new StackTraceMessage().init(e).getMessage().toString()));
-        System.out.println("\n-----------"+pkg+"---------");
-        System.out.println();
+        String p=format(pkg,obj.toString());
+        print(pkg,p);
+        return p;
       }
 
-    public class Log
+
+    public static  String print(java.lang.Class mclass,Exception e){
+        String pkg=mclass.getName();
+        String p=format(pkg,new StackTraceMessage().init(e).getMessage().toString());
+        print(pkg,p);
+        return p;
+      }
+
+    private static  String format(String className,String string){
+        StringBuilder sb=new StringBuilder();
+        sb.append("\n----------")
+        .append(className)
+        .append("----------")
+        .append("\n")
+        .append(string)
+        .append("\n")
+        .append("----------")
+        .append(className)
+        .append("----------\n");
+        return sb.toString();
+      }
+
+    public  class Logger
       {
-        private BuildConfig b;
+        public  void print(){
+            System.out.println();
+          }
 
-        public Log(){
-            b=new BuildConfig();
+        public  void print(Object obj){
+            System.out.println(obj);
           }
-        public  void e(String tag,String msg){
-            if(b.DEBUG)
-              android.util.Log.e(tag,msg);
+
+        public   void print(Object thisz,Exception e){
+            String pkg=thisz.getClass().getName();
+            print();
+            print("\n\n-----------"+pkg+"---------");
+            print(String.format("\n    %s\n",new StackTraceMessage().init(e).getMessage().toString()));
+            print("\n-----------"+pkg+"---------\n");
+            print();
           }
-        public  void w(String tag,String msg){
-            if(b.DEBUG)
-              android.util.Log.w(tag,msg);
+
+        public  void print(Object thisz,String e){
+            String pkg=thisz.getClass().getName();
+            print();
+            print("\n\n-----------"+pkg+"---------");
+            print(String.format("\n    %s\n",e));
+            print("\n-----------"+pkg+"---------\n");
+            print();
+          }
+
+        public  void print(Object thisz,Object e){
+            String pkg=thisz.getClass().getName();
+            print();
+            print("\n\n-----------"+pkg+"---------");
+            print(String.format("\n    %s\n",e).toString());
+            print("\n-----------"+pkg+"---------\n");
+            print();
           }
       }
+
+
   }
 
       

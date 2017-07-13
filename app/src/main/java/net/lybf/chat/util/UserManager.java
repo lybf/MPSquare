@@ -70,7 +70,7 @@ public class UserManager
       }
 
 
-    public Bitmap getHead(){
+    public Bitmap getIcon(){
         BmobFile file=use.getIcon();
         final String filename=file.getFilename();
         File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+filename);
@@ -90,12 +90,13 @@ public class UserManager
         BmobFile file=use.getIcon();
         final String filename=file.getFilename();
         File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+filename);
-        //if(!f.exists())
-        //  DownLoadHeader();
+        if(!f.exists())
+          DownLoadHeader();
         return f;
       }
+      
     private void print(String e){
-        new Utils().print(this.getClass(),e);
+         Utils.print(this.getClass(),e);
       }
 
   }

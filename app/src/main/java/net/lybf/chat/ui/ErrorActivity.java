@@ -26,7 +26,7 @@ public class ErrorActivity extends AppCompatActivity
     private settings set;
 
     private MainApplication app;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         print("接收到错误信息");
@@ -48,29 +48,29 @@ public class ErrorActivity extends AppCompatActivity
         Bundle b = null;
         try{
             b=i.getBundleExtra("Error");
-          }catch(Exception e){
-            print(e);
-          }
-        if(b!=null)
-          if(b.getString("error")!=null){
-              print(b.getString("error").toString());
-              //long date=System.currentTimeMillis();
-              String str = null;
-              try{
+            if(b!=null)
+              if(b.getString("error")!=null){
+                  print(b.getString("error").toString());
+                  //long date=System.currentTimeMillis();
+                  String str = null;
                   Date d=new Date();
                   SimpleDateFormat da=new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒SSS毫秒");
                   str=da.format(d);
-                }catch(Exception e){
-                  print(e);
+                  Utils u=new Utils();
+                  message.setText("设备信息:\n"+u.getDeviceInfo()+"\n\n-------"+str+"-------\n\n"+b.getString("error"));
+                  print(u.getDeviceInfo());
                 }
-              Utils u=new Utils();
-              message.setText("设备信息:\n"+u.getDeviceInfo()+"\n\n-------"+str+"-------\n\n"+b.getString("error"));
-              print(u.getDeviceInfo());
-            }
+          }catch(Exception e){
+            print(e);
+          }
+
       }
-      
-      public void print(Object o){
-        new Utils().print(this.getClass(),o);
+
+    public void print(Exception e){
+        Utils.print(this.getClass(),e);
+      }
+    public void print(Object o){
+        Utils.print(this.getClass(),o);
       }
 
 

@@ -4,30 +4,31 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import cn.bmob.v3.BmobUser;
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Random;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.maps.Robot;
-import net.lybf.chat.maps.RobotList;
-import org.json.JSONArray;
+import net.lybf.chat.system.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;  
-public class TuLingRobot
 
+public class TuLingRobot
   {
     //CreatedAt 2017/4/24 16:00
     private MyUser user;
     private String key="b6b3d000e00d4580a0b0eaf3a1236bd9";
 
     private MainApplication app;
+
     private Context ctx;
+
     private String id;
 
     private TuLingRobot.TuLingRobotListener listener;
@@ -68,7 +69,8 @@ public class TuLingRobot
                       str=str.substring(0,15);
                     }
                   id=str;
-                  System.out.println("TuLingRobot.class RandomID-->"+str);
+                  Utils.print(this.getClass(),"RandomID:"+str);
+                  //    System.out.println("TuLingRobot.class RandomID-->"+str);
                 }
             //IMEI
             //id=((TelephonyManager)ctx. getSystemService(ctx.TELEPHONY_SERVICE)).getDeviceId();
@@ -147,6 +149,7 @@ public class TuLingRobot
                       }
                   }
 
+                  Utils.print(this.getClass(),"\n"+result.toString()+"\n");
                 JSONObject json = null;
                 Robot robot = null;
                 try{
@@ -159,39 +162,10 @@ public class TuLingRobot
                             json.put("text","网络似乎出了点问题～请检查你的网络！");
                           }
                       }
-                    robot=new Robot();
+                    robot=new Gson().fromJson(json.toString(),Robot.class);
                     robot.setFlag(robot.FLAG_ROBOT);
-                    robot.setName(""+json.opt("name"));
-                    robot.setCode(json.opt("code"))
-                    .setText(""+json.opt("text"))
-                    .setUrl(""+json.opt("url"));
 
-                    try{
-                        JSONArray array=(JSONArray) json.opt("list");
-                        if(array!=null){
-                            ArrayList<RobotList> l=new ArrayList<RobotList>();
-                            for(int i=0;i<array.length();i++){
-                                JSONObject obj=(JSONObject) array.opt(i);
-                                if(obj!=null){
-                                    RobotList list=new RobotList();
-                                    //new Gson().fromJson(obj.toString(),RobotList.class);
-                                    list.setArticle(""+obj.opt("article"))
-                                    .setDetailUrl(""+obj.opt("detailurl"))
-                                    .setFlag(0)
-                                    .setIcon(""+obj.opt("icon"))
-                                    .setInfo(""+obj.opt("info"))
-                                    .setName(""+obj.opt("name"))
-                                    .setSource(""+obj.opt("source"));
-                                    l.add(list);         
-                                  }//end if
-                              }//end for
-                            if(l.size()>0)
-                              robot.setList(l);
-                          }//end if
-                      }catch(Exception e){
-                        e.printStackTrace();
-                      }//end try
-
+                    Utils.print(this.getClass(),new Gson().toJson(robot));
                   }catch(JSONException e){
                     e.printStackTrace();
                   }

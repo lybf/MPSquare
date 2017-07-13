@@ -5,17 +5,14 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import java.util.Locale;
+import android.app.Activity;
 
 public class ResourceUtils
   {
     /*
-       CreatedAt 2017/5/31 23:31
-    */
+     CreatedAt 2017/5/31 23:31
+     */
     private Resources resources;
-
-    private Configuration config;
-
-    private DisplayMetrics dm;
 
     public ResourceUtils(Resources res){
         this.resources=res;
@@ -23,6 +20,10 @@ public class ResourceUtils
 
     public ResourceUtils(Context context){
         this.resources=context.getResources();
+      }
+
+    public ResourceUtils(Activity activity){
+        this.resources=activity.getResources();
       }
 
     public AssetManager getAssets(){
@@ -42,12 +43,11 @@ public class ResourceUtils
       }
 
     public void setLanguage(Locale locale){
-        if(config==null)
-          config=getConfiguration();
-        if(dm==null)
-          dm=getDisplayMetrics();
+        Configuration config=getConfiguration();
+        DisplayMetrics dm=getDisplayMetrics();
         config.locale=locale;
-        updateConfiguration(config,dm);
+        if(locale!=null&&dm!=null&&config!=null)
+          updateConfiguration(config,dm);
       }
 
     public void updateConfiguration(Configuration config,DisplayMetrics dm){

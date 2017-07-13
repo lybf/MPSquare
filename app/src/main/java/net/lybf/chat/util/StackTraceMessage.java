@@ -3,6 +3,18 @@ package net.lybf.chat.util;
 public class StackTraceMessage
   {
 	private Throwable throwable;
+    public StackTraceMessage(){
+      
+    }
+    
+    public StackTraceMessage(Throwable throwable){
+        this.throwable=throwable;
+      }
+      
+    public StackTraceMessage(Exception exception){
+        this.throwable=exception;
+      }
+
 	public StackTraceMessage init(Throwable throwable){
 		this.throwable=throwable;
 		return this;
@@ -11,6 +23,7 @@ public class StackTraceMessage
 		this.throwable=exception;
 		return this;
 	  }
+
 
 	public StringBuilder getMessage(){
 		StringBuilder builder=new StringBuilder();
@@ -37,8 +50,8 @@ public class StackTraceMessage
           }
         return builder;
       }
-    
-      
+
+
 	public String toString(){
 		return "msg:"+getMessage().toString();
 	  }

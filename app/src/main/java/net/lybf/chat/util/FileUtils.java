@@ -3,12 +3,13 @@ import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
 
-public class FileUtils
+public class FileUtils extends File
   {
 
     private File file;
 
     public FileUtils(File file){
+        super(file.getAbsolutePath());
         this.file=file;
       }
 

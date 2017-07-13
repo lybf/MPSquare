@@ -43,6 +43,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.FindListener;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +57,13 @@ import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.bmob.Post;
 import net.lybf.chat.maps.MainTools;
 import net.lybf.chat.system.ActivityResultCode;
+import net.lybf.chat.system.Colors;
+import net.lybf.chat.system.Paths;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 import net.lybf.chat.ui.MainActivity;
 import net.lybf.chat.ui.SettingsActivity;
+import net.lybf.chat.util.BitmapTools;
 import net.lybf.chat.util.CommentCount;
 import net.lybf.chat.util.CommonUtil;
 import net.lybf.chat.util.Network;
@@ -70,9 +74,11 @@ public class MainActivity extends AppCompatActivity
 
 
     //Tabs
-    private String[] tabs={
+    private String[] tabs=
+      {
       "社区",
-      "工具"};
+      "工具"
+      };
     //界面
     private List<View> mContent=new ArrayList<View>();
 
@@ -134,12 +140,6 @@ public class MainActivity extends AppCompatActivity
     private MainToolsAdapter ToolsAdapter;
 
     private boolean themechange;
-    @Override
-    protected void onStart(){
-        // TODO: Implement this method
-        super.onStart();
-      }
-
 
     @Override
     public void onCreate(Bundle save){
@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity
         bundle=save;
         //getSupportActionBar().hide();
         ctx=this;
-        // app=new MainApplication();
         app=(MainApplication) getApplication();
         set=app.getSettings();
         themechange=set.isDark();
@@ -200,19 +199,18 @@ public class MainActivity extends AppCompatActivity
         new AlertDialog.Builder(this)
         .setTitle("退出?")
         .setMessage("你想去外面的世界看看？")
-        .setPositiveButton("是",new ExitApp())
+        .setPositiveButton("是",new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface p1,int p2){
+                MainActivity.this.finish();
+              }
+          })
         .setNegativeButton("不",null)
         .setCancelable(false)
         .show();
       }
 
-    private class ExitApp implements DialogInterface.OnClickListener
-      {
-        @Override
-        public void onClick(DialogInterface p1,int p2){
-            MainActivity.this.finish();
-          }
-      }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -267,7 +265,7 @@ public class MainActivity extends AppCompatActivity
 
                 case ActivityResultCode.SETTINGS_CHANGE:
                   print("SettingsChange");
-                //  settings st=new settings(this);
+                  //  settings st=new settings(this);
                   recreate();
                   //initViews();
                   break;
@@ -319,7 +317,7 @@ public class MainActivity extends AppCompatActivity
                     BmobFile icon=use.getIcon();
                     final String ic=icon.getFilename();
                     print("图片名:"+ic);
-                    final File f=new File("/sdcard/lybf/MPSquare/.user/"+use.getObjectId()+"/head/"+ic);
+                    final File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+ic);
                     print("文件路径:"+f.getAbsolutePath());
                     if(!f.getParentFile().exists())
                       f.getParentFile().mkdirs();
@@ -329,11 +327,10 @@ public class MainActivity extends AppCompatActivity
                         icon.download(f.getAbsoluteFile(),new DownloadFileListener(){
                             @Override
                             public void done(String p1,BmobException p2){
-                                if(p2==null){
-                                    nv_header.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
-                                  }else{
-                                    System.out. println("下载失败:"+p2);
-                                  }
+                                if(p2==null)
+                                  Picasso.with(ctx).load(f).into(nv_header);
+                                else
+                                  Utils.print(MainActivity.class,"下载失败:"+p2);  
                               }
                             @Override
                             public void onProgress(Integer p1,long p2){
@@ -348,14 +345,10 @@ public class MainActivity extends AppCompatActivity
                 if(use.getUsername()!=null)
                   if(nv_name!=null)
                     nv_name.setText(""+use.getUsername());
-                  else
-                    print("控件空指针了");
-                else
-                  print("名字为空");
               }else{
                 if(nv_name!=null){
                     nv_name.setText("未登录，点击头像以登录");
-                    nv_header.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.ic_user_header));
+                    Picasso.with(ctx).load(R.drawable.ic_user_header).into(nv_header);
                   }
               }
 
@@ -445,13 +438,19 @@ public class MainActivity extends AppCompatActivity
                 mTools.setItemAnimator(new DefaultItemAnimator());
 
                 final Object[][] tools={
-                    {"robot",R.drawable.ic_android_black,"聊天机器人"},
-                    {"count",R.drawable.ic_contrast,"统计"}
+                  //Tag,Icon,name,Class
+                    {"robot",R.drawable.ic_android_black,"聊天机器人",ChatRobotActivity.class},
+                    {"count",R.drawable.ic_contrast,"统计",null}
                   };
                 for(int i=0;i<tools.length;i++){
 
                     MainTools mt=new MainTools();
                     Bitmap bm=BitmapFactory.decodeResource(getResources(),tools[i][1]);
+                    if(set.isDark()){
+                        int x=Colors.gray;
+                        int y=Colors.white;
+                        bm=new BitmapTools().setColor(x,y,bm);
+                      }
                     mt.setBitmap(bm);
                     mt.setTAG(""+tools[i][0]);
                     mt.setDescribe(""+tools[i][2]);
@@ -463,15 +462,15 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void onClick(View view,int index){
                             MainTools mt=ToolsAdapter.getItemData(index);
-                            switch(mt.getTAG()){
-                                case "robot":
-                                  Intent i=new Intent(ctx,ChatRobotActivity.class);
-                                  ctx.startActivity(i);
-                                  break;
-
-                                case "count":
-
-                                  break;
+                            Class obj=(Class)tools[index][3];
+                            if(obj!=null){
+                                //  Class css=obj.getClass();
+                                Intent i=new Intent(ctx,obj);
+                                try{
+                                    ctx.startActivity(i);
+                                  }catch(Exception e){
+                                    e.printStackTrace();
+                                  }
                               }
                           }
                       });
@@ -484,6 +483,7 @@ public class MainActivity extends AppCompatActivity
               }
             mDrawerLayout=(DrawerLayout) findViewById(R.id.drawerlayout);
             mToolbar=(Toolbar) findViewById(R.id.toolbar);
+            mToolbar.setSubtitle("version:"+ctx.getPackageManager().getPackageInfo(getPackageName(),0).versionCode);
             mNavigationView=(NavigationView) findViewById(R.id.navigationview);
             mNavigationView.inflateHeaderView(R.layout.activity_main_nv_menu);
             mNavigationView.inflateMenu(R.menu.menu_main_nav);
@@ -502,7 +502,8 @@ public class MainActivity extends AppCompatActivity
             refresh.setProgressViewOffset(false,0,new CommonUtil().dip2px(24f));
             refresh.setOnRefreshListener(new SwipeRefresh());
             //refresh.setProgressBackground(Color.parseColor("0xFFFFFFFF"));
-            refresh.setColorSchemeResources(R.color.orange,R.color.green,R.color.blue); 
+            refresh.setColorSchemeResources(R.color.blue,
+            R.color.orange,R.color.green,R.color.primary_dark_material_dark,R.color.primary_dark_material_light); 
             //refresh.setColorSchemeResources(android.R.colorholo_blue_ligh,android.R.color.holo_red_light,android.R.color.holo_orange_light,android.R.color.holo_green_light);
             //refresh.setRefreshing(true);
             refresh.setSize(SwipeRefreshLayout.DEFAULT);
@@ -660,11 +661,11 @@ public class MainActivity extends AppCompatActivity
     private Runnable run=new Runnable(){
         public void run(){
             i++;
-            if(i==5&&refresh.isRefreshing()&&refresh!=null){
+            if(i==7&&refresh.isRefreshing()&&refresh!=null){
                 refresh.setRefreshing(false);
-                showError(null,"未知错误:刷新时间超过5秒，请检查您的网络连接").show();
+                showError(null,"刷新超时(7秒)，请检查您的网络连接").show();
               }        
-            if(refresh.isRefreshing()&&i<=5)
+            if(refresh.isRefreshing()&&i<=7)
               refreshing.postDelayed(this,1000);
           }
       };
@@ -728,8 +729,6 @@ public class MainActivity extends AppCompatActivity
 
 
     private void read(boolean b){
-        MTA.clearAll();
-        MTA.notifyDataSetChanged();
         print("扫描…………");
         BmobQuery<Post> query = new BmobQuery<Post>();
         query.addWhereEqualTo("type","0");
@@ -761,6 +760,8 @@ public class MainActivity extends AppCompatActivity
         query.findObjects(new FindListener<Post>() {
             @Override
             public void done(List<Post> obj,BmobException er){
+                MTA.clearAll();
+                MTA.notifyDataSetChanged();
                 if(er==null){
                     int le=obj.size();
                     print("查询成功............................共"+le+"条");
@@ -794,15 +795,13 @@ public class MainActivity extends AppCompatActivity
           }
         );
 
+        
       }
 
 
     private void print(Object o){
         new Utils().print(this.getClass(),o);
       }
-
-
-
 
 
 

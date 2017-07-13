@@ -12,6 +12,8 @@ import net.lybf.chat.R;
 import net.lybf.chat.maps.MainTools;
 import net.lybf.chat.util.BitmapTools;
 import net.lybf.chat.util.DateTools;
+import cn.bmob.push.a.which;
+import com.squareup.picasso.Picasso;
 
 public class MainToolsAdapter extends RecyclerView.Adapter<MainToolsAdapter.ViewHolder>
   {
@@ -103,6 +105,8 @@ public class MainToolsAdapter extends RecyclerView.Adapter<MainToolsAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder,final int p2){
         MainTools too=getItemData(p2);
+       // Picasso.with(ctx).
+        
         (viewHolder.hader).setImageBitmap(too.getBitmap());
         viewHolder.describe.setText(""+too.getDescribe());
         if(onClicklistener!=null){
@@ -112,7 +116,7 @@ public class MainToolsAdapter extends RecyclerView.Adapter<MainToolsAdapter.View
                     onClicklistener.onClick(viewHolder.root,p2);
                   }
               });
-              
+              /*
             viewHolder.describe.setOnClickListener(new OnClickListener(){
                 @Override
                 public void onClick(View p1){
@@ -124,7 +128,7 @@ public class MainToolsAdapter extends RecyclerView.Adapter<MainToolsAdapter.View
                 public void onClick(View p1){
                     onClicklistener.onClick(viewHolder.root,p2);
                   }
-              });
+              });*/
           }
       }
 
@@ -157,6 +161,7 @@ public class MainToolsAdapter extends RecyclerView.Adapter<MainToolsAdapter.View
         public TextView describe;
 
         public ImageView hader;
+        
         public ViewHolder(View view){
             super(view);
             this.root=view;

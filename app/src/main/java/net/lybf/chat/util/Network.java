@@ -19,8 +19,8 @@ import org.json.JSONObject;
 
 public class Network
   {
-	private Context ctx
-    ;
+	private Context ctx;
+    
 	public Network(Context c){
 		ctx=c;
 	  }
@@ -49,9 +49,9 @@ public class Network
 		  return false;
 	  }
       
-    public interface TuLingRobotListener
+    public interface SendPostListener
       {
-        void done(Robot robot);
+        void done(String robot);
       }
       
     //发送Post
@@ -105,6 +105,7 @@ public class Network
                       }
                   }
 
+                  /*
                 JSONObject json = null;
                  Message msg=handler.obtainMessage();
                 msg.what=success;
@@ -113,7 +114,6 @@ public class Network
                 /*   if(listener!=null){
                  listener.done(robot);
                  }*/
-
               }
           }
         ).start();
