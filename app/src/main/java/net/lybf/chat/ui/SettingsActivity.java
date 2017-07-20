@@ -2,7 +2,7 @@ package net.lybf.chat.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -15,7 +15,7 @@ import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 import org.json.JSONException;
 
-public class SettingsActivity extends AppCompatActivity
+public class SettingsActivity extends MPSActivity
   {
 
 //    settings set;

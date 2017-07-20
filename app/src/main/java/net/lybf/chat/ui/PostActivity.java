@@ -9,7 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +38,7 @@ import net.lybf.chat.util.CommonUtil;
 import net.lybf.chat.util.DateTools;
 import net.lybf.chat.util.Network;
 
-public class PostActivity extends AppCompatActivity
+public class PostActivity extends MPSActivity
   {
 
     private Toolbar bar;
@@ -66,10 +66,11 @@ public class PostActivity extends AppCompatActivity
     private CommentAdapter adapter;
 
     private MainApplication app;
+    
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        app=new MainApplication();
+        app=getMainApplication();
         set=app.getSettings();
 
         use=BmobUser.getCurrentUser(MyUser.class);

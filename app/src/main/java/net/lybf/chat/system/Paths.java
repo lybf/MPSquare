@@ -8,4 +8,7 @@ public class Paths
   public static final String SETTINGS_PATH="/sdcard/lybf/MPSquare/.settings/main.json";
   public static final String SETTINGS_PKG_PATH="/sdcard/lybf/MPSquare/.settings";
   
+  public static final String LOG_ROBOT_CHAT="/sdcard/lybf/MPSquare/.chatLog";
+  public static final String LOGCHAT_CRASH="/sdcard/lybf/MPSquare/.logcat";
+  
 }

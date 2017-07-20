@@ -2,7 +2,7 @@ package net.lybf.chat.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +21,7 @@ import net.lybf.chat.bmob.Post;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 
-public class WritePostActivity extends AppCompatActivity
+public class WritePostActivity extends MPSActivity
   {
 
     /*
@@ -45,7 +45,7 @@ public class WritePostActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
-        app=new MainApplication();
+        app=getMainApplication();
         set=app.getSettings();
 
         if(set.isDark()){

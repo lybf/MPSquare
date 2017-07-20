@@ -3,7 +3,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import net.lybf.chat.activity.MPSActivity;
 import android.view.View;
 import android.widget.EditText;
 import cn.bmob.v3.BmobUser;
@@ -43,7 +43,7 @@ import android.support.v7.app.ActionBar;
 import net.lybf.chat.system.Utils;
 import android.text.TextUtils;
 import net.lybf.chat.MainApplication;
-public class LoginActivity extends AppCompatActivity
+public class LoginActivity extends MPSActivity
   {
     private Toolbar bar;
     private EditText Name, Pass;
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        app=new MainApplication();
+        app=getMainApplication();
         set=app.getSettings();
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity
               }catch(Exception e){}
           }
       }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){

@@ -23,12 +23,17 @@ import net.lybf.chat.bmob.Post;
 import net.lybf.chat.system.BmobUtils;
 import net.lybf.chat.util.BitmapTools;
 import net.lybf.chat.util.DateTools;
+import net.lybf.chat.system.Paths;
+import net.lybf.chat.system.Utils;
+import android.view.View.OnLongClickListener;
 
 public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHolder>
   {
 
     private OnItemClickListener onClicklistener;
+    
     private OnItemLongClickListener onLongClicklistener;
+
     public interface OnItemClickListener
       {
         void onClick(View view,int index);
@@ -36,15 +41,18 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
 
     public interface OnItemLongClickListener
       {
-        void onLong(View view,int index);
+        boolean onLong(View view,int index);
       }
 
     //帖子
     private ArrayList<Post> mData =new ArrayList<Post>();
+
     //用户头像
     private HashMap<String,Object> userIcon=new HashMap<String,Object>();
+
     //帖子计数
     private HashMap<String,Object> comments=new HashMap<String,Object>();
+
     private Context ctx;
 
     private BitmapTools BMT;
@@ -70,6 +78,7 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         mData.clear();
         userIcon.clear();
         comments.clear();
+        System.gc();
         return this;
       }
 
@@ -132,7 +141,7 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         final MyUser user=post.getUser();
         BmobFile icon=user.getIcon();
         String ic=icon.getFilename();
-        final File f=new File("/sdcard/lybf/MPSquare/.user/"+user.getObjectId()+"/head/"+icon.getFilename());
+        final File f=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/head/"+icon.getFilename());
         if(!f.getParentFile().exists())
           f.getParentFile().mkdirs();
         if(f.exists()){
@@ -187,7 +196,9 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         Post hm = null;
         try{
             hm=mData.get(i);
-          }catch(Exception e){}
+          }catch(Exception e){
+            Utils.print(this.getClass(),e);
+          }
         return hm;
       }
 
@@ -256,6 +267,23 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
                 @Override
                 public void onClick(View p1){
                     onClicklistener.onClick(p1,p2);
+                  }
+              });
+          }
+          
+          //
+        if(onLongClicklistener!=null){
+            t.setOnLongClickListener(new OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View p1){
+                    return onLongClicklistener.onLong(p1,p2);
+                  }
+                });
+
+            viewHolder.go.setOnLongClickListener(new OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View p1){
+                    return onLongClicklistener.onLong(p1,p2);
                   }
               });
           }

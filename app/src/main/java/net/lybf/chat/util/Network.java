@@ -105,15 +105,6 @@ public class Network
                       }
                   }
 
-                JSONObject json = null;
-                 Message msg=handler.obtainMessage();
-                msg.what=success;
-                msg.obj=robot;
-                handler.sendMessage(msg);
-                /*   if(listener!=null){
-                 listener.done(robot);
-                 }*/
-
               }
           }
         ).start();

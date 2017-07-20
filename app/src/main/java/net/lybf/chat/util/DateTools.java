@@ -7,17 +7,24 @@ import net.lybf.chat.system.Utils;
 public class DateTools
   {
     public static final String TIME_YEAR="yyyy";
+
     public static final String TIME_MOTHER="MM";
+
     public static final String TIME_DAY="dd";
+
     public static final String TIME_HOURS="HH";
+
     public static final String TIME_MINUTES="mm";
+
     public static final String TIME_SECONDS="ss";
 
-    public String format(Date date,String pattern){
+    public static final String TIME_MILLISECOND="SSS";
+
+    public static String format(Date date,String pattern){
         return new SimpleDateFormat(pattern).format(date);
       }
 
-    public String format(long date,String pattern){
+    public static String format(long date,String pattern){
         Date dat=new Date(date);
         return new SimpleDateFormat(pattern).format(dat);
       }
@@ -35,30 +42,30 @@ public class DateTools
 		return dat;
 	  }
 
-    public Date getDate(String date,String pattern){
+    public static Date getDate(String date,String pattern){
         SimpleDateFormat f=new SimpleDateFormat();
         f.applyPattern(pattern);
         Date dat = null;
         try{
             dat=f.parse(date);
           }catch(Exception e){
-            Utils.print(this.getClass(),e);
+            Utils.print("net.lybf.chat.utils.DateTools",e);
           }
         return dat;
       }
 
-	public long getLong(Date date){
+	public static long getLong(Date date){
 		if(date!=null)
 		  return date.getTime();
 		return 0;
 	  }
 
-    public long getLong(String date,String pattern){
+    public static long getLong(String date,String pattern){
         Date dt=getDate(date,pattern);
         return dt.getTime();
       }
 
-	public  String date(Date startDate){ 
+	public static String date(Date startDate){ 
 		Date endDate=new Date(System.currentTimeMillis());
 		if(startDate==null||endDate==null)
 		  return null;

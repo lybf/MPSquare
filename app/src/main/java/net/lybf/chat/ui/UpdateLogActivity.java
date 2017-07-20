@@ -1,7 +1,7 @@
 package net.lybf.chat.ui;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +20,7 @@ import net.lybf.chat.system.settings;
 import net.lybf.chat.system.update;
 import net.lybf.chat.util.Network;
 
-public class UpdateLogActivity extends AppCompatActivity
+public class UpdateLogActivity extends MPSActivity
   {
 
     public static Context ctx;
@@ -43,7 +43,7 @@ public class UpdateLogActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         ctx=this;
-        app=new MainApplication();
+        app=getMainApplication();
         set=app.getSettings();
         if(set.isDark()){
             setTheme(R.style.DarkTheme);

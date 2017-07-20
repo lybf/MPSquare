@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,7 +37,7 @@ import net.lybf.chat.system.Paths;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 
-public class UserActivity extends AppCompatActivity
+public class UserActivity extends MPSActivity
   {
 
     private settings set;
@@ -55,7 +55,7 @@ public class UserActivity extends AppCompatActivity
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        app=new MainApplication();
+        app=getMainApplication();
         set=app.getSettings();
         ctx=this;
         if(set.isDark()){

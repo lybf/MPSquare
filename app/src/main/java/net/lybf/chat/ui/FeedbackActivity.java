@@ -1,5 +1,5 @@
 package net.lybf.chat.ui;
-import android.support.v7.app.AppCompatActivity;
+import net.lybf.chat.activity.MPSActivity;
 import cn.bmob.v3.BmobUser;
 import android.view.MenuItem;
 import net.lybf.chat.bmob.MyUser;
@@ -9,7 +9,7 @@ import net.lybf.chat.system.settings;
 import net.lybf.chat.R;
 import android.content.Context;
 
-public class FeedbackActivity extends AppCompatActivity
+public class FeedbackActivity extends MPSActivity
   {
     //CreatedAt 2017/4/22 13:33
     private MyUser user;
@@ -24,7 +24,7 @@ public class FeedbackActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
-        app=new MainApplication();
+        app=getMainApplication();
         set=app.getSettings();
 
         if(set.isDark()){

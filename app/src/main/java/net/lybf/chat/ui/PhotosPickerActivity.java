@@ -1,11 +1,11 @@
 package net.lybf.chat.ui;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import net.lybf.chat.activity.MPSActivity;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
 import net.lybf.chat.system.settings;
 
-public class PhotosPickerActivity extends AppCompatActivity
+public class PhotosPickerActivity extends MPSActivity
   {
 
     private settings set;
@@ -14,7 +14,7 @@ public class PhotosPickerActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        app=new MainApplication();
+        app=getMainApplication();
         set=app.getSettings();
         if(set.isDark()){
             setTheme(R.style.DarkTheme);

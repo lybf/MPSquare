@@ -3,7 +3,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -22,7 +22,7 @@ import net.lybf.chat.bmob.ErrorMessage;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.system.settings;
 
-public class SignUpActivity extends AppCompatActivity
+public class SignUpActivity extends MPSActivity
   {
 
     private settings set;
@@ -32,7 +32,7 @@ public class SignUpActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-		app=new MainApplication();
+		app=getMainApplication();
         set=app.getSettings();
 		if(set.isDark()){
             setTheme(R.style.DarkTheme);

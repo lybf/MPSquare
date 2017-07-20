@@ -1,7 +1,7 @@
 package net.lybf.chat.ui;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -13,7 +13,7 @@ import net.lybf.chat.R;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 
-public class ErrorActivity extends AppCompatActivity
+public class ErrorActivity extends MPSActivity
   {
 
     //This is error message EditText
@@ -26,12 +26,12 @@ public class ErrorActivity extends AppCompatActivity
     private settings set;
 
     private MainApplication app;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         print("接收到错误信息");
         super.onCreate(savedInstanceState);
-        app=new MainApplication();
+        app=getMainApplication();
         set=app.getSettings();
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
@@ -48,29 +48,29 @@ public class ErrorActivity extends AppCompatActivity
         Bundle b = null;
         try{
             b=i.getBundleExtra("Error");
-          }catch(Exception e){
-            print(e);
-          }
-        if(b!=null)
-          if(b.getString("error")!=null){
-              print(b.getString("error").toString());
-              //long date=System.currentTimeMillis();
-              String str = null;
-              try{
+            if(b!=null)
+              if(b.getString("error")!=null){
+                  print(b.getString("error").toString());
+                  //long date=System.currentTimeMillis();
+                  String str = null;
                   Date d=new Date();
                   SimpleDateFormat da=new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒SSS毫秒");
                   str=da.format(d);
-                }catch(Exception e){
-                  print(e);
+                  Utils u=new Utils();
+                  message.setText("设备信息:\n"+u.getDeviceInfo(this)+"\n\n-------"+str+"-------\n\n"+b.getString("error"));
+                  print(u.getDeviceInfo(this));
                 }
-              Utils u=new Utils();
-              message.setText("设备信息:\n"+u.getDeviceInfo()+"\n\n-------"+str+"-------\n\n"+b.getString("error"));
-              print(u.getDeviceInfo());
-            }
+          }catch(Exception e){
+            print(e);
+          }
+
       }
-      
-      public void print(Object o){
-        new Utils().print(this.getClass(),o);
+
+    public void print(Exception e){
+        Utils.print(this.getClass(),e);
+      }
+    public void print(Object o){
+        Utils.print(this.getClass(),o);
       }
 
 

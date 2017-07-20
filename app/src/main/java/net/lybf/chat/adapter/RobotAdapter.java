@@ -19,6 +19,7 @@ import cn.bmob.v3.BmobUser;
 import java.io.File;
 import net.lybf.chat.system.Paths;
 import com.squareup.picasso.Picasso;
+import net.lybf.chat.system.Utils;
 
 public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
   {
@@ -157,6 +158,10 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
         return chat;
       }
 
+    public ArrayList<Robot> getAllData(){
+        return views;
+      }
+
     @Override
     public int getItemViewType(int position){
         Robot ro= views.get(position);
@@ -172,9 +177,10 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
     public int count(){
         return views.size();
       }
+
     private void print(Object... obj){
         for(Object o:obj){
-            System.out.println("RobotAdapter.class:"+o+"\n");
+            Utils.print(this.getClass(),o);
           }
       }
 
@@ -193,7 +199,7 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
         public CircleImageView header;
 
         public TextView content;
-        
+
         public ViewHolder(View view,int flag){
             super(view);
             this.root=view;

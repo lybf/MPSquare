@@ -1,5 +1,6 @@
 package net.lybf.chat.util;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -14,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 
 public class BitmapTools
   {
@@ -100,9 +102,36 @@ public class BitmapTools
       } 
 
 
+    public Bitmap setColor(int color,int instead,Bitmap bitmap){
+        int bitmap_w=bitmap.getWidth();
+        int bitmap_h=bitmap.getHeight();
+        int[] arrayColor=new int[bitmap_w*bitmap_h];
+        int count=0;
+        int i=0;
+        int temp = 0;
+        for(i=0;i<bitmap_h;i++){
+            for(int j=0;j<bitmap_w;j++){
+                int color1=bitmap.getPixel(j,i);
+                if(color1==0){
+                    // temp=color1;
+                  }else if(color1==color){
+                    temp=instead;
+                    arrayColor[count]=temp;         
+                  }
+                count++;
+              }
+          }
+        bitmap.recycle();
+        Bitmap map=Bitmap.createBitmap(arrayColor,bitmap_w,bitmap_h,Config.ARGB_8888);
+        return map;
+      }
 
 
-
+    public int getColor(Bitmap bitmap,int x,int y){
+        int result = 0;
+        result=bitmap.getPixel(x,y);
+        return result;
+      }
 
     public Bitmap compressImage(Bitmap image,int percent){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

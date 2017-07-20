@@ -5,7 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,8 +32,10 @@ import net.lybf.chat.system.settings;
 import net.lybf.chat.util.TuLingRobot;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import net.lybf.chat.system.Paths;
+import java.util.ArrayList;
 
-public class ChatRobotActivity extends AppCompatActivity
+public class ChatRobotActivity extends MPSActivity
   {
 
     private RecyclerView mRecyclerView;
@@ -54,7 +56,7 @@ public class ChatRobotActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        app=new MainApplication();
+        app=getMainApplication();
         set=app.getSettings();
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
@@ -103,7 +105,7 @@ public class ChatRobotActivity extends AppCompatActivity
 
                 String[] order=str.split(" ");
                 if(order.length>=1){
-                    if(order[0].equals("$order")){
+                    if(order[0].equals("///")){
                         boolean bool= runOrder(str);
                         if(bool)return;
                       }
@@ -161,21 +163,21 @@ public class ChatRobotActivity extends AppCompatActivity
 
     private String[] ORDER_HELP={
       "欢迎使用MPSquare指令帮助，怎么使用指令？您只需把指令用输入法打出来，然后按[发送]即可，以下是支持的指令",
-      "$order [指令]",
-      "$order clearScreen(清除聊天信息)",
-      "$order clearLoginData(清除登录记录)",
-      "$order export(导出聊天记录)",
-      "$order import [文件夹路径](导入MPSquare缓存)",
-      "$order output [文件夹目录](导出MPSquare缓存)",
-      "$order openMenu(打开UI窗口式指令)",
-      "$order closeMenu(关闭UI窗口)",
-      "$order runApp [包名/应用名称](运行App)"
+      "/// [指令]",
+      "clearScreen(清除聊天信息)",
+      "clearLoginData(清除登录记录)",
+      "export(导出聊天记录)",
+      "import [文件夹路径](导入MPSquare缓存)",
+      "output [文件夹目录](导出MPSquare缓存)",
+      "openMenu(打开UI窗口式指令)",
+      "closeMenu(关闭UI窗口)",
+      "runApp [包名/应用名称](运行App)"
       };
 
     private boolean runOrder(String orders){
         String[] order=orders.split(" ");
         if(order.length>=1){
-            if(order[0].equals("$order")){
+            if(order[0].equals("///")){
                 switch(order.length){
                     case 2:
                       switch(order[1]){
@@ -201,9 +203,7 @@ public class ChatRobotActivity extends AppCompatActivity
 
                           case "export":
                             Utils.print(this.getClass(),"startEXPORT");
-                            int count=adapter.count();
-                            int j;
-                            File f=new File("/sdcard/lybf/MPSquare/log/");
+                            File f=new File(Paths.LOG_ROBOT_CHAT);
                             if(!f.exists())f.mkdirs();
                             String da= new SimpleDateFormat("yyyyMMddHHmm").format(new Date(System.currentTimeMillis()));
                             File fp=new File(f.getAbsolutePath()+"/"+da+".json");
@@ -211,8 +211,9 @@ public class ChatRobotActivity extends AppCompatActivity
                             JSONArray array=new JSONArray();
                             try{
                                 out=new FileOutputStream(fp);
-                                for(j=0;j<count;j++){
-                                    Robot robot=adapter.getItemData(j);
+                                ArrayList<Robot> list=adapter.getAllData();
+                                for(Robot r:list){
+                                    Robot robot=r;
                                     String json=new Gson().toJson(robot);
                                     JSONObject pm=new JSONObject(json);
                                     Utils.print(this.getClass(),pm);
@@ -254,11 +255,11 @@ public class ChatRobotActivity extends AppCompatActivity
                           for(PackageInfo in:info){
                               ApplicationInfo infom=in.applicationInfo;
                               if(infom.loadLabel(pm).equals(app)){
- 
+
                                   try{
-              
+
                                       Intent intent=new Intent(this,Class.forName(infom.className));
-                                    //  intent.setAction(
+                                      //  intent.setAction(
                                       this.startActivity(intent);
                                     }catch(ClassNotFoundException e){
                                       e.printStackTrace();
@@ -268,7 +269,7 @@ public class ChatRobotActivity extends AppCompatActivity
                             }
                         }
 
-                      return false;
+                      return true;
                     default:
                       return false;
                   }// switch

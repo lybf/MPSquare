@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.util.Linkify;
@@ -22,6 +22,7 @@ import cn.bmob.v3.listener.FindListener;
 import java.util.List;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
+import net.lybf.chat.activity.MPSActivity;
 import net.lybf.chat.bmob.ErrorMessage;
 import net.lybf.chat.bmob.UpdateLog;
 import net.lybf.chat.system.Utils;
@@ -29,11 +30,11 @@ import net.lybf.chat.system.settings;
 import net.lybf.chat.system.update;
 import net.lybf.chat.util.Network;
 
-public class AboutActivity extends AppCompatActivity
+public class AboutActivity extends MPSActivity/*AppCompatActivity*/
   {
 
     private Context ctx;
-    
+
     private Toolbar bar;
 
     private TextView Name;
@@ -43,7 +44,7 @@ public class AboutActivity extends AppCompatActivity
     private Network net;
 
     private PackageManager pm ;
-    
+
     private PackageInfo pi ;
 
     private Button CheckUpdate;
@@ -53,21 +54,21 @@ public class AboutActivity extends AppCompatActivity
     private settings set;
 
     private MainApplication app;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         net=new Network(this);
         ctx=this;
-        app=new MainApplication();
-        set=app.getSettings();
+        app=getMainApplication();
+        set=getSettings();
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
           }else{
             setTheme(R.style.LightTheme);
           }
         setContentView(R.layout.activity_about);
-        
+
         pm=ctx.getPackageManager();
         try{
             pi=pm.getPackageInfo(ctx.getPackageName(),0);
@@ -141,9 +142,7 @@ public class AboutActivity extends AppCompatActivity
                             up.setTitle(l.getTile());
 
                             try{
-
                                 int i=pi.versionCode;
-
                                 String ii=pi.versionName;
                                 if(i-up.getVersionCode().intValue()<0){
                                     showAppUpdateMessage(up);
@@ -155,7 +154,7 @@ public class AboutActivity extends AppCompatActivity
 
 
                       }else{
-
+                        Snackbar.make(bar,"什么事也没发生",Snackbar.LENGTH_SHORT).show();
                         print(new ErrorMessage().getMessage(er.getErrorCode()));
                       }
                   }

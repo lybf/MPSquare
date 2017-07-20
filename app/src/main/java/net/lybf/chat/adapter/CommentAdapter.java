@@ -134,6 +134,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public CommentAdapter removeAll(){
         this.comment.clear();
         this.comment.add(post);
+        System.gc();
         return this;
       }
 
