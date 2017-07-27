@@ -64,6 +64,10 @@ import net.lybf.chat.util.CommentCount;
 import net.lybf.chat.util.CommonUtil;
 import net.lybf.chat.util.Network;
 import net.lybf.chat.widget.CircleImageView;
+import net.lybf.chat.util.Logcat;
+import java.io.IOException;
+import android.support.design.widget.Snackbar;
+import com.gc.materialdesign.widgets.SnackBar;
 
 public class MainActivity extends MPSActivity/*AppCompatActivity*/
   {
@@ -134,19 +138,21 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
     private MainPagerAdaptet mViewPagerAdapter;
 
-    private boolean FIRST_READ=true;;
+    private static boolean FIRST_READ=true;;
 
-    private boolean REFRESH_HINT=true;
+    private static boolean REFRESH_HINT=true;
 
     private static Bundle bundle;
 
     private static MainApplication app;
 
-    private RecyclerView mTools;
+    private static RecyclerView mTools;
 
-    private MainToolsAdapter ToolsAdapter;
+    private static MainToolsAdapter ToolsAdapter;
 
     private static boolean themechange;
+
+    private static Logcat logcat;
 
     @Override
     public void onCreate(Bundle save){
@@ -155,7 +161,10 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
         ctx=this;
         app=getMainApplication();
         set=getSettings();
+        logcat=getLogcat();
         themechange=set.isDark();
+        logcat.println(this,"启动MainActivity");
+        logcat.println(this,"初始化控件");
         initViews();
       }
 
@@ -172,6 +181,12 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
     @Override
     protected void onDestroy(){
+        logcat.println(this,"退出应用");
+        try{
+            logcat.close();
+          }catch(IOException e){
+            e.printStackTrace();
+          }
         super.onDestroy();
       }
 
@@ -219,7 +234,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
 
 
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
@@ -300,7 +315,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
             if(use!=null){
                 try{
                     BmobFile icon=use.getIcon();
-                    final String ic=icon.getFilename();
+                    final String ic=icon==null?"":icon.getFilename();
                     print("图片名:"+ic);
                     final File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+ic);
                     print("文件路径:"+f.getAbsolutePath());
@@ -452,6 +467,12 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                                   }catch(Exception e){
                                     e.printStackTrace();
                                   }
+                              }else{
+                                if(obj==null){
+                                    Snackbar.make(mToolbar,"尚未添加，请耐心等待哦",Snackbar.LENGTH_SHORT)
+
+                                    .show();
+                                  }             
                               }
                           }
                       });
@@ -464,7 +485,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
               }
             mDrawerLayout=(DrawerLayout) findViewById(R.id.drawerlayout);
             mToolbar=(Toolbar) findViewById(R.id.toolbar);
-            mToolbar.setSubtitle("version:"+ctx.getPackageManager().getPackageInfo(getPackageName(),0).versionCode);
+            mToolbar.setSubtitle("version:"+ctx.getPackageManager().getPackageInfo(getPackageName(),0).versionName);
             mNavigationView=(NavigationView) findViewById(R.id.navigationview);
             mNavigationView.inflateHeaderView(R.layout.activity_main_nv_menu);
             mNavigationView.inflateMenu(R.menu.menu_main_nav);
@@ -547,13 +568,21 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                           fab.setVisibility(View.VISIBLE);
                           fab.setOnClickListener(new OnClickListener(){
                               public void onClick(View v){
-                                  try{
-                                      if(use!=null&&use.getUsername()!=null)
-                                        MainActivity.this.startActivityForResult(new Intent(ctx,UserActivity.class),0);
-                                      else
-                                        MainActivity.this.startActivityForResult(new Intent(ctx,LoginActivity.class),0);
-                                    }catch(Exception e){
-                                      print(e);
+                                  if(use!=null&&use.getUsername()!=null){
+                                      startActivityForResult(new Intent(ctx,WritePostActivity.class),9483);
+                                    }else{
+                                      new AlertDialog.Builder(ctx)
+                                      .setTitle("失败")
+                                      .setMessage("你需要登录后才能发言")
+                                      .setPositiveButton("登录",new DialogInterface.OnClickListener(){
+                                          @Override
+                                          public void onClick(DialogInterface p1,int p2){
+                                              startActivityForResult(new Intent(ctx,LoginActivity.class),0);
+                                            }
+                                        })
+                                      .setNegativeButton("关闭",null)
+                                      .setCancelable(false)
+                                      .show();
                                     }
                                 }
                             });
@@ -598,6 +627,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
       {
         @Override
         public void onRefresh(){
+            logcat.println(this,"刷新贴子");
             if(net.isConnectedOrConnecting()){
                 i=0;
                 refreshing.postDelayed(run,1000);

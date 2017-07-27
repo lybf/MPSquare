@@ -140,7 +140,7 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         notifyItemInserted(mData.size()-1);
         final MyUser user=post.getUser();
         BmobFile icon=user.getIcon();
-        String ic=icon.getFilename();
+        String ic=icon==null?"":icon.getFilename();
         final File f=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/head/"+icon.getFilename());
         if(!f.getParentFile().exists())
           f.getParentFile().mkdirs();

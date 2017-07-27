@@ -43,7 +43,7 @@ public class UserManager
     public UserManager DownLoadHeader(){
         if(use!=null){
             BmobFile file=use.getIcon();
-            final String filename=file.getFilename();
+            final String filename=file==null?"":file.getFilename();
             File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+filename);
             if(!f.exists()){
                 file.download(f,new DownloadFileListener(){
@@ -72,7 +72,7 @@ public class UserManager
 
     public Bitmap getHead(){
         BmobFile file=use.getIcon();
-        final String filename=file.getFilename();
+        final String filename=file==null?"":file.getFilename();
         File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+filename);
         if(!f.exists())
           DownLoadHeader();
@@ -88,7 +88,7 @@ public class UserManager
 
     public File getIconFile(){
         BmobFile file=use.getIcon();
-        final String filename=file.getFilename();
+        final String filename=file==null?"":file.getFilename();
         File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+filename);
         //if(!f.exists())
         //  DownLoadHeader();

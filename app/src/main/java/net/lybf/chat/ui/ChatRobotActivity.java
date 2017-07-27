@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
-import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,20 +19,21 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
+import net.lybf.chat.activity.MPSActivity;
 import net.lybf.chat.adapter.RobotAdapter;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.maps.Robot;
+import net.lybf.chat.system.Paths;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 import net.lybf.chat.util.TuLingRobot;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import net.lybf.chat.system.Paths;
-import java.util.ArrayList;
 
 public class ChatRobotActivity extends MPSActivity
   {
@@ -72,7 +72,10 @@ public class ChatRobotActivity extends MPSActivity
         edit=(EditText)findViewById(R.id.content_robot_edittext);
 
         robot=new TuLingRobot();
-
+        if(user!=null)
+          robot.setUserID(user.getObjectId());
+        else
+          robot.setUserID(null);
         user=new BmobUser().getCurrentUser(MyUser.class);
 
         adapter=new RobotAdapter(this);

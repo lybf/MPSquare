@@ -1,71 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardCornerRadius="2dp"
-    app:cardMaxElevation="2dp"
-    app:cardElevation="2dp"
-    app:cardPreventCornerOverlap="true"
-    app:cardUseCompatPadding="true"
-    android:layout_margin="2dp">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	app:cardCornerRadius="2dp"
+	app:cardMaxElevation="2dp"
+	app:cardElevation="2dp"
+	app:cardPreventCornerOverlap="true"
+	app:cardUseCompatPadding="true"
+	android:layout_marginLeft="16dp"
+	android:layout_marginRight="8dp">
 
-    <LinearLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:orientation="horizontal">
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:orientation="horizontal">
 
-            <net.lybf.chat.widget.CircleImageView
-                android:layout_height="40dp"
-                android:layout_width="40dp"
-                android:src="@drawable/ic_launcher"
-                app:civ_border_width="2dp"
-                android:id="@+id/comment_header"
-                android:layout_margin="8dp"/>
+			<net.lybf.chat.widget.CircleImageView
+				android:layout_height="40dp"
+				android:layout_width="40dp"
+				android:src="@drawable/ic_launcher"
+				android:id="@+id/comment_header"
+				android:layout_margin="8dp"/>
 
-            <LinearLayout
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:orientation="vertical">
+			<LinearLayout
+				android:layout_height="match_parent"
+				android:layout_width="match_parent"
+				android:orientation="vertical">
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:layout_width="match_parent"
-                    android:id="@+id/comment_name"/>
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:layout_width="match_parent"
+					android:id="@+id/comment_name"/>
 
-                <TextView
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_gravity="bottom|right"
-                    android:id="@+id/comment_time"/>
+				<TextView
+					android:layout_height="match_parent"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:layout_width="match_parent"
+					android:layout_gravity="bottom|right"
+					android:id="@+id/comment_time"/>
 
-            </LinearLayout>
+			</LinearLayout>
 
-        </LinearLayout>
+		</LinearLayout>
 
-        <TextView
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:autoLink="web|email"
-            android:id="@+id/comment_content"
-            android:textIsSelectable="true"/>
+		<TextView
+			android:layout_height="match_parent"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:layout_width="match_parent"
+			android:autoLink="web|email"
+			android:id="@+id/comment_content"
+			android:textIsSelectable="true"/>
 
-        <View
-            android:layout_height="2dp"
-            android:layout_width="match_parent"/>
+		<View
+			android:layout_height="2dp"
+			android:layout_width="match_parent"/>
 
-    </LinearLayout>
+	</LinearLayout>
 
 </android.support.v7.widget.CardView>
+

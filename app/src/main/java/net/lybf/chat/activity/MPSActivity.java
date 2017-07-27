@@ -8,27 +8,37 @@ import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.content.Intent;
 import static net.lybf.chat.system.Utils.*;
+import net.lybf.chat.util.Logcat;
 public class MPSActivity extends AppCompatActivity
   {
+    public static final String TAG="MPSActivity";
+    
     private static MainApplication application;
 
     private static settings settings;
 
+    private static Logcat logcat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        init();
+      }
+
+    private void init(){
         application=(MainApplication)getApplication();
         if(application==null){
             print(this.getClass(),"Application cast error");
             application=new MainApplication();
           }
         settings=application.getSettings();
-        super.onCreate(savedInstanceState);
+        logcat=application.getLogcat();
       }
 
 
     @Override
     protected void onDestroy(){
-        settings.save();
+       // settings.save();
         super.onDestroy();
       }
 
@@ -41,12 +51,24 @@ public class MPSActivity extends AppCompatActivity
           getActionBar().show();
       }
 
-    public MainApplication getMainApplication(){
+    protected MainApplication getMainApplication(){
+        if(application==null){
+            init();
+          }
         return this.application;
       }
 
-
+    protected Logcat getLogcat(){
+        if(logcat==null){
+            init();
+          }
+        return this.logcat;
+      }
+      
     protected settings getSettings(){
+        if(settings==null){
+            init();
+          }
         return this.settings;
       }
 

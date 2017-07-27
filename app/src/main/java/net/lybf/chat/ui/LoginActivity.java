@@ -43,6 +43,7 @@ import android.support.v7.app.ActionBar;
 import net.lybf.chat.system.Utils;
 import android.text.TextUtils;
 import net.lybf.chat.MainApplication;
+import net.lybf.chat.bmob.MyUser;
 public class LoginActivity extends MPSActivity
   {
     private Toolbar bar;
@@ -169,12 +170,12 @@ public class LoginActivity extends MPSActivity
 
 
     private void logIn(final String name,final String password){
-        BmobUser ur=new BmobUser();
+        MyUser ur=new MyUser();
         ur.setUsername(name);
         ur.setPassword(password);
-        ur.login(new SaveListener<BmobUser>(){
+        ur.login(new SaveListener<MyUser>(){
             @Override
-            public void done(BmobUser p1,BmobException p){
+            public void done(MyUser p1,BmobException p){
                 if(p==null){
                     new AlertDialog.Builder(LoginActivity.this)
                     .setTitle("登录成功")

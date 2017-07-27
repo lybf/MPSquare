@@ -22,10 +22,10 @@
 
 	</android.support.design.widget.AppBarLayout>
 
-	<android.support.v7.widget.RecyclerView
-		android:id="@+id/updatelog_listview"
+	<WebView
 		android:layout_height="match_parent"
-		android:layout_width="match_parent"/>
+		android:layout_width="match_parent"
+		android:id="@+id/updatelog_changelog"/>
 
 </LinearLayout>
 

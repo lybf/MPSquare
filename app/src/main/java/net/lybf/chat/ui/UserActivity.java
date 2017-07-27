@@ -36,6 +36,10 @@ import net.lybf.chat.system.ActivityResultCode;
 import net.lybf.chat.system.Paths;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
+import cn.bmob.v3.listener.FetchUserInfoListener;
+import android.widget.ImageView;
+import net.lybf.chat.util.BitmapTools;
+import net.lybf.chat.system.Colors;
 
 public class UserActivity extends MPSActivity
   {
@@ -51,7 +55,8 @@ public class UserActivity extends MPSActivity
     private boolean UserInfoChange=false;
 
     private MainApplication app;
-    
+
+    private ImageView email;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -95,15 +100,16 @@ public class UserActivity extends MPSActivity
 
             case R.id.user_refresh:
               if(use!=null)
-                use.update(new UpdateListener(){
+                use.fetchUserInfo(new FetchUserInfoListener<MyUser>(){
                     @Override
-                    public void done(BmobException p1){
+                    public void done(MyUser user,BmobException p1){
+                        Utils.print(this.getClass(),p1.getMessage());
                         if(p1==null){
                             refreshData();
                             Snackbar.make(UserEmail,"刷新成功",Snackbar.LENGTH_SHORT).show();
                           }else{
                             ErrorMessage msg=new ErrorMessage();
-                            new AlertDialog.Builder(ctx).setMessage(msg.getMessage(p1.getErrorCode()))
+                            new AlertDialog.Builder(ctx).setTitle(p1.getErrorCode()==9015?"其他错误":"错误信息").setMessage(p1.getErrorCode()==9015?p1.getMessage():msg.getMessage(p1.getErrorCode()))
                             .setPositiveButton("确定",null)
                             .show();
                           }
@@ -164,6 +170,7 @@ public class UserActivity extends MPSActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         EmailVerify=(CheckBox)findViewById(R.id.user_emailVerify);
+        email=(ImageView)findViewById(R.id.user_emailIcon);
         refreshData();
       }
 
@@ -172,6 +179,14 @@ public class UserActivity extends MPSActivity
 
     public void refreshData(){
         try{
+
+            if(set.isDark()){
+              BitmapTools m=BitmapTools.with(this);
+                Bitmap p=BitmapTools.setColor(Colors.gray,Colors.white,  m.load(getResources(),R.drawable.ic_email));
+                email.setBackgroundDrawable(m.Bitmap2Drawable(p));
+              }else{
+                email.setBackgroundResource(R.drawable.ic_email);
+              }
             if(use!=null){
                 UserName.setText(use.getUsername());
                 UserEmail.setText(use.getEmail());
@@ -258,7 +273,7 @@ public class UserActivity extends MPSActivity
 
 
                 BmobFile icon=use.getIcon();
-                final String ic=icon.getFilename();
+                final String ic=icon==null?"":icon.getFilename();
                 new Utils().print("图片名:"+ic);
                 final File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+ic);
                 new Utils().print("文件路径:"+f.getAbsolutePath());

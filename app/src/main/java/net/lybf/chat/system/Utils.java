@@ -262,10 +262,7 @@ public class Utils
         .append("----------")
         .append("\n")
         .append(string)
-        .append("\n")
-        .append("----------")
-        .append(className)
-        .append("----------\n");
+        .append("\n");
         return sb.toString();
       }
 

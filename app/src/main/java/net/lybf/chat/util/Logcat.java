@@ -39,7 +39,8 @@ public class Logcat
           }
         try{
             out=new FileOutputStream(file,true);
-          }catch(FileNotFoundException e){
+            out.write("############Start##########\n".getBytes());
+          }catch(Exception e){
             e.printStackTrace();
           }
 
@@ -48,41 +49,41 @@ public class Logcat
 
     public void println(Object thisz,Object object){
         String str=print(thisz.getClass(),object);
-        try{
-            write(str);
-          }catch(Exception e){
-            e.printStackTrace();
-          }
+        write(str);
       }
 
     public void println(Object object){
         print(object);
-        try{
-            write(object.toString());
-          }catch(Exception e){
-            e.printStackTrace();
-          }
+        write(object.toString());
       }
 
+    public void printWithTime(Object object){
+        print(object);
+        String time=DateTools.format(System.currentTimeMillis(),"yyy/MM/dd HH:mm:ss:SSS");
+        write(time+" "+object.toString());
+      }
 
     public void write(String string){
         try{
+            String time=DateTools.format(System.currentTimeMillis(),"yyy/MM/dd HH:mm:ss:SSS");
             if(out!=null)
-              out.write((DateTools.format(System.currentTimeMillis(),"yyy/MM/dd HH:mm:ss:SSS   ")+string+"\n").getBytes());
+              out.write((time+"   "+string+"\n").getBytes());
             else
-              throw new NullPointerException();
+              newWrite();
           }catch(Exception e){
             e.printStackTrace();
           }
       }
 
     public void close() throws IOException{
+        out.write("###########End##########\n\n\n".getBytes());
         out.close();
         out=null;
         System.gc();
       }
 
-    public void newWrite() throws FileNotFoundException{
+    public void newWrite() throws Exception{
         out=new FileOutputStream(file,true);
+        out.write("############Start##########\n".getBytes());
       }
   }

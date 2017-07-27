@@ -2,6 +2,7 @@ package net.lybf.chat.bmob;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import java.io.File;
+import cn.bmob.v3.BmobInstallation;
 
 //用户类
 public class MyUser extends BmobUser
@@ -18,43 +19,53 @@ public class MyUser extends BmobUser
     private boolean op;
     //超级管理员
     private boolean superop;
+    //设备 绑定设备
+    private BmobInstallation device;
 
     //获取vip级别
     public Integer getVipLevel(){
-        return vip;
+        return this.vip;
       }
 
     //是否是管理员
     public boolean isOP(){
-        return op;
+        return this.op;
       }
 
     //是否是超级管理员
     public boolean isSuperOp(){
-        return superop;
+        return this.superop;
       }
 
     //获取头像
     public BmobFile getIcon(){
-        return icon;
+        return this.icon;
       }
 
     //修改头像
-    public void setIcon(BmobFile f){
-        icon=f;
+    public MyUser setIcon(BmobFile f){
+        this.icon=f;
+        return this;
       }
 
     //获取描述
     public String getdescribe(){
-        return describe;
+        return this.describe;
       }
 
     //是否是黑名单
     public boolean isBlackName(){
-        return BlackName;
+        return this.BlackName;
       }
 
+    public MyUser setDevice(BmobInstallation Installation){
+        this.device=Installation;
+        return this;
+      }
 
+    public BmobInstallation getDevice(){
+        return this.device;
+      }
 
 
   }

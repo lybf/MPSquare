@@ -20,6 +20,7 @@ import java.io.File;
 import net.lybf.chat.system.Paths;
 import com.squareup.picasso.Picasso;
 import net.lybf.chat.system.Utils;
+import cn.bmob.v3.datatype.BmobFile;
 
 public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
   {
@@ -137,7 +138,8 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
         viewHolder.content.setText(""+too.getText());
         viewHolder.name.setText(""+too.getName());
         if(viewHolder.flag==viewHolder.FLAG_MYSELF){
-            File file=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/head/"+user.getIcon().getFilename());
+            BmobFile icon=user.getIcon();
+            File file=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/head/"+icon==null?"":icon.getFilename());
             if(file.exists())
               Picasso.with(ctx).load(file).into(viewHolder.header);
             else

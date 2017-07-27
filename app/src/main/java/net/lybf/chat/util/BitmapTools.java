@@ -15,12 +15,43 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import net.lybf.chat.system.Utils;
+import android.content.Context;
+import android.content.res.Resources;
+import java.io.File;
 
 
 public class BitmapTools
   {
 
-    public Bitmap download(String url){
+
+    public Context context;
+    public Bitmap bitmap;
+
+    public BitmapTools(){
+
+      }
+    
+    public BitmapTools(Context context){
+        this.context=context;
+      }
+
+    public static BitmapTools with(Context ctx){
+        BitmapTools bitmaptools=new BitmapTools(ctx);
+        return bitmaptools;
+      }
+
+    public static Bitmap load(Resources res,int id){
+        return Drawable2Bitmap(res.getDrawable(id));
+      }
+
+    public static Bitmap load(String path){
+        Bitmap bitmap=BitmapFactory.decodeFile(path);
+        return bitmap;
+      }
+
+
+    public static Bitmap download(String url){
         Bitmap bitmap=null;
         try{
             URL myUrl;
@@ -33,21 +64,21 @@ public class BitmapTools
             is.close();
             return bitmap;
           }catch(Exception e){
-            new CommonUtil().print(this.getClass(),e);
+            Utils.print(BitmapTools.class,e);
           }
         return bitmap;
       }
 
 
 
-    public byte[] Bitmap2Bytes(Bitmap bm){
+    public static byte[] Bitmap2Bytes(Bitmap bm){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.PNG,100,baos);
         return baos.toByteArray();
       }
 
 
-    public Bitmap Bytes2Bimap(byte[] b){
+    public static Bitmap Bytes2Bimap(byte[] b){
         if(b.length!=0)
           return BitmapFactory.decodeByteArray(b,0,b.length);
         else
@@ -56,13 +87,13 @@ public class BitmapTools
 
 
 
-    public Bitmap Drawable2Bitmap(Drawable draw){
+    public static Bitmap Drawable2Bitmap(Drawable draw){
         BitmapDrawable drawable=(BitmapDrawable) draw;
         Bitmap bitmap=drawable.getBitmap();
         return bitmap;
       }
 
-    public Drawable Bitmap2Drawable(Bitmap bitmap){
+    public static Drawable Bitmap2Drawable(Bitmap bitmap){
         BitmapDrawable drawable=new BitmapDrawable(bitmap);
         return drawable;
       }
@@ -102,7 +133,7 @@ public class BitmapTools
       } 
 
 
-    public Bitmap setColor(int color,int instead,Bitmap bitmap){
+    public static Bitmap setColor(int color,int instead,Bitmap bitmap){
         int bitmap_w=bitmap.getWidth();
         int bitmap_h=bitmap.getHeight();
         int[] arrayColor=new int[bitmap_w*bitmap_h];
@@ -121,19 +152,19 @@ public class BitmapTools
                 count++;
               }
           }
-        bitmap.recycle();
+      //  bitmap.recycle();
         Bitmap map=Bitmap.createBitmap(arrayColor,bitmap_w,bitmap_h,Config.ARGB_8888);
         return map;
       }
 
 
-    public int getColor(Bitmap bitmap,int x,int y){
+    public static int getColor(Bitmap bitmap,int x,int y){
         int result = 0;
         result=bitmap.getPixel(x,y);
         return result;
       }
 
-    public Bitmap compressImage(Bitmap image,int percent){
+    public static Bitmap compressImage(Bitmap image,int percent){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int options = percent;
         image.compress(Bitmap.CompressFormat.JPEG,options,baos);//这里压缩options%，把压缩后的数据存放到baos中
