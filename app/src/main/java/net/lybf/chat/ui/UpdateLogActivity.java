@@ -11,7 +11,7 @@ import net.lybf.chat.R;
 import net.lybf.chat.activity.MPSActivity;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
-import net.lybf.chat.util.Network;
+import net.lybf.chat.utils.Network;
 
 public class UpdateLogActivity extends MPSActivity
   {
@@ -44,7 +44,11 @@ public class UpdateLogActivity extends MPSActivity
 
         bar=(Toolbar)findViewById(R.id.updatelog_toolbar);
         setSupportActionBar(bar);
+        try{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }catch(Exception e){
+          Utils.print(this.getClass(),e);
+        }
         initView();
       }
 

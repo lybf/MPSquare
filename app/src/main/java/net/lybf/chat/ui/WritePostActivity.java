@@ -20,6 +20,7 @@ import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.bmob.Post;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
+import android.text.TextUtils;
 
 public class WritePostActivity extends MPSActivity
   {
@@ -91,8 +92,6 @@ public class WritePostActivity extends MPSActivity
       }
 
 
-    private boolean t=false,t2=false;
-
 
     private void printError(String str){
         new AlertDialog.Builder(this)
@@ -106,15 +105,15 @@ public class WritePostActivity extends MPSActivity
 
 
     private void sendmessage(String title,String msg){
-        if(title==null){
-            if(msg==null){
-                printError("帖子标题不能为空\n"+"内容不能为空");
-              }else{
-                if(title!=null)
-                  printError("帖子内容不能为空");
-              }
-          }else{
-            //    printError("帖子标题不能为空");
+        if(TextUtils.isEmpty(title)&!TextUtils.isEmpty(msg)&&title.equals("")&&msg.equals("")){
+            printError("标题不能为空\n"+"内容不能为空");
+            return;
+          }else  if(TextUtils.isEmpty(msg)&&msg.equals("")){
+            printError("内容不能为空");
+            return;
+          }else if(TextUtils.isEmpty(title)){
+            printError("标题不能为空");
+            return;
           }
         if(title!=null&&msg!=null){
 
@@ -150,6 +149,6 @@ public class WritePostActivity extends MPSActivity
       }
 
     private void print(Object o){
-        new Utils().print(this.getClass(),o);
+        Utils.print(this.getClass(),o);
       }
   }

@@ -21,17 +21,18 @@ import net.lybf.chat.R;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.bmob.Post;
 import net.lybf.chat.system.BmobUtils;
-import net.lybf.chat.util.BitmapTools;
-import net.lybf.chat.util.DateTools;
+import net.lybf.chat.utils.BitmapTools;
+import net.lybf.chat.utils.DateTools;
 import net.lybf.chat.system.Paths;
 import net.lybf.chat.system.Utils;
 import android.view.View.OnLongClickListener;
+import net.lybf.chat.utils.UserManager;
 
 public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHolder>
   {
 
     private OnItemClickListener onClicklistener;
-    
+
     private OnItemLongClickListener onLongClicklistener;
 
     public interface OnItemClickListener
@@ -59,8 +60,10 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
 
     private DateTools DTL;
 
+    private UserManager Umanager;
     public MainTieAdapter(Context ctx){
         this.ctx=ctx;
+        this.Umanager=new UserManager(ctx);
         init();
       }
 
@@ -87,38 +90,13 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
         if(position<=-1)
           return this;
         mData.add(position,post);
-        notifyItemInserted(position);
+        //    notifyItemInserted(position);
         final MyUser user=post.getUser();
-        BmobFile icon=user.getIcon();
-        String ic=icon.getFilename();
-        final File f=new File("/sdcard/lybf/MPSquare/.user/"+user.getObjectId()+"/head/"+icon.getFilename());
-        if(!f.getParentFile().exists())
-          f.getParentFile().mkdirs();
-        if(f.exists()){
-            userIcon.put(user.getObjectId(),f);
-          }else{
-            icon.download(f,new DownloadFileListener(){
-                @Override
-                public void done(String p1,BmobException p2){
-                    if(p2==null){
-                        userIcon.put(user.getObjectId(),f);
-                        notifyItemChanged(position-1);
-                      }else{
-                        System.out. println(p2);
-                      }
-                  }
-                @Override
-                public void onProgress(Integer p1,long p2){
-                    if(p1==100){
-                        userIcon.put(user.getObjectId(),f);
-                        int i=0;
-                        i=(position>=1?position-1:position);
-                        notifyItemChanged(i);
-                      }
-                  }   
-              });
+        File file=Umanager.getIconFile(user);
+        if(file!=null){
+            userIcon.put(user.getObjectId(),file);
+            notifyItemChanged(position-1);
           }
-
         return this;
       }
 
@@ -137,36 +115,13 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
           }
         mData.add(post);
         //notifyItemChanged(mData.size()-1);
-        notifyItemInserted(mData.size()-1);
+        //  notifyItemInserted(mData.size()-1);
         final MyUser user=post.getUser();
-        BmobFile icon=user.getIcon();
-        String ic=icon==null?"":icon.getFilename();
-        final File f=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/head/"+icon.getFilename());
-        if(!f.getParentFile().exists())
-          f.getParentFile().mkdirs();
-        if(f.exists()){
-            userIcon.put(user.getObjectId(),f);
-          }else{
-            icon.download(f,new DownloadFileListener(){
-                @Override
-                public void done(String p1,BmobException p2){
-                    if(p2==null){
-                        userIcon.put(user.getObjectId(),f);
-                        notifyItemChanged((int)getItemCount()-1);
-                      }else{
-                        System.out. println(p2);
-                      }
-                  }
-                @Override
-                public void onProgress(Integer p1,long p2){
-                    if(p1==100){
-                        userIcon.put(user.getObjectId(),f);
-                        notifyItemChanged(getItemCount()-1);
-                      }
-                  }   
-              });
+        File file=Umanager.getIconFile(user);
+        if(file!=null){
+            userIcon.put(user.getObjectId(),file);
+            notifyItemChanged((int)getItemCount()-1);
           }
-
         return this;
       }
 
@@ -270,15 +225,15 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
                   }
               });
           }
-          
-          //
+
+        //
         if(onLongClicklistener!=null){
             t.setOnLongClickListener(new OnLongClickListener(){
                 @Override
                 public boolean onLongClick(View p1){
                     return onLongClicklistener.onLong(p1,p2);
                   }
-                });
+              });
 
             viewHolder.go.setOnLongClickListener(new OnLongClickListener(){
                 @Override

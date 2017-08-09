@@ -53,6 +53,8 @@
             android:name=".ui.FeedbackActivity"/>
         <activity
             android:name=".ui.ChatRobotActivity"/>
+        <activity
+            android:name=".ui.FlashLightActivity"/>
         <receiver
             android:name=".receiver.AdminReceiver"
             android:description="@string/device_admin_description"
@@ -100,6 +102,7 @@
 
         <receiver android:name=".receiver.PushMessage" >
             <intent-filter>
+                <action android:name="net.lybf.chat.action.push"/>
                 <action android:name="cn.bmob.push.action.MESSAGE" />
             </intent-filter>
         </receiver>
@@ -111,16 +114,19 @@
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.GET_PACKAGE_SIZE"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <uses-permission android:name="android.permission.HARDWERE_TEST"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.ACCOUNT_MANAGER"/>
     <uses-permission android:name="android.permission.BATTERY_STATS"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.WRITE_SMS"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 </manifest>

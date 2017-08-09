@@ -32,7 +32,8 @@
 			android:textSize="20sp"
 			android:layout_toRightOf="@id/main_nav_header"
 			android:layout_centerVertical="true"
-			android:textAppearance="?android:attr/textAppearanceMedium"/>
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="#FFFFFF"/>
 
 	</RelativeLayout>
 

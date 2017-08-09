@@ -30,16 +30,17 @@ public class WelcomeActivity extends MPSActivity /*AppCompatActivity*/
                 @Override
                 public void done(BmobException p1){
                     if(p1==null)
-                      getLogcat().println(this,"update User success");
+                      getLogcat().println(this,"Update user info success.");
                     else
-                      getLogcat().println(this,"Error:"+p1.getMessage());
+                      getLogcat().println(this,"Update user info failed. info:"+p1.getMessage());
                   }       
               });
           }
+         
         Intent i=new Intent(this,MainActivity.class);
         startActivity(i);
-        getLogcat().println("启动应用--欢迎页面");
+        getLogcat().println("startApp-WelcomeActivity");
         this.finish();
-        getLogcat().println("关闭欢迎页面");
+        getLogcat().println("closeActivity-WelcomeActivity");
       }
   }

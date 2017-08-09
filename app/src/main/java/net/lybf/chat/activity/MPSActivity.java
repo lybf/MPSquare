@@ -8,9 +8,12 @@ import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.content.Intent;
 import static net.lybf.chat.system.Utils.*;
-import net.lybf.chat.util.Logcat;
+import net.lybf.chat.utils.Logcat;
+import net.lybf.chat.R;
+import android.app.Fragment;
 public class MPSActivity extends AppCompatActivity
   {
+    //Created by lybf on 2017/7/23 13:34
     public static final String TAG="MPSActivity";
     
     private static MainApplication application;
@@ -19,6 +22,8 @@ public class MPSActivity extends AppCompatActivity
 
     private static Logcat logcat;
 
+    private static boolean autoDark=false;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -29,9 +34,10 @@ public class MPSActivity extends AppCompatActivity
         application=(MainApplication)getApplication();
         if(application==null){
             print(this.getClass(),"Application cast error");
-            application=new MainApplication();
+            application=MainApplication.getInstance();
           }
         settings=application.getSettings();
+     //   application.init();
         logcat=application.getLogcat();
       }
 
@@ -42,9 +48,48 @@ public class MPSActivity extends AppCompatActivity
         super.onDestroy();
       }
 
+    @Override
+    public void startActivity(Intent intent){
+       // logcat.println(
+        super.startActivity(intent);
+      }
+
+    @Override
+    public void startActivity(Intent intent,Bundle options){
+        // TODO: Implement this method
+        super.startActivity(intent,options);
+      }
+      
+
+    @Override
+    public void startActivities(Intent[] intents){
+        super.startActivities(intents);
+      }
+
+    @Override
+    public void startActivityForResult(Intent intent,int requestCode,Bundle options){
+        super.startActivityForResult(intent,requestCode,options);
+      }
 
 
-    public void hideActionBar(boolean bool){
+ 
+    public void RefreshData(){
+      init();
+    }
+    
+    
+    protected void AutoDark(boolean bool){
+      this.autoDark=bool;
+      if(autoDark){
+        if(settings.isDark()){
+          setTheme(R.style.DarkTheme);
+        }else{
+          setTheme(R.style.LightTheme);
+        }
+      }
+    }
+    
+    protected void hideActionBar(boolean bool){
         if(bool)
           getActionBar().hide();
         else

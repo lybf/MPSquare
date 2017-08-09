@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<android.support.design.widget.AppBarLayout
+		android:layout_width="match_parent"
+		android:id="@+id/app_bar"
+		android:fitsSystemWindows="true"
+		android:layout_height="wrap_content">
+
+		<android.support.v7.widget.Toolbar
+			app:title="@string/flashlight"
+			app:layout_collapseMode="pin"
+			android:id="@+id/toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize"
+			android:theme="@style/AppTheme.AppBarOverlay"/>
+
+	</android.support.design.widget.AppBarLayout>
+
+	<HorizontalScrollView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:id="@+id/flashlight_horizontal"
+		android:layout_below="@id/app_bar">
+
+		<RadioGroup
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:orientation="horizontal"
+			android:gravity="center"
+			android:id="@+id/flashlight_radioGroup">
+
+			<RadioButton
+				android:layout_height="wrap_content"
+				android:layout_width="100dp"
+				android:text="普通模式"
+				android:id="@+id/flashlight_mode_common"/>
+
+			<RadioButton
+				android:layout_height="wrap_content"
+				android:layout_width="100dp"
+				android:text="SOS求救"
+				android:id="@+id/flashlight_mode_sos"/>
+
+			<RadioButton
+				android:layout_height="wrap_content"
+				android:layout_width="100dp"
+				android:text="快速闪烁"
+				android:id="@+id/flashlight_mode_quickly"/>
+
+			<RadioButton
+				android:layout_height="wrap_content"
+				android:layout_width="100dp"
+				android:text="自定义模式"
+				android:id="@+id/flashlight_mode_custom"/>
+
+		</RadioGroup>
+
+	</HorizontalScrollView>
+
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:orientation="vertical"
+		android:layout_below="@id/flashlight_horizontal"
+		android:id="@+id/flashlight_custom"
+		android:layout_marginTop="10dp"
+		android:visibility="gone">
+
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:orientation="horizontal">
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal"
+				android:layout_weight="1.0"
+				android:gravity="center">
+
+				<TextView
+					android:layout_height="match_parent"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:layout_width="wrap_content"
+					android:text="次数"
+					android:gravity="center"/>
+
+				<EditText
+					android:layout_height="wrap_content"
+					android:inputType="textMultiLine"
+					android:layout_width="wrap_content"
+					android:ems="3"
+					android:hint="0~60"
+					android:id="@+id/flashlight_number"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal"
+				android:layout_marginLeft="10dp"
+				android:layout_weight="1.0"
+				android:gravity="center">
+
+				<TextView
+					android:layout_height="match_parent"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:layout_width="wrap_content"
+					android:text="间隔(毫秒)"
+					android:gravity="center"/>
+
+				<EditText
+					android:layout_height="wrap_content"
+					android:inputType="textMultiLine"
+					android:layout_width="wrap_content"
+					android:ems="3"
+					android:hint="100~?"
+					android:id="@+id/flashlight_time"/>
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+	<ImageButton
+		style="?android:attr/buttonBarButtonStyle"
+		android:layout_height="50dp"
+		android:layout_width="50dp"
+		android:layout_gravity="bottom|center"
+		android:layout_alignParentBottom="true"
+		android:layout_centerVertical="true"
+		android:layout_centerHorizontal="true"
+		android:id="@+id/flashlight_switchMode"/>
+
+</RelativeLayout>
+

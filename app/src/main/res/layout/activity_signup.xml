@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:toolbar="http://schemas.android.com/apk/res-auto"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:orientation="vertical"
 	android:layout_width="match_parent"
@@ -13,11 +12,12 @@
 		android:fitsSystemWindows="true">
 
 		<android.support.v7.widget.Toolbar
+            android:fitsSystemWindows="true"
 			android:id="@+id/toolbar_sign"
-			toolbar:title="@string/sign_title"
+			app:title="@string/sign_title"
 			android:layout_width="match_parent"
 			android:layout_height="?attr/actionBarSize"
-		     android:theme="@style/AppTheme.AppBarOverlay"
+            android:theme="@style/AppTheme.AppBarOverlay"
 			app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
 	</android.support.design.widget.AppBarLayout>
@@ -86,7 +86,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:hint="@string/sign_Password"
-          android:maxLength="18"
+                    android:maxLength="18"
 					android:inputType="textPassword"/>
 
 			</android.support.design.widget.TextInputLayout>
@@ -106,7 +106,7 @@
 					android:id="@+id/sign_aginInpuPassword"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-            android:maxLength="18"
+                    android:maxLength="18"
 					android:hint="@string/sign_aginEnterPassword"
 					android:inputType="textPassword"/>
 

@@ -8,16 +8,14 @@ public class Comment extends BmobObject
     private String content;
     //图1～图3
     private images  image,image2,image3;
-    //父类，所属贴子
-    private String parent;
+    //所属贴子
+    private Post post;
     //用户
     private MyUser user;
 
     //获取内容
     public String getMessage(){
-        if(content!=null)
-          return content;
-        return null;
+        return content;
       }
 
     //修改内容(设置内容)
@@ -36,28 +34,14 @@ public class Comment extends BmobObject
       }
 
 
-    /*
-     public Post getPost()
-     {
-     return post;
-     }
-
-
-     public void setPost(Post p)
-     {
-     post=p;
-     }*/
-
-    //获取所属贴子ID
-    public String getParent(){
-        if(parent!=null)
-          return parent;
-        return null;
+    //获取所属贴子
+    public Post getPost(){
+        return post;
       }
 
-    //设置所属贴子ID
-    public void setParent(String p){
-        parent=p;
+    //设置所属贴子
+    public void setPost(Post p){
+        this.post=p;
       }
 
     //获取图片1

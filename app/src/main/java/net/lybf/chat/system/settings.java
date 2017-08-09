@@ -13,101 +13,150 @@ import java.io.InputStream;
 import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
+import net.lybf.chat.MainApplication;
+import net.lybf.chat.utils.Logcat;
+import net.lybf.chat.utils.StackTraceMessage;
 
 public class settings
   {
     //根
     private JSONObject root;
     //Context
-    private Context ctx;
+    private static Context ctx;
     //文件
-    private File file;
+    private static File file;
     //设置文件路径
-    private String path=Paths.SETTINGS_PATH;
+    private static final String path=Paths.SETTINGS_PATH;
     //Assets-main.json
-    private String res="settings/main.json";
+    private static final String res="settings/main.json";
 
+    private static Logcat logcat;
 
-    public settings(Context ctx){
-        this.ctx=ctx;
+    private static settings settings;;
+
+    private settings(){
+        if(logcat==null)
+          logcat=MainApplication.getInstance().getLogcat();
+      }
+
+    public static settings getInstance(){
+        if(settings==null)
+          settings=new settings();
+        return settings;
+      }
+
+    public void init(Context context){
+        this.ctx=context;
         init();
       }
 
-    public String getUpdatedAt(){
-        return ""+root.opt("updatedAt");
-      }
-
-
-    private void init(){
+    private synchronized void init(){
         file=new File(path);
         if(!file.getParentFile().exists())
           file.getParentFile().mkdirs();
         if(!file.exists()){
             try{
-                InputStream input=ctx.getAssets().open("settings/main.json");
+                InputStream input=ctx.getAssets().open(res);
                 FileOutputStream out=new FileOutputStream(file);
                 byte[] by=new byte[input.available()];
                 input.read(by);
-                out.write(by);
+                root=new JSONObject(new String(by));
+                Date d=new Date(System.currentTimeMillis());
+                SimpleDateFormat p=new SimpleDateFormat(BmobUtils.BMOB_DATE_TYPE);
+                p.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
+                String date=p.format(d);
+                root.put("updatedAt",date);
+                root.put("createdAt",date);
+                save();
+                //  out.write(format(ar.toString()).getBytes());
               }catch(Exception e){
                 print(e);
               }
           }
-        if(file.exists()){
+        importSettings(this.file);
+        // importSettings(file);
+      }
+
+    public synchronized void importSettings(File file){
+        if(file.exists()&&file.length()>0){
             try{
                 InputStream in=new FileInputStream(file);
                 byte[] b=new byte[in.available()];
                 in.read(b);
                 root=new JSONObject(new String(b));
+                in.close();
               }catch(Exception e){
                 print(e);
               }
+          }else{
+            init();
           }
       }
 
 
 
-    public void setRandomBackground(boolean can)throws JSONException{
-        root.put("RandomBackground",can);
+    public synchronized void setRandomBackground(boolean can)throws JSONException{
+        set("RandomBackground",can);
         save();
       }
 
     public boolean getRandomBackground(){
-        boolean b= root.opt("RandomBackground");
+        boolean b= get("RandomBackground");
         return b;
       }
 
 
     public boolean isDark(){
-        boolean b=root.opt("DarkTheme");
+        boolean b=get("DarkTheme");
         return b;
       }
 
-    public void setDarkTheme(boolean b)throws JSONException{
-        root.put("DarkTheme",b);
+    public synchronized void setDarkTheme(boolean b)throws JSONException{
+        set("DarkTheme",b);
         save();
       }
 
-
-    public void updateTheme(){
-        increment("SettingsChange");
+    public String getUpdatedAt(){
+        return (String)get("updatedAt");
       }
 
-    private void increment(String key){
-        int p=root.opt(key);
+    public String getCreatedAt(){   
+        return (String)get("createdAt");
+      }
+
+
+    private synchronized void set(String key,Object object){
         try{
-            root.put(key,(p+1));
+            root.put(key,object);
           }catch(JSONException e){
             e.printStackTrace();
+            logcat.println(this,StackTraceMessage.getMessage(e).toString());
           }
       }
 
+    private synchronized Object get(String key){
+        Object result = null;
+        try{
+            result=root.opt(key);
+          }catch(Exception e){
+            e.printStackTrace();
+            logcat.println(this,StackTraceMessage.getMessage(e).toString());
+          }
+        return result;
+      }
+      
+      
     public void refresh(){
         init();
       }
 
 
     public String format(){
+        String result=format(root.toString());
+        return result;
+      }
+
+    public String format(String string){
         Date d=new Date(System.currentTimeMillis());
         SimpleDateFormat p=new SimpleDateFormat(BmobUtils.BMOB_DATE_TYPE);
         p.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
@@ -120,15 +169,13 @@ public class settings
           }
         Gson gson3 = new GsonBuilder().setPrettyPrinting().create();
         JsonParser jp = new JsonParser();
-        JsonElement je = jp.parse(""+root.toString());
+        JsonElement je = jp.parse(""+string);
         String format= gson3.toJson(je);
         return format;
       }
 
-
-    public void save(){
+    public synchronized void save(){
         try{
-
             FileOutputStream out=new FileOutputStream(file);
             out.write(format().getBytes());
           }catch(Exception e){
@@ -142,7 +189,7 @@ public class settings
       }
 
     private SaveListener savelistener;
-    public void save(SaveListener listener){
+    public synchronized void save(SaveListener listener){
         savelistener=listener;
         try{
             FileOutputStream out=new FileOutputStream(file);
@@ -154,6 +201,8 @@ public class settings
             savelistener.done(e);
           }
       }
+
+
     private void print(Object o){
         Utils.print(this.getClass(),o);
       }

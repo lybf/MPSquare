@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="MPSquare">冒泡广场</string> 
     <string name="app_name">冒泡广场</string>
 	<string name="allright">©2016-2017 lybf All Right reserved</string>  
 	<string name="open">打开</string>
@@ -8,13 +9,14 @@
 	<string name="send">发送</string>
 	<string name="login">登录</string>
 	<string name="password">密码</string>
+    <string name="flashlight">手电筒</string>
 	<string name="settings">设置</string>
 	<string name="settings_title">设置</string>
 	<string name="check_update">检查更新</string>
 	<string name="feedback">反馈</string>
 	<string name="about">关于</string>
 	<string name="log_out">退出登录</string>
-	<string name="error">很抱歉，《冒泡社区》在运行时出现了严重的错误.如果方便，请填写一些可能是重要的细节:应用出错前，你正在做什么(操作)等</string>
+	<string name="error">很抱歉，《冒泡社区》在运行时出现了严重的错误.如果方便，请填写一些可能是重要的细节，列如应用出错前，你正在做什么(操作)等</string>
     <string name="error_us">Please fill in any details that may be important:setps to reproduce,what were you doing when problem occurred ,etc.</string>
 	<string name="user_describe">这个人很懒，什么也没留下</string>
 

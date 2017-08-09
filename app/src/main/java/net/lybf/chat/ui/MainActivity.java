@@ -59,15 +59,16 @@ import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 import net.lybf.chat.ui.MainActivity;
 import net.lybf.chat.ui.SettingsActivity;
-import net.lybf.chat.util.BitmapTools;
-import net.lybf.chat.util.CommentCount;
-import net.lybf.chat.util.CommonUtil;
-import net.lybf.chat.util.Network;
+import net.lybf.chat.utils.BitmapTools;
+import net.lybf.chat.utils.CommentCount;
+import net.lybf.chat.utils.CommonUtil;
+import net.lybf.chat.utils.Network;
 import net.lybf.chat.widget.CircleImageView;
-import net.lybf.chat.util.Logcat;
+import net.lybf.chat.utils.Logcat;
 import java.io.IOException;
 import android.support.design.widget.Snackbar;
 import com.gc.materialdesign.widgets.SnackBar;
+import net.lybf.chat.utils.UserManager;
 
 public class MainActivity extends MPSActivity/*AppCompatActivity*/
   {
@@ -154,11 +155,22 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
     private static Logcat logcat;
 
+    private static UserManager userManager;
     @Override
     public void onCreate(Bundle save){
         super.onCreate(save);
+        
+        Intent ip=new Intent();
+        ip.setAction("net.lybf.chat.action.push");
+        Bundle bun=new Bundle();
+        bun.putString("title","测试");
+        bun.putString("message","这是测试内容，点击后跳转到MainActivity");
+        ip.putExtra("data",bun);
+      //  sendBroadcast(ip);
+        
         bundle=save;
         ctx=this;
+        userManager=new UserManager(this);
         app=getMainApplication();
         set=getSettings();
         logcat=getLogcat();
@@ -181,7 +193,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
     @Override
     protected void onDestroy(){
-        logcat.println(this,"退出应用");
+        logcat.println(this,"Exit");
         try{
             logcat.close();
           }catch(IOException e){
@@ -311,36 +323,10 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
     private void refreshUser(){
         use=BmobUser.getCurrentUser(MyUser.class);
         try{
-
             if(use!=null){
-                try{
-                    BmobFile icon=use.getIcon();
-                    final String ic=icon==null?"":icon.getFilename();
-                    print("图片名:"+ic);
-                    final File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+ic);
-                    print("文件路径:"+f.getAbsolutePath());
-                    if(!f.getParentFile().exists())
-                      f.getParentFile().mkdirs();
-                    if(f.exists()){
-                        nv_header.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
-                      }else{
-                        icon.download(f.getAbsoluteFile(),new DownloadFileListener(){
-                            @Override
-                            public void done(String p1,BmobException p2){
-                                if(p2==null)
-                                  Picasso.with(ctx).load(f).into(nv_header);
-                                else
-                                  Utils.print(MainActivity.class,"下载失败:"+p2);  
-                              }
-                            @Override
-                            public void onProgress(Integer p1,long p2){
-                                print("下载:"+ic+"到:"+f.getAbsolutePath()+"   进度:"+p1);
-                              }   
-                          });
-                      }
-                  }catch(Exception e){
-                    print("错误。"+e);
-                  }
+                File file=userManager.getIconFile(use);
+                if(file!=null)
+                  Picasso.with(this).load(file).into(nv_header);       
 
                 if(use.getUsername()!=null)
                   if(nv_name!=null)
@@ -349,12 +335,10 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                 if(nv_name!=null){
                     nv_name.setText("未登录，点击头像以登录");
                     Picasso.with(ctx).load(R.drawable.ic_user_header).into(nv_header);
-                  }
+                  }    
               }
-
-
           }catch(Exception e){
-            print(e);
+            e.printStackTrace();
           }
       }
 
@@ -362,28 +346,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
 
 
-    private void updateApp(String title,String text,String ApkFile){
-        Intent iii= new Intent();
-        iii.setClass(ctx,MainActivity.class);
-        iii.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent Pi=
-        PendingIntent.getActivity(ctx,0,iii,0);
-
-        NotificationCompat.Builder mBuilder =new NotificationCompat.Builder(this)
-        .setTicker("应用更新")
-
-        .setSmallIcon(R.drawable.ic_launcher)
-        .setContentTitle(title)
-        .setContentText(text)
-        .setAutoCancel(true)
-        .setDefaults(Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE)
-        .setContentIntent(Pi);
-        // 发送通知
-        NotificationManager nm = (NotificationManager) ctx.getSystemService(this.NOTIFICATION_SERVICE);
-        Notification nms= mBuilder.build();
-        nm.notify(0,nms);
-
-      }
+    
 
 
 
@@ -437,6 +400,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                 final Object[][] tools={
                   //Tag,Icon,name,Class
                     {"robot",R.drawable.ic_android_black,"聊天机器人",ChatRobotActivity.class},
+                    {"flashlight",R.drawable.ic_flashlight,"手电筒",FlashLightActivity.class},
                     {"count",R.drawable.ic_contrast,"统计",null}
                   };
                 for(int i=0;i<tools.length;i++){
@@ -717,76 +681,73 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
 
     private void read(boolean b){
-        print("扫描…………");
-        BmobQuery<Post> query = new BmobQuery<Post>();
-        query.addWhereEqualTo("type","0");
-        query.order("-createdAt");
-        query.include("user,image,image2,image3");
-        query.setLimit(加载信息条数);
-        boolean isCache = query.hasCachedResult(Post.class);
-        if(!b||!net.isConnectedOrConnecting()){//离线阅读
-            if(isCache){
-                query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
-              }else{
-                query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
-                print("无缓存");
-              }
-          }else{
-            if(FIRST_READ|!b){
-                FIRST_READ=false;
+        synchronized(this){
+            print("扫描…………");
+            BmobQuery<Post> query = new BmobQuery<Post>();
+            query.addWhereEqualTo("type","0");
+            query.order("-createdAt");
+            query.include("user,image,image2,image3");
+            query.setLimit(加载信息条数);
+            boolean isCache = query.hasCachedResult(Post.class);
+            if(!b||!net.isConnectedOrConnecting()){//离线阅读
                 if(isCache){
-                    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+                    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
+                  }else{
+                    query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+                    print("无缓存");
+                  }
+              }else{
+                if(FIRST_READ|!b){
+                    FIRST_READ=false;
+                    if(isCache){
+                        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+                      }else{
+                        query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+                      }
                   }else{
                     query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
                   }
-              }else{
-                query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
               }
-          }
 
-        query.findObjects(new FindListener<Post>() {
-            @Override
-            public void done(List<Post> obj,BmobException er){
-                MTA.clearAll();
-                MTA.notifyDataSetChanged();
-                if(er==null){
-                    int le=obj.size();
-                    print("查询成功............................共"+le+"条");
-                    for(int i=0;i<le;i++){
-                        final Post m=obj.get(i);
+            query.findObjects(new FindListener<Post>() {
+                @Override
+                public void done(List<Post> obj,BmobException er){
+                    MTA.clearAll();
+                    MTA.notifyDataSetChanged();
+                    if(er==null){
+                        int le=obj.size();
+                        print("QuerySuccess,count:"+le);
+                        for(int i=0;i<le;i++){
+                            final Post m=obj.get(i);
+                            new CommentCount().setPost(m).count(new CommentCount.CommentCountListener(){
+                                @Override
+                                public void done(int i,BmobException e){
+                                    if(e==null){
+                                        MTA.addPostCommentCount(m.getObjectId(),i);
+                                        MTA.additem(m);
+                                      }else{
+                                        MTA.additem(m);
+                                      }
+                                  }                              
+                              });
+                          }
 
-                        new CommentCount().setPostID(m.getObjectId()).count(new CommentCount.CommentCountListener(){
-                            @Override
-                            public void done(int i,BmobException e){
-                                if(e==null){
-                                    MTA.addPostCommentCount(m.getObjectId(),i);
-                                    MTA.additem(m);
-                                    print("增加数据:"+m.getObjectId());           
-                                  }else{
-                                    MTA.additem(m);
-                                    print("增加数据:"+m.getObjectId());           
-                                    print("CountCommentE:"+e.getMessage());
-                                  }
-
-                              }                              
-                          });
+                        if(refresh.isRefreshing()&&refresh!=null)
+                          refresh.setRefreshing(false);
+                      }else{
+                        ErrorMessage msg=new ErrorMessage();
+                        print("QueryFailed:"+er.getErrorCode()+"  "+msg.getMessage(er.getErrorCode())+"\n"+er.getMessage());
                       }
-
-                    if(refresh.isRefreshing()&&refresh!=null)
-                      refresh.setRefreshing(false);
-                  }else{
-                    ErrorMessage msg=new ErrorMessage();
-                    print("查询失败:"+er.getErrorCode()+"  "+msg.getMessage(er.getErrorCode())+"\n"+er.getMessage());
                   }
-              }
-          });
+              });
 
+          }
 
       }
 
 
     private void print(Object o){
-        new Utils().print(this.getClass(),o);
+        Utils.print(this.getClass(),o);
       }
   }
 

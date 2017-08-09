@@ -23,49 +23,31 @@ import net.lybf.chat.bmob.Post;
 import net.lybf.chat.system.BmobUtils;
 import net.lybf.chat.system.Paths;
 import net.lybf.chat.system.Utils;
-import net.lybf.chat.util.DateTools;
+import net.lybf.chat.utils.DateTools;
 import net.lybf.chat.widget.CircleImageView;
+import net.lybf.chat.utils.UserManager;
+import android.graphics.Bitmap;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>
   {
-    //Created at 2017/3/13
-    private Post post;
+    //Created by lybf on 2017/3/13
+    private static Post post;
 
-    private List<Object> comment=new ArrayList<Object>();
+    private static List<Object> comment=new ArrayList<Object>();
 
-    private Context ctx;
+    private static Context ctx;
 
-    private MainApplication mApplication;
-
-    private MyUser user;
+    private static MyUser user;
 
     private static final int TYPE_POST = 0;
 
     private static final int TYPE_COMMENT = 1;
-    public CommentAdapter(){
-        init();
-        if(ctx==null){
-            this.ctx=mApplication.getContext();
-          }else{
-            this.ctx=ctx;
-          }
-      }
     public CommentAdapter(Context ctx){
-        init();
-        if(ctx==null){
-            this.ctx=mApplication.getContext();
-          }else{
-            this.ctx=ctx;
-          }
+        this.ctx=ctx;
       }
 
     public CommentAdapter(Context ctx,Post post){
-        init();
-        if(ctx==null){
-            this.ctx=mApplication.getContext();
-          }else{
-            this.ctx=ctx;
-          }
+        this.ctx=ctx;
         if(post!=null){
             this.comment.add(post);
             this.post=post;
@@ -73,9 +55,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
           }
       }
 
-    private void init(){
-        mApplication=new MainApplication();
-      }
 
     public CommentAdapter setPost(Post post){
         this.comment.add(post);
@@ -87,7 +66,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     public CommentAdapter addComment(Comment comment){
         this.comment.add(comment);
-        notifyItemInserted(count());
+        notifyItemChanged(count()>0?count()-1:count());
         return this;
       }
 
@@ -97,7 +76,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         return this;
       }
 
-    public CommentAdapter remove(){
+    public CommentAdapter removeEnd(){
         if(count()>0){
             this.comment.remove(count());
             notifyItemChanged(count());
@@ -173,103 +152,57 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
       }
 
     @Override
-    public void onBindViewHolder(CommentAdapter.ViewHolder v,final int p2){
+    public void onBindViewHolder(CommentAdapter.ViewHolder v,final int index){
+        try{
+            if(index==0){
+                if(user.getUsername()!=null)
+                  v.name.setText(""+user.getUsername());
+                if(post.getCreatedAt()!=null){
+                    SimpleDateFormat da=new SimpleDateFormat(BmobUtils.BMOB_DATE_TYPE);
+                    Date datt = null;
+                    try{
+                        datt=da.parse(post.getCreatedAt());
+                      }catch(Exception e){
+                        print(e);
+                      }
+                    v.time.setText(""+new DateTools().date(datt));
+                  }
+                if(post.getMessage()!=null)
+                  v.content.setText(""+post.getMessage());
 
-        if(p2==0){
-            if(user.getUsername()!=null)
-              v.name.setText(""+user.getUsername());
-            if(post.getCreatedAt()!=null){
+                UserManager bm=new UserManager(ctx);
+                File file= bm.getIconFile(user);
+                if(file!=null){
+                    Picasso.with(ctx).load(file).into(v.header);
+                  }else{
+                    Picasso.with(ctx).load(R.drawable.ic_launcher).into(v.header);
+                  }
+              }else{
+                if(v.type==0);
+                //v=new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_comment,null),1);
+                Comment m=(Comment)comment.get(index);
+                MyUser usr=m.getUser();
+                UserManager bm=new UserManager(ctx);
+                File file= bm.getIconFile(usr);
+                if(file!=null){
+                    Picasso.with(ctx).load(file).into(v.header);
+                  }else{
+                    Picasso.with(ctx).load(R.drawable.ic_launcher).into(v.header);
+                  }          
+                v.name.setText(""+usr.getUsername());
                 SimpleDateFormat da=new SimpleDateFormat(BmobUtils.BMOB_DATE_TYPE);
-                Date datt = null;
+                Date dp = null;
                 try{
-                    datt=(Date) da.parse(post.getCreatedAt());
+                    dp=da.parse(""+m.getCreatedAt());
                   }catch(Exception e){
                     print(e);
                   }
-                v.time.setText(""+new DateTools().date(datt));
+                v.time.setText(""+new DateTools().date(dp));
+                v.content.setText(""+m.getMessage());
               }
-            if(post.getMessage()!=null)
-              v.content.setText(""+post.getMessage());
-
-            BmobFile file=user.getIcon();
-            if(file!=null){
-                File f=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/head/"+file==null?"":file.getFilename());
-                if(!f.getParentFile().exists())
-                  f.getParentFile().mkdirs();
-                if(f.exists()){
-                    try{
-                        Picasso.with(ctx).load(f.getAbsoluteFile()).into(
-                        v.header);
-                      }catch(Exception e){
-                        print("解析头像错误:"+e);
-                      }
-                  }else{
-                    file.download(f,new DownloadFileListener(){
-                        @Override
-                        public void done(String p1,BmobException p){
-                            if(p==null){
-                                notifyItemChanged(p2);
-                              }else{
-                                print(p);
-                              }
-                          }
-                        @Override
-                        public void onProgress(Integer p1,long p2){
-                            print("下载头像中:"+p1);
-
-                          }               
-                      });
-                  }
-
-              }else{
-                Picasso.with(ctx).load(R.drawable.ic_launcher).into(v.header);
-              }
-          }else{
-            if(v.type==0);
-            //v=new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_comment,null),1);
-            Comment m=(Comment)comment.get(p2);
-            MyUser usr=m.getUser();
-            BmobFile file=usr.getIcon();
-            if(file!=null){
-                File f=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/head/"+file==null?"":file.getFilename());
-
-                if(!f.getParentFile().exists())
-                  f.getParentFile().mkdirs();
-                if(f.exists()){
-                    try{
-                        v.header.setImageBitmap(
-                        BitmapFactory.decodeFile(f.getAbsolutePath()));
-                      }catch(Exception e){
-                        print("解析评论头像错误:"+e);
-                      }
-                  }else{
-                    file.download(f,new DownloadFileListener(){
-                        @Override
-                        public void done(String p1,BmobException p){
-                            if(p==null){
-                                notifyItemChanged(p2);
-                              }else{
-                                print(p);
-                              }
-                          }
-                        @Override
-                        public void onProgress(Integer p1,long p2){
-                            print("下载头像中:"+p1);
-                          }               
-                      }                    
-                    );
-                  }
-              }
-            v.name.setText(""+usr.getUsername());
-            SimpleDateFormat da=new SimpleDateFormat(BmobUtils.BMOB_DATE_TYPE);
-            Date dp = null;
-            try{
-                dp=(Date) da.parse(""+m.getCreatedAt());
-              }catch(Exception e){
-                print(e);
-              }
-            v.time.setText(""+new DateTools().date(dp));
-            v.content.setText(""+m.getMessage());
+            notifyItemChanged(index);
+          }catch(Exception e){
+            Utils.print(this.getClass(),e);
           }
       }
 

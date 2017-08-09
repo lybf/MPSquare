@@ -31,7 +31,7 @@ import net.lybf.chat.maps.Robot;
 import net.lybf.chat.system.Paths;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
-import net.lybf.chat.util.TuLingRobot;
+import net.lybf.chat.utils.TuLingRobot;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -170,6 +170,7 @@ public class ChatRobotActivity extends MPSActivity
       "clearScreen(清除聊天信息)",
       "clearLoginData(清除登录记录)",
       "export(导出聊天记录)",
+      "makeBug(测试专用,会崩溃)",
       "import [文件夹路径](导入MPSquare缓存)",
       "output [文件夹目录](导出MPSquare缓存)",
       "openMenu(打开UI窗口式指令)",
@@ -232,6 +233,10 @@ public class ChatRobotActivity extends MPSActivity
                               }
 
                             return true;// break;
+
+                          case "makeBug":
+                            ((String)null).toString();
+                            return true;
 
                           case "clearLoginData":
 

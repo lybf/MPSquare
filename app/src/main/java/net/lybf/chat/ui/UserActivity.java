@@ -38,7 +38,7 @@ import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 import cn.bmob.v3.listener.FetchUserInfoListener;
 import android.widget.ImageView;
-import net.lybf.chat.util.BitmapTools;
+import net.lybf.chat.utils.BitmapTools;
 import net.lybf.chat.system.Colors;
 
 public class UserActivity extends MPSActivity

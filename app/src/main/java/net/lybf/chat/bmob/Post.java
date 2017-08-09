@@ -21,73 +21,67 @@ public class Post extends BmobObject
     private MyUser user;
 
     public void setType(String p){
-        type=p;
+        this.type=p;
       }
 
     public String getType(){
-        return type;
+        return this.type;
       }
 
     public String getMessage(){
-        if(content==null)
-          return null;
-        return content;
+        return this.content;
       }
 
     public void setMessage(String str){
-        content=str;
+        this.content=str;
       }
 
 
 
 
     public String getTitle(){
-        if(title==null)
-          return null;
-        return title;
+        return this.title;
       }
 
     public void setTitle(String str){
-        title=str;
+        this.title=str;
       }
 
 
     public MyUser getUser(){
-        if(user==null)
-          return null;
-        return user;
+        return this.user;
       }
 
     public void setUser(MyUser str){
-        user=str;
+        this.user=str;
       }
 
 
 
     public images getImage(){
-        return image;
+        return this.image;
       }
 
     public void setImage(images b){
-        image=b;
+        this.image=b;
       }
 
 
     public images getImage2(){
-        return image2;
+        return this.image2;
       }
 
     public void setImage2(images b){
-        image2=b;
+        this.image2=b;
       }
 
 
     public images getImage3(){
-        return image3;
+        return this.image3;
       }
 
     public void setImage3(images b){
-        image3=b;
+        this.image3=b;
       }
   }
 

@@ -16,10 +16,11 @@
 			android:layout_width="match_parent"
 			android:id="@+id/app_bar"
 			android:fitsSystemWindows="true"
+            android:clipToPadding="true"
 			android:layout_height="wrap_content">
 
 			<android.support.v7.widget.Toolbar
-				app:title="@string/app_name"
+            	app:title="@string/app_name"
 				app:layout_collapseMode="pin"
 				android:id="@+id/toolbar"
 				android:layout_width="match_parent"

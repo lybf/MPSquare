@@ -21,8 +21,9 @@
 			android:background="#00000000">
 
 			<android.support.v7.widget.Toolbar
-				xmlns:toolbar="http://schemas.android.com/apk/res-auto"
-				toolbar:title="@string/login"
+                android:fitsSystemWindows="true"
+                android:clipToPadding="true"
+				app:title="@string/login"
 				app:layout_collapseMode="pin"
 				android:id="@+id/toolbar_login"
 				android:layout_width="match_parent"
@@ -65,7 +66,9 @@
 					android:layout_width="match_parent"
 					android:maxLength="8"
 					android:layout_height="wrap_content"
-					android:hint="账号"/>
+					android:hint="账号"
+					android:textColor="#FFFFFF"
+					android:textColorHint="#FFFCFC"/>
 
 			</android.support.design.widget.TextInputLayout>
 
@@ -91,7 +94,9 @@
 						android:layout_height="wrap_content"
 						android:hint="@string/password"
 						android:maxLength="18"
-						android:inputType="textPassword"/>
+						android:inputType="textPassword"
+						android:textColor="#FFFFFF"
+						android:textColorHint="#FCFCFC"/>
 
 				</android.support.design.widget.TextInputLayout>
 
@@ -110,26 +115,23 @@
 			style="?android:attr/buttonStyleSmall"
 			android:text="@string/login"
 			android:gravity="center"
-			android:layout_width="320dp"
+			android:layout_width="match_parent"
 			android:id="@+id/login"
-			android:layout_marginRight="12dp"
-			android:layout_marginLeft="12dp"
+			android:layout_marginRight="16dp"
+			android:layout_marginLeft="16dp"
 			android:layout_marginTop="50dp"/>
 
-	</LinearLayout>
+		<com.gc.materialdesign.views.ButtonRectangle
+			android:layout_height="50dp"
+			style="?android:attr/buttonStyleSmall"
+			android:text="@string/signup"
+			android:gravity="center"
+			android:layout_width="match_parent"
+			android:id="@+id/login_signup"
+			android:layout_marginRight="16dp"
+			android:layout_marginLeft="16dp"/>
 
-	<TextView
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:layout_width="wrap_content"
-		android:text="@string/signup"
-		android:id="@+id/login_signup"
-		android:layout_gravity="bottom|right"
-		android:textColor="@color/blue"
-		android:layout_alignParentBottom="true"
-		android:layout_alignParentRight="true"
-		android:layout_marginBottom="10dp"
-		android:layout_marginRight="10dp"/>
+	</LinearLayout>
 
 </RelativeLayout>
 

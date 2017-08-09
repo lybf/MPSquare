@@ -10,8 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import net.lybf.chat.R;
 import net.lybf.chat.maps.MainTools;
-import net.lybf.chat.util.BitmapTools;
-import net.lybf.chat.util.DateTools;
+import net.lybf.chat.utils.BitmapTools;
+import net.lybf.chat.utils.DateTools;
 import cn.bmob.push.a.which;
 import com.squareup.picasso.Picasso;
 

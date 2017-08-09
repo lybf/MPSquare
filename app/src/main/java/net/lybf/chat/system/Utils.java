@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.lybf.chat.BuildConfig;
 import net.lybf.chat.MainApplication;
-import net.lybf.chat.util.StackTraceMessage;
+import net.lybf.chat.utils.StackTraceMessage;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.os.Process;

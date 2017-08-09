@@ -28,7 +28,7 @@ import net.lybf.chat.bmob.UpdateLog;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 import net.lybf.chat.system.update;
-import net.lybf.chat.util.Network;
+import net.lybf.chat.utils.Network;
 
 public class AboutActivity extends MPSActivity/*AppCompatActivity*/
   {

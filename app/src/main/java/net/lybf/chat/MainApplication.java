@@ -10,53 +10,89 @@ import net.lybf.chat.bmob.ErrorMessage;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.system.BmobUtils;
 import net.lybf.chat.system.settings;
-import net.lybf.chat.util.CrashHandler;
-import net.lybf.chat.util.DateTools;
+import net.lybf.chat.utils.CrashHandler;
+import net.lybf.chat.utils.DateTools;
 import cn.bmob.v3.Bmob;
 import net.lybf.chat.system.Utils;
-import net.lybf.chat.util.Logcat;
+import net.lybf.chat.utils.Logcat;
 import cn.bmob.v3.listener.SaveListener;
+import net.lybf.chat.utils.chat;
+import cn.bmob.push.BmobPush;
+
+  /*
+  @author: lybf
+  @Date : 2017/.....
+ */
 public class MainApplication extends Application
   {
 
+    //单例
+    private static MainApplication INSTANCE;
+
+    //日志记录
     private static Logcat logcat;
 
-    static{
-        System.loadLibrary("system");
-      }
-
-    public native String getkey();
-
-    public native boolean BmobInitialize(Context ctx);
-
+    //Context
     private static Context mContext;
 
-    private CrashHandler crash;
+    //崩溃记录器
+    private static CrashHandler crash;
 
-    public settings set=new settings(this);
-
-    public boolean LastTheme;
+    private static settings set;
 
     private static MyUser user;
 
     private static BmobInstallation device;
 
+    private static chat jni;
     @Override
     public void onCreate(){
+        INSTANCE=this;
+        init();
+        logcat.println(this,"Application onCreate");
+        super.onCreate();
+      }
+
+    @Override
+    public void onLowMemory(){
+        logcat.println(this,"onLowMemory");
+        super.onLowMemory();
+      }
+
+    @Override
+    public void onTerminate(){
+        logcat.println(this,"kill application:MPSquare");
+        super.onTerminate();
+      }
+
+
+
+    public void init(){
+        jni=new chat();
+        set=settings.getInstance();
+        set.init(getApplicationContext());
         logcat=Logcat.getInstance();
         logcat.init();
-        logcat.println("Application init");
         super.onCreate();
         crash=CrashHandler.getInstance();
         crash.init(this);
-        logcat.println("init Bmob:"+BmobInitialize(this));
+        BmobPush.startWork(this);
+        logcat.println(this,"BmobPush startWork");
+        boolean success=jni.BmobInitialize(getApplicationContext());
+        logcat.println("Bmob init:"+success);
         mContext=this;
-        if(set==null)
-          set=new settings(this.getApplicationContext());
-        updateSettings();
         initBmob();
       }
 
+    public static MainApplication getInstance(){
+        if(INSTANCE==null){
+            synchronized(MainApplication.class){
+                INSTANCE=new MainApplication();
+                // INSTANCE.init();
+              }
+          }
+        return INSTANCE;
+      }
 
     private void initBmob(){
         user=BmobUser.getCurrentUser(MyUser.class);
@@ -66,9 +102,9 @@ public class MainApplication extends Application
             public void done(String p,BmobException e){
                 Utils.print(this.getClass(),"Installation :"+p);
                 if(e==null){
-                    Utils.print(this.getClass(),"Installation Save Success");
+                    //  Utils.print(this.getClass(),"Installation save success");
                   }else{
-                    Utils.print(this.getClass(),"Error:"+e.getMessage());
+                    //    Utils.print(this.getClass(),"Installation info save failed:"+e.getMessage());
                   }
               }    
           });
@@ -95,26 +131,20 @@ public class MainApplication extends Application
       }
 
     public Logcat getLogcat(){
+        if(logcat==null){
+            logcat=Logcat.getInstance();
+            logcat.init();
+          }
         return logcat;
       }
 
     public settings getSettings(){
-        updateSettings();
         if(set==null){
-            logcat.println("Settings Is Null");
-            set=new settings(this);
+            logcat.println("Settings is Null");
+            set=settings.getInstance();
+            set.init(getApplicationContext());
           }
         return this.set;
-      }
-
-    private void updateSettings(){
-        DateTools dt=new DateTools();
-        settings sett=new settings(this);
-        long l=dt.getLong(dt.getDate(sett.getUpdatedAt(),BmobUtils.BMOB_DATE_TYPE));
-        long now=dt.getLong(dt.getDate(set.getUpdatedAt(),BmobUtils.BMOB_DATE_TYPE));
-        if(l>now){
-            set=sett;
-          }
       }
 
 

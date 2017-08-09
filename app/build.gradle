@@ -13,8 +13,8 @@ android {
         applicationId "net.lybf.chat"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 5
-        versionName "1.4.1"
+        versionCode 7
+        versionName "1.4.3"
     }
 	
 	   signingConfigs {
@@ -34,14 +34,13 @@ android {
 	
 	
     buildTypes {	
-        release {
-			
+        release {	
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-	debug {
-        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        minifyEnabled true
+        debug {
+           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+           minifyEnabled true
 		}
     }
 	

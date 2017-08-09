@@ -34,9 +34,9 @@ import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.bmob.Post;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
-import net.lybf.chat.util.CommonUtil;
-import net.lybf.chat.util.DateTools;
-import net.lybf.chat.util.Network;
+import net.lybf.chat.utils.CommonUtil;
+import net.lybf.chat.utils.DateTools;
+import net.lybf.chat.utils.Network;
 
 public class PostActivity extends MPSActivity
   {
@@ -51,7 +51,7 @@ public class PostActivity extends MPSActivity
 
     private settings set;
 
-    private String 帖子;
+    private String postId;
 
     private MyUser use;
 
@@ -66,7 +66,9 @@ public class PostActivity extends MPSActivity
     private CommentAdapter adapter;
 
     private MainApplication app;
-    
+
+    private int load;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -88,7 +90,7 @@ public class PostActivity extends MPSActivity
         ctx=this;
         Intent i=getIntent();
         Bundle b=i.getBundleExtra("Mydata");
-        帖子=(String) b.get("帖子");
+        postId=(String) b.get("帖子");
         initView();
       }
 
@@ -156,29 +158,17 @@ public class PostActivity extends MPSActivity
                 public void onRefresh(){
                     i=0;
                     runing.postDelayed(run,1000);
-                    加载信息条数+=10;
+                    load+=10;
                     read();
                   } 
               }
             );
-            /*
-             //设置手势滑动监听器。        
-
-             refresh.setProgressBackgroundColor(0xFFFFFF);
-             //设置进度圈的背景色。*/
             refresh.setColorSchemeResources(R.color.orange,R.color.green,R.color.blue); 
-            //设置进度动画的颜色。
-            //refresh.setRefreshing(true);
-            //设置组件的刷洗状态
             refresh.setSize(SwipeRefreshLayout.DEFAULT);
-            //设置进度圈的大小，只有两个值：DEFAULT、LARGE
-
           }catch(Exception e){
             print("初始化失败"+e);
           }
-
         initTie();
-
       }
 
 
@@ -186,7 +176,7 @@ public class PostActivity extends MPSActivity
     private void initTie(){
         BmobQuery<Post> tie=new BmobQuery<Post>();
         tie.include("user");
-        tie.getObject(帖子,new QueryListener<Post>() {
+        tie.getObject(postId,new QueryListener<Post>() {
             @Override
             public void done(Post p1,BmobException p2){
                 if(p2==null){
@@ -196,7 +186,6 @@ public class PostActivity extends MPSActivity
                     user=p1.getUser();
                     adapter.setPost(post);
                     read();
-
                   }else{
                     if(net.isConnectedOrConnecting()){
                         ErrorMessage error=new ErrorMessage();
@@ -268,7 +257,7 @@ public class PostActivity extends MPSActivity
                 if(str!=null){
                     Comment c=new Comment();
                     c.setUser(use);
-                    c.setParent(帖子);
+                    c.setPost(post);
                     c.setMessage(str);
                     c.save(new SaveListener<String>(){
                         @Override
@@ -296,42 +285,38 @@ public class PostActivity extends MPSActivity
         a.show();
       }
 
-
-
-
-
-
-
-
     //用户(只存储发布者用户)
     private MyUser user;
     //帖子
     private Post post;
-    private int 加载信息条数=50;
 
     private void read(){
-
         print("开始扫描评论");
-        adapter.removeAll();
-        adapter.notifyDataSetChanged();
         final BmobQuery<Comment> query = new BmobQuery<Comment>();
         query.order("-createdAt");
-        query.addWhereEqualTo("parent",帖子);
-        query.include("user,image,image2,image3");
-        query.setLimit(加载信息条数);
-        query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
-        final boolean isCache = query.hasCachedResult(Comment.class);
+        query.addWhereEqualTo("post",post);
+        query.include("user,post,image,image2,image3");
+        query.setLimit(load);
+        boolean has=query.hasCachedResult(Comment.class);
+        if(has)
+          query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        else
+          query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
         query.findObjects(new FindListener<Comment>() {
             @Override
             public void done(List<Comment> p1,BmobException p2){
                 if(p2==null){
+                    adapter.removeAll();
+                    adapter.notifyDataSetChanged();
                     for(Comment me: p1){
                         adapter.addComment(me);
                       }
+                      adapter.notifyDataSetChanged();
                     if(refresh.isRefreshing())
-                      refresh.setRefreshing(false);;
+                      refresh.setRefreshing(false);
+                    load+=10;
                   }else{
-                    加载信息条数-=10;
+                    //加载信息条数-=10;
                     print("错误编码:"+p2.getErrorCode()+"\n错误信息:"+p2.getMessage());
                   }
               }
@@ -342,7 +327,7 @@ public class PostActivity extends MPSActivity
 
 
     private void print(Object p){
-        new Utils().print(this.getClass(),p);
+        Utils.print(this.getClass(),p);
       }
   }
     

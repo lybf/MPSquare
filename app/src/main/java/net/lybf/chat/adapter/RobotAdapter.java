@@ -10,10 +10,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import net.lybf.chat.R;
 import net.lybf.chat.maps.Robot;
-import net.lybf.chat.util.BitmapTools;
-import net.lybf.chat.util.DateTools;
+import net.lybf.chat.utils.BitmapTools;
+import net.lybf.chat.utils.DateTools;
 import net.lybf.chat.widget.CircleImageView;
-import net.lybf.chat.util.UserManager;
+import net.lybf.chat.utils.UserManager;
 import net.lybf.chat.bmob.MyUser;
 import cn.bmob.v3.BmobUser;
 import java.io.File;
@@ -138,9 +138,9 @@ public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
         viewHolder.content.setText(""+too.getText());
         viewHolder.name.setText(""+too.getName());
         if(viewHolder.flag==viewHolder.FLAG_MYSELF){
-            BmobFile icon=user.getIcon();
-            File file=new File(Paths.USER_PATH+"/"+user.getObjectId()+"/head/"+icon==null?"":icon.getFilename());
-            if(file.exists())
+            UserManager manager=new UserManager(ctx);
+            File file=manager.getIconFile(user);
+            if(file!=null)
               Picasso.with(ctx).load(file).into(viewHolder.header);
             else
               Picasso.with(ctx).load(R.drawable.ic_launcher).into(viewHolder.header);

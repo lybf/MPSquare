@@ -44,13 +44,14 @@ import net.lybf.chat.system.Utils;
 import android.text.TextUtils;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.bmob.MyUser;
+import net.lybf.chat.system.Colors;
 public class LoginActivity extends MPSActivity
   {
     private Toolbar bar;
     private EditText Name, Pass;
     private TextInputLayout mtextInputlayout,mname;
     private ButtonRectangle LOGIN;
-    private TextView SIGNUP;
+    private ButtonRectangle SIGNUP;
     private RelativeLayout root;
     private settings set;
 
@@ -69,6 +70,8 @@ public class LoginActivity extends MPSActivity
         setContentView(R.layout.activity_login);
         initView();
         if(set.getRandomBackground()){
+          Name.setHintTextColor(Colors.white);
+          Pass.setHintTextColor(Colors.white);
             try{
                 String[] as=this.getAssets().list("RandomBackground");
                 int i=new Random().nextInt(as.length);
@@ -110,7 +113,7 @@ public class LoginActivity extends MPSActivity
             ab. setDisplayHomeAsUpEnabled(true);
 
             LOGIN=(ButtonRectangle)findViewById(R.id.login);
-            SIGNUP=(TextView)findViewById(R.id.login_signup);
+            SIGNUP=(ButtonRectangle)findViewById(R.id.login_signup);
             LOGIN.setOnClickListener(new OnClickListener(){
                 public void onClick(View v){
                     String name=Name.getText().toString();
