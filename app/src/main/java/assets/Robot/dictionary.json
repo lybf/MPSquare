@@ -1,22 +1,20 @@
 {
   //作者
   "auther":"lybf",
-  //兼容版本
-  "compat":1.4,
   //名称
   "name":"机器人中文词库",
   //版本号
   "versionCode":1,
   //版本名
   "versionName":"1.0",
-  "useLibrary":"this",
-  "useLibraries":["assets/Robot/cute.json"],
+  "useLibraries":[".../cute.json"],
   //字典
   "dictionary":{
     //word result
     "你好":["你也好","泥嚎啊"],
     "你叫什么?":["我叫小C机器人啦"],
-    "你爸爸是谁？":["我爸爸叫lybf啦"]
-    
+    "你爸爸是谁？":["我爸爸就是'冒泡广场'的作者lybf啦～"],
+    "泥嚎":["你好啊","Hi"],
+    "hello":["hi","你也好啊"]
   }
 }

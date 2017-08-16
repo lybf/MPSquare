@@ -19,9 +19,9 @@ import cn.bmob.v3.listener.SaveListener;
 import net.lybf.chat.utils.chat;
 import cn.bmob.push.BmobPush;
 
-  /*
-  @author: lybf
-  @Date : 2017/.....
+/*
+ @author: lybf
+ @Date : 2017/.....
  */
 public class MainApplication extends Application
   {
@@ -38,13 +38,18 @@ public class MainApplication extends Application
     //崩溃记录器
     private static CrashHandler crash;
 
+    //应用配置
     private static settings set;
 
+    //用户
     private static MyUser user;
 
+    //
     private static BmobInstallation device;
 
+    //JNI
     private static chat jni;
+    
     @Override
     public void onCreate(){
         INSTANCE=this;
@@ -123,7 +128,10 @@ public class MainApplication extends Application
       }
 
     public Context getContext(){
-        return mContext;
+        if(INSTANCE==null){
+            INSTANCE=new MainApplication();
+          }
+        return INSTANCE;
       }
 
     public Application getApplication(){

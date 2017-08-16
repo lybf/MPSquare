@@ -6,7 +6,7 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import java.util.Locale;
 
-public class ResourceUtils
+public class ResUtils
   {
     /*
        CreatedAt 2017/5/31 23:31
@@ -17,11 +17,11 @@ public class ResourceUtils
 
     private DisplayMetrics dm;
 
-    public ResourceUtils(Resources res){
+    public ResUtils(Resources res){
         this.resources=res;
       }
 
-    public ResourceUtils(Context context){
+    public ResUtils(Context context){
         this.resources=context.getResources();
       }
 

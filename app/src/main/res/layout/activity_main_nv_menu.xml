@@ -11,15 +11,13 @@
 	<RelativeLayout
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:layout_marginTop="20dp"
-		android:layout_marginBottom="20dp"
 		android:layout_gravity="center">
 
 		<net.lybf.chat.widget.CircleImageView
 			android:id="@+id/main_nav_header"
 			android:layout_width="80dp"
 			android:layout_height="80dp"
-			android:src="@drawable/ic_user_header"
+			android:src="@drawable/ic_account_circle"
 			android:layout_margin="20dp"/>
 
 		<TextView
@@ -30,10 +28,11 @@
 			android:text="未登录，点击头像登录"
 			android:layout_margin="5dp"
 			android:textSize="20sp"
-			android:layout_toRightOf="@id/main_nav_header"
 			android:layout_centerVertical="true"
 			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:textColor="#FFFFFF"/>
+			android:textColor="#FFFFFF"
+			android:layout_below="@id/main_nav_header"
+			android:layout_marginLeft="16dp"/>
 
 	</RelativeLayout>
 

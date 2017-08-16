@@ -45,6 +45,7 @@ import android.text.TextUtils;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.system.Colors;
+import android.graphics.Color;
 public class LoginActivity extends MPSActivity
   {
     private Toolbar bar;
@@ -83,6 +84,8 @@ public class LoginActivity extends MPSActivity
                 a=new BitmapDrawable(BitmapFactory.decodeByteArray(by,0,length));
                 root.setBackground(a);
               }catch(Exception e){}
+          }else{
+            bar.setBackgroundColor(Colors.primary);
           }
       }
 

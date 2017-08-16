@@ -11,20 +11,19 @@
 		android:orientation="vertical"
 		android:layout_marginBottom="50dp">
 
-		<android.support.design.widget.AppBarLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-			<android.support.v7.widget.Toolbar
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:id="@+id/toolbar_sendtie"
-				app:popupTheme="@style/AppTheme.PopupOverlay"
-				app:theme="@style/AppTheme.AppBarOverlay"
-				android:title="发布贴子"/>
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbar_sendtie"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/AppTheme.AppBarOverlay"
+                android:title="发布贴子"/>
 
-		</android.support.design.widget.AppBarLayout>
-
+        </android.support.design.widget.AppBarLayout>
 		<EditText
 			android:layout_height="50dp"
 			android:ems="10"

@@ -55,7 +55,7 @@ public class WritePostActivity extends MPSActivity
             setTheme(R.style.LightTheme);
           }
         setContentView(R.layout.activity_writepost);
-        ctx=this;
+        this.ctx=this;
         init();
       }
 
@@ -115,8 +115,7 @@ public class WritePostActivity extends MPSActivity
             printError("标题不能为空");
             return;
           }
-        if(title!=null&&msg!=null){
-
+        if(title!=null&&msg!=null&&title.length()>0&&msg.length()>0){
             Post me= new Post();
             me.setMessage(msg);
             me.setUser(use);

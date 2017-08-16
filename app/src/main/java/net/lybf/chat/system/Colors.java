@@ -2,14 +2,14 @@ package net.lybf.chat.system;
 
 public class Colors
 {
-    public static final int primary=0x3F51B5;
-    public static final int primary_dark=0x303F9F;
-    public static final int primary_light=0xC5CAE9;
-    public static final int accent=0x448AFF;
-    public static final int primary_text=0x212121;
-    public static final int secondary_text=0x757575;
-    public static final int icons=0xFFFFFF;
-    public static final int divider=0xBDBDBD;
+    public static final int primary=0xFF3F51B5;
+    public static final int primary_dark=0xFF303F9F;
+    public static final int primary_light=0xFFC5CAE9;
+    public static final int accent=0xFF448AFF;
+    public static final int primary_text=0xFF212121;
+    public static final int secondary_text=0xFF757575;
+    public static final int icons=0xFFFFFFFF;
+    public static final int divider=0xFFBDBDBD;
     
     public static final int white=0xFFFFFFFF;
     public static final int black=0xFF212021;

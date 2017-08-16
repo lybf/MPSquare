@@ -37,6 +37,10 @@ import net.lybf.chat.system.settings;
 import net.lybf.chat.utils.CommonUtil;
 import net.lybf.chat.utils.DateTools;
 import net.lybf.chat.utils.Network;
+import net.lybf.chat.system.BmobUtils;
+import java.util.Date;
+import cn.bmob.v3.datatype.BmobDate;
+import com.gc.materialdesign.widgets.ProgressDialog;
 
 public class PostActivity extends MPSActivity
   {
@@ -67,8 +71,11 @@ public class PostActivity extends MPSActivity
 
     private MainApplication app;
 
-    private int load;
+    // private int load;
 
+    private LinearLayoutManager linearLayoutManager;
+
+    private ProgressDialog progress;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -145,12 +152,45 @@ public class PostActivity extends MPSActivity
             );
             listview=(RecyclerView)findViewById(R.id.comment_content);
             listview.setAdapter((adapter=new CommentAdapter(this)));
-            LinearLayoutManager Manager = new LinearLayoutManager(this);         
-            Manager.setOrientation(LinearLayoutManager.VERTICAL);
-            listview.setLayoutManager(Manager); 
+            linearLayoutManager=new LinearLayoutManager(this);         
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            listview.setLayoutManager(linearLayoutManager); 
             listview.setItemAnimator(new DefaultItemAnimator());
-            //  listview.setFastScrollEnabled(true);
 
+            listview.setOnScrollListener(new RecyclerView.OnScrollListener(){
+                private int lastPosition=0;
+                public void onScrolled(RecyclerView recyclerView,int dx,int dy){
+                    super.onScrolled(recyclerView,dx,dy);
+                  }
+
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView,int newState){
+                    super.onScrollStateChanged(recyclerView,newState);
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+                    int lastItemPosition = linearManager.findLastVisibleItemPosition();
+                    Utils.print(this.getClass(),"lastPosition:"+lastItemPosition);
+                    int cn=adapter.CommentCount;
+                    if(lastItemPosition==adapter.count()-1&&lastItemPosition!=lastPosition){
+                        //当滑动到最后一个评论时(评论数>0)，加载剩余评论(10条)
+                        if(progress==null)
+                          PostActivity.this.progress=new ProgressDialog(ctx,"加载评论中..");
+                        if(adapter.commentCount()==cn){
+                            final Snackbar s= Snackbar.make(bar,"已经到达地球底端了啦",Snackbar.LENGTH_SHORT);
+                            s.setAction("确定",new OnClickListener(){
+                                public void onClick(View v){
+                                    s.dismiss();
+                                  }
+                              }).show();
+                          }else if(!progress.isShowing()){
+                            PostActivity.this. progress.show();
+                            readMore();
+                          }
+                      }
+                      lastPosition=lastItemPosition;
+                  }
+
+              });
             refresh=(SwipeRefreshLayout)findViewById(R.id.comment_refresh);
             refresh.setProgressViewOffset(false,0,new CommonUtil().dip2px(100f));
             refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
@@ -158,7 +198,6 @@ public class PostActivity extends MPSActivity
                 public void onRefresh(){
                     i=0;
                     runing.postDelayed(run,1000);
-                    load+=10;
                     read();
                   } 
               }
@@ -290,13 +329,61 @@ public class PostActivity extends MPSActivity
     //帖子
     private Post post;
 
+    private void readMore(){
+        Comment last=adapter.getComment(adapter.commentCount()-1);
+        if(last==null){
+          return;
+        }
+        String date = null;
+        if(last!=null){
+            date=last.getCreatedAt();
+          }
+        Date dat=DateTools.getDate(date,BmobUtils.BMOB_DATE_TYPE);
+        final BmobQuery<Comment> query = new BmobQuery<Comment>();
+        query.order("-createdAt");
+        query.addWhereEqualTo("post",post);
+        query.addWhereLessThan("createdAt",new BmobDate(dat));
+        query.include("user,image,image2,image3");
+        query.setLimit(10);
+        boolean has=query.hasCachedResult(Comment.class);
+        if(has)
+          query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        else
+          query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        query.findObjects(new FindListener<Comment>() {
+            @Override
+            public void done(List<Comment> p1,BmobException p2){
+                if(p2==null){
+                    for(Comment me: p1){
+                        adapter.addComment(me);
+                      }
+                    adapter.notifyDataSetChanged();
+                    if(progress.isShowing()){
+                        progress.dismiss();
+                        final Snackbar snack=Snackbar.make(bar,"本次更新了:"+p1.size()+"条评论",Snackbar.LENGTH_SHORT);
+                        snack.setAction("确定",new OnClickListener(){
+                            public void onClick(View v){
+                                snack.dismiss();
+                              }
+                          }).show();
+                      }
+                  }else{
+                    print("错误编码:"+p2.getErrorCode()+"\n错误信息:"+p2.getMessage());
+                  }
+              }
+          }
+        );
+      }
+
+
     private void read(){
         print("开始扫描评论");
         final BmobQuery<Comment> query = new BmobQuery<Comment>();
         query.order("-createdAt");
         query.addWhereEqualTo("post",post);
-        query.include("user,post,image,image2,image3");
-        query.setLimit(load);
+
+        query.include("user,image,image2,image3");
+        query.setLimit(10);
         boolean has=query.hasCachedResult(Comment.class);
         if(has)
           query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
@@ -308,13 +395,15 @@ public class PostActivity extends MPSActivity
                 if(p2==null){
                     adapter.removeAll();
                     adapter.notifyDataSetChanged();
+                    int p = 0;
                     for(Comment me: p1){
+                        p++;
+                        Utils.print(this.getClass(),"评论 "+p);
                         adapter.addComment(me);
                       }
-                      adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
                     if(refresh.isRefreshing())
                       refresh.setRefreshing(false);
-                    load+=10;
                   }else{
                     //加载信息条数-=10;
                     print("错误编码:"+p2.getErrorCode()+"\n错误信息:"+p2.getMessage());

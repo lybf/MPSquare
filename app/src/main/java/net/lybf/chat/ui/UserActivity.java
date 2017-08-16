@@ -40,6 +40,8 @@ import cn.bmob.v3.listener.FetchUserInfoListener;
 import android.widget.ImageView;
 import net.lybf.chat.utils.BitmapTools;
 import net.lybf.chat.system.Colors;
+import net.lybf.chat.utils.UserManager;
+import com.squareup.picasso.Picasso;
 
 public class UserActivity extends MPSActivity
   {
@@ -57,11 +59,14 @@ public class UserActivity extends MPSActivity
     private MainApplication app;
 
     private ImageView email;
+
+    private UserManager userManager;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         app=getMainApplication();
         set=app.getSettings();
+        userManager=new UserManager(this);
         ctx=this;
         if(set.isDark()){
             setTheme(R.style.DarkTheme);
@@ -181,8 +186,8 @@ public class UserActivity extends MPSActivity
         try{
 
             if(set.isDark()){
-              BitmapTools m=BitmapTools.with(this);
-                Bitmap p=BitmapTools.setColor(Colors.gray,Colors.white,  m.load(getResources(),R.drawable.ic_email));
+                BitmapTools m=BitmapTools.with(this);
+                Bitmap p=BitmapTools.setColor(Colors.gray,Colors.white,m.load(getResources(),R.drawable.ic_email));
                 email.setBackgroundDrawable(m.Bitmap2Drawable(p));
               }else{
                 email.setBackgroundResource(R.drawable.ic_email);
@@ -272,30 +277,17 @@ public class UserActivity extends MPSActivity
                   }
 
 
-                BmobFile icon=use.getIcon();
-                final String ic=icon==null?"":icon.getFilename();
-                new Utils().print("图片名:"+ic);
-                final File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+ic);
-                new Utils().print("文件路径:"+f.getAbsolutePath());
-                if(!f.getParentFile().exists())
-                  f.getParentFile().mkdirs();
-                if(f.exists()){
-                    UserHeader.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
+                //  new UserManager(this).
+
+
+                File bitmap=userManager.getIconFile();
+                if(bitmap!=null){
+                    if(bitmap.exists())
+                      Picasso.with(this).load(bitmap).into(UserHeader);
+                    else
+                      Picasso.with(this).load(R.drawable.ic_launcher).into(UserHeader);
                   }else{
-                    icon.download(f.getAbsoluteFile(),new DownloadFileListener(){
-                        @Override
-                        public void done(String p1,BmobException p2){
-                            if(p2==null){
-                                UserHeader.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
-                              }else{
-                                System.out. println("下载失败:"+p2);
-                              }
-                          }
-                        @Override
-                        public void onProgress(Integer p1,long p2){
-                            new Utils().print("下载:"+ic+"到:"+f.getAbsolutePath()+"   进度:"+p1);
-                          }   
-                      });
+                    UserHeader.setImageBitmap(BitmapTools.load(R.drawable.ic_account_circle));
                   }
               }else{
                 UserName.setText("未登录");

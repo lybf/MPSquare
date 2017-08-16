@@ -7,23 +7,19 @@
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
 
-	<android.support.design.widget.AppBarLayout
-		android:layout_gravity="center_horizontal"
-		android:orientation="vertical"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
 		<android.support.v7.widget.Toolbar
-			xmlns:toolbar="http://schemas.android.com/apk/res-auto"
-			toolbar:title="@string/Error"
+			app:title="@string/Error"
 			app:layout_collapseMode="pin"
 			android:id="@+id/toolbar_error"
 			android:layout_width="match_parent"
 			android:layout_height="?attr/actionBarSize"
 			android:theme="@style/AppTheme.AppBarOverlay"
 			app:popupTheme="@style/AppTheme.AppBarOverlay"/>
-
-	</android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.AppBarLayout>
 
 	<TextView
 		android:layout_height="wrap_content"

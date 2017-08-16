@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -60,11 +60,7 @@
 			android:id="@+id/comment_content"
 			android:textIsSelectable="true"/>
 
-		<View
-			android:layout_height="2dp"
-			android:layout_width="match_parent"/>
-
 	</LinearLayout>
 
-</android.support.v7.widget.CardView>
+</LinearLayout>
 

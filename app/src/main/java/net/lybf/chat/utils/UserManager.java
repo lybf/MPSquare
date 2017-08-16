@@ -12,6 +12,9 @@ import net.lybf.chat.MainApplication;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.system.Paths;
 import net.lybf.chat.system.Utils;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindListener;
+import java.util.List;
 
 public class UserManager
   {
@@ -25,6 +28,20 @@ public class UserManager
         this.ctx=ctx;
       }
 
+    public UserManager(Context context,MyUser user){
+        this.ctx=context;
+        this.use=user;
+      }
+
+    public UserManager with(Context context){
+        return new UserManager(context);
+      }
+
+    public UserManager with(Context context,MyUser user){
+        return new UserManager(context,user);
+      }
+
+
     public MyUser getCurrentUser(){
         MyUser user=BmobUser.getCurrentUser(MyUser.class);
         return user;
@@ -36,27 +53,7 @@ public class UserManager
       }
 
     public UserManager DownLoadIcon(){
-        if(use!=null){
-            BmobFile file=use.getIcon();
-            final String filename=file==null?"":file.getFilename();
-            File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+filename);
-            if(!f.exists()){
-                file.download(f,new DownloadFileListener(){
-                    @Override
-                    public void done(String p1,BmobException p2){
-                        if(p2==null){
-                            print(filename+"  DownloadSuccess");
-                          }else{
-                            print(filename+"  DownloadError -->"+p2.toString());
-                          }
-                      }
-
-                    @Override
-                    public void onProgress(Integer p1,long p2){}
-                  });
-              }
-          }
-
+        DownLoadIcon(this.use);
         return this;
       }
 
@@ -68,7 +65,7 @@ public class UserManager
           }
         return this;
       }
-      
+
     public UserManager DownLoadIcon(MyUser user){
         if(user!=null){
             BmobFile file=user.getIcon();
@@ -95,25 +92,12 @@ public class UserManager
       }
 
     public Bitmap getIcon(){
-        BmobFile file=use.getIcon();
-        if(file==null)
-          return null;
-        final String filename=file.getFilename();
-        File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+filename);
-        if(!f.exists())
-          DownLoadIcon();
-        Bitmap mp = null;
-        if(f.exists()&&f.isFile()){
-            try{
-                mp=Picasso.with(ctx).load(f).get();
-              }catch(IOException e){
-                e.printStackTrace();
-              }
-          }
-        return mp;
+        return getIcon(use);
       }
 
     public Bitmap getIcon(MyUser user){
+        if(user==null)
+          return null;
         BmobFile file=user.getIcon();
         if(file==null)
           return null;
@@ -133,17 +117,12 @@ public class UserManager
       }
 
     public File getIconFile(){
-        BmobFile file=use.getIcon();
-        if(file==null)
-          return null;
-        final String filename=file.getFilename();
-        File f=new File(Paths.USER_PATH+"/"+use.getObjectId()+"/head/"+filename);
-        if(!f.exists())
-          DownLoadIcon();
-        return f;
+        return getIconFile(use);
       }
 
     public File getIconFile(MyUser user){
+        if(user==null)
+          return null;
         BmobFile file=user.getIcon();
         if(file==null)
           return null;
@@ -154,6 +133,44 @@ public class UserManager
         return f;
       }
 
+
+    public boolean isEmailVerified(){
+        return isEmailVerified(use);
+      }
+
+    /*
+     邮箱是否验证过
+     */
+    public boolean isEmailVerified(MyUser user){
+        boolean verify=false;
+        if(!(user.getEmail()==null))
+          if(user.getEmailVerified())
+            verify=true;
+        return verify;
+      }
+
+    /*
+     以用户名查询用户信息
+     */
+    public void queryUserByName(String name,FindListener<MyUser> listener){
+        queryUserByKeyValue("username",name,listener);
+      }
+
+    /*
+     以用户唯一id查询用户信息
+     */
+    public void queryUserById(String id,FindListener<MyUser> listener){
+        queryUserByKeyValue("objectid",id,listener);
+      }
+
+    /*
+     以key-value形式查询用户信息
+     */
+    public void queryUserByKeyValue(String key,String value,FindListener<MyUser> listener){
+        BmobQuery<MyUser> query=new BmobQuery<MyUser>();
+        query.addWhereEqualTo(key,value);
+        query.findObjects(listener);
+      }
 
     private void print(String e){
         Utils.print(this.getClass(),e);

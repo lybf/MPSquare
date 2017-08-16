@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:layout_width="match_parent">
+
+	<View
+		android:layout_height="20dp"
+		android:layout_width="8dp"
+		android:layout_alignParentLeft="true"
+		android:id="@+id/item_post_split_allcomment_view"
+		android:background="#3699EC"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:layout_width="wrap_content"
+		android:text="全部评论(0)"
+		android:layout_toRightOf="@id/item_post_split_allcomment_view"
+		android:layout_marginLeft="20dp"
+		android:id="@+id/item_post_split_allcomment_count"/>
+
+</RelativeLayout>
+

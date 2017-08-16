@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.Paths;
-import static net.lybf.chat.system.Utils.*;
+import static net.lybf.chat.system.Utils.print;
 public class CrashHandler implements UncaughtExceptionHandler
   {
     public static final String TAG = "CrashHandler";
@@ -170,8 +170,8 @@ public class CrashHandler implements UncaughtExceptionHandler
     /**
      * 保存错误信息到文件中
      *
-     * @param ex
-     * @return 返回文件名称,便于将文件传送到服务器
+     * @parame ex
+     * @return 返回文件名称
      */
     private String saveCrashInfo2File(Throwable ex){
 

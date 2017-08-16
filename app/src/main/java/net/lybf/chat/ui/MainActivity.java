@@ -334,7 +334,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
               }else{
                 if(nv_name!=null){
                     nv_name.setText("未登录，点击头像以登录");
-                    Picasso.with(ctx).load(R.drawable.ic_user_header).into(nv_header);
+                    Picasso.with(ctx).load(R.drawable.ic_account_circle).into(nv_header);
                   }    
               }
           }catch(Exception e){
