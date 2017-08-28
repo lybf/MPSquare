@@ -39,7 +39,6 @@ public class MainPagerAdaptet extends PagerAdapter
         view.removeView(views.get(position));
       }
 
-    // 当要显示的图片可以进行缓存的时候，会调用这个方法进行显示图片的初始化，我们将要显示的ImageView加入到ViewGroup中，然后作为返回值返回即可
     @Override
     public Object instantiateItem(ViewGroup view, int position) {
         view.addView(views.get(position));

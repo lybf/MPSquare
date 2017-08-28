@@ -1,6 +1,5 @@
 package net.lybf.chat.utils;
 import android.content.Context;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import cn.bmob.v3.BmobUser;
@@ -16,10 +15,10 @@ import net.lybf.chat.MainApplication;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.maps.Robot;
 import net.lybf.chat.maps.RobotList;
+import net.lybf.chat.system.Utils;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import net.lybf.chat.system.Utils;  
+import org.json.JSONObject;  
 public class TuLingRobot
 
   {

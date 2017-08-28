@@ -1,6 +1,5 @@
 package net.lybf.chat.ui;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;

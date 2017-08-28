@@ -2,8 +2,8 @@ package net.lybf.chat.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,12 +15,12 @@ import cn.bmob.v3.listener.SaveListener;
 import com.gc.materialdesign.views.ButtonRectangle;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
+import net.lybf.chat.activity.MPSActivity;
 import net.lybf.chat.bmob.ErrorMessage;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.bmob.Post;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
-import android.text.TextUtils;
 
 public class WritePostActivity extends MPSActivity
   {

@@ -1,7 +1,4 @@
 package net.lybf.chat.ui;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,8 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -34,12 +31,11 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.FindListener;
 import com.squareup.picasso.Picasso;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import net.lybf.chat.MainApplication;
@@ -54,7 +50,6 @@ import net.lybf.chat.bmob.Post;
 import net.lybf.chat.maps.MainTools;
 import net.lybf.chat.system.ActivityResultCode;
 import net.lybf.chat.system.Colors;
-import net.lybf.chat.system.Paths;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 import net.lybf.chat.ui.MainActivity;
@@ -62,13 +57,10 @@ import net.lybf.chat.ui.SettingsActivity;
 import net.lybf.chat.utils.BitmapTools;
 import net.lybf.chat.utils.CommentCount;
 import net.lybf.chat.utils.CommonUtil;
-import net.lybf.chat.utils.Network;
-import net.lybf.chat.widget.CircleImageView;
 import net.lybf.chat.utils.Logcat;
-import java.io.IOException;
-import android.support.design.widget.Snackbar;
-import com.gc.materialdesign.widgets.SnackBar;
+import net.lybf.chat.utils.Network;
 import net.lybf.chat.utils.UserManager;
+import net.lybf.chat.widget.CircleImageView;
 
 public class MainActivity extends MPSActivity/*AppCompatActivity*/
   {
@@ -159,15 +151,16 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
     @Override
     public void onCreate(Bundle save){
         super.onCreate(save);
-        
+        super.setSwipeBackEnable(false);
+
         Intent ip=new Intent();
         ip.setAction("net.lybf.chat.action.push");
         Bundle bun=new Bundle();
         bun.putString("title","测试");
         bun.putString("message","这是测试内容，点击后跳转到MainActivity");
         ip.putExtra("data",bun);
-      //  sendBroadcast(ip);
-        
+        //  sendBroadcast(ip);
+
         bundle=save;
         ctx=this;
         userManager=new UserManager(this);
@@ -180,11 +173,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
         initViews();
       }
 
-    @Override
-    protected void onStop(){
-        super.onStop();
-      }
-
+  
     @Override
     protected void onPause(){
         super.onPause();
@@ -193,7 +182,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
     @Override
     protected void onDestroy(){
-        logcat.println(this,"Exit");
+        logcat.println(this,"退出应用");
         try{
             logcat.close();
           }catch(IOException e){
@@ -304,6 +293,8 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                   break;
 
               }
+              
+              
           }
 
         super.onActivityResult(requestCode,resultCode,data);
@@ -346,7 +337,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
 
 
-    
+
 
 
 
@@ -651,7 +642,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
 
 
-    private void NavigationViewListener(NavigationView mNav){
+    private void NavigationViewListener(final NavigationView mNav){
         mNav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
           {
             @Override
@@ -666,6 +657,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                       startActivityForResult(new Intent(ctx,SettingsActivity.class),0);
                       break;
                   }
+                  mDrawerLayout.closeDrawer(mNav);
                 return true;
               }
           });

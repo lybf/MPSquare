@@ -17,9 +17,7 @@ public class UpdateLog extends BmobObject
     /*更新级别如下
      1:普通升级
      2:建议升级
-     3:强烈交易升级
-     4:非常强烈滴升级
-     5:强制升级*/
+     3:强制升级*/
     private Number level;
 
     private Number showType;
@@ -32,22 +30,27 @@ public class UpdateLog extends BmobObject
     public String getVersionName(){
         return versionName;
       }
+
      //获取更新级别
     public Number getLevel(){
         return level==-1?0:level;
       }
+
      //获取版本号
     public Number getVersionCode(){
         return versionCode;
       }
+
     //获取下载地址
     public String getApkFile(){
         return Apk;
       }
+
     //获取标题
     public String getTile(){
         return title;
       }
+
      //获取更新信息
     public String getMessage(){
         return describe;

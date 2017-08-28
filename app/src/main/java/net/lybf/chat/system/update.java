@@ -1,14 +1,10 @@
 package net.lybf.chat.system;
-import java.io.File;
-import org.json.JSONObject;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import com.google.gson.Gson;
-import org.json.JSONException;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class update
   {

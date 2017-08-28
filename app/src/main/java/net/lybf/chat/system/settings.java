@@ -11,11 +11,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Date;
-import org.json.JSONException;
-import org.json.JSONObject;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.utils.Logcat;
 import net.lybf.chat.utils.StackTraceMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class settings
   {

@@ -1,23 +1,26 @@
 package net.lybf.chat.receiver;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
-import android.app.PendingIntent;
-import android.support.v4.app.NotificationCompat;
+import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
-import android.app.Notification;
-import android.app.NotificationManager;
-import net.lybf.chat.ui.MainActivity;
-import android.os.Bundle;
 import net.lybf.chat.system.Utils;
+import net.lybf.chat.ui.MainActivity;
 
 public class PushMessage extends BroadcastReceiver
   {
 
     @Override
     public void onReceive(Context context,Intent intent){
+        MainApplication app=  (MainApplication)context.getApplicationContext();
+        app.getLogcat().println(this,"接收到推送信息");
         String action=intent.getAction();
         Bundle bun=intent.getBundleExtra("data");
         Utils.print(this.getClass(),"action:"+action);
@@ -25,7 +28,7 @@ public class PushMessage extends BroadcastReceiver
           pushMessage(context,intent.getStringExtra("msg"));
         else if(action.equals("net.lybf.chat.action.push"))
           updateApp(context,bun.getString("title"),bun.getString("message"),null);
-        
+
       }
 
     public void pushMessage(Context context,String message){

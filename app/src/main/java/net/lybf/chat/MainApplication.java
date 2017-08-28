@@ -49,10 +49,11 @@ public class MainApplication extends Application
 
     //JNI
     private static chat jni;
-    
+
     @Override
     public void onCreate(){
-        INSTANCE=this;
+        if(INSTANCE==null)
+          INSTANCE=this;
         init();
         logcat.println(this,"Application onCreate");
         super.onCreate();

@@ -1,13 +1,13 @@
 package net.lybf.chat.ui;
-import net.lybf.chat.activity.MPSActivity;
-import cn.bmob.v3.BmobUser;
-import android.view.MenuItem;
-import net.lybf.chat.bmob.MyUser;
-import android.os.Bundle;
-import net.lybf.chat.MainApplication;
-import net.lybf.chat.system.settings;
-import net.lybf.chat.R;
 import android.content.Context;
+import android.os.Bundle;
+import android.view.MenuItem;
+import cn.bmob.v3.BmobUser;
+import net.lybf.chat.MainApplication;
+import net.lybf.chat.R;
+import net.lybf.chat.activity.MPSActivity;
+import net.lybf.chat.bmob.MyUser;
+import net.lybf.chat.system.settings;
 
 public class FeedbackActivity extends MPSActivity
   {

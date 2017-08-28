@@ -35,6 +35,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     //Created by lybf on 2017/3/13
     private Post post;
 
+    // 评论
     private List<Comment> comment=new ArrayList<Comment>();
 
     private Context ctx;
@@ -144,11 +145,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup p1,int p2){
         ViewHolder v = null;
         if(p2==TYPE_POST){
-            v=new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_post_user,null),TYPE_POST);
+            v=new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_post_user,null,false),TYPE_POST);
           }else if(p2==TYPE_COMMENT){
-            v=new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_comment,null),TYPE_COMMENT);
+            v=new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_comment,null,false),TYPE_COMMENT);
           }else if(p2==TYPE_SPLIT){
-            v=new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_post_split_allcomment,null),TYPE_SPLIT);
+            v=new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_post_split_allcomment,null,false),TYPE_SPLIT);
           }
         return v;
       }

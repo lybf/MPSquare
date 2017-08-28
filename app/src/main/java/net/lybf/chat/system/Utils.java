@@ -1,9 +1,12 @@
 package net.lybf.chat.system;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Process;
 import android.os.StatFs;
 import android.text.format.Formatter;
 import java.io.File;
@@ -11,13 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.lybf.chat.BuildConfig;
-import net.lybf.chat.MainApplication;
 import net.lybf.chat.utils.StackTraceMessage;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningAppProcessInfo;
-import android.os.Process;
-import android.content.pm.PackageManager.NameNotFoundException;
 public class Utils
   {
 
@@ -64,7 +61,7 @@ public class Utils
             sb.append("\n\n-------设备信息-------");
             sb.append("\n版本名:"+Build.VERSION.RELEASE);
             sb.append("\n版本号:"+Build.VERSION.SDK_INT);
-            
+
             sb.append("\n版本："+Build.MODEL);
             //sb.append("\n主板："+Build.BOARD);
             //sb.append("\n系统启动程序版本号："+Build.BOOTLOADER);
@@ -221,7 +218,16 @@ public class Utils
         return Formatter.formatFileSize(ctx,blockSize*availableBlocks);
       }
 
+    public static String getClassName(Object obj){
+        return getClassName(obj.getClass());
+      }
 
+    public static String getClassName(Class css){
+        if(css!=null)
+          return css.getName();
+        else return null;
+      }
+      
     public static void print(){
         System.out.println();
       }
@@ -272,11 +278,11 @@ public class Utils
             System.out.println();
           }
 
-        public  void print(Object obj){
+        public void print(Object obj){
             System.out.println(obj);
           }
 
-        public   void print(Object thisz,Exception e){
+        public void print(Object thisz,Exception e){
             String pkg=thisz.getClass().getName();
             print();
             print("\n\n-----------"+pkg+"---------");

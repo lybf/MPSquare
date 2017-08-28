@@ -1,18 +1,14 @@
 package net.lybf.chat.services;
 import android.accessibilityservice.AccessibilityService;
-import android.view.accessibility.AccessibilityEvent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.DatabaseErrorHandler;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import android.util.AttributeSet;
-import android.content.res.TypedArray;
 import android.content.Intent;
 import android.content.res.Configuration;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import android.os.IBinder;
+import android.database.DatabaseErrorHandler;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.KeyEvent;
+import android.view.accessibility.AccessibilityEvent;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 public class MyAccessibilityServer extends AccessibilityService
   {

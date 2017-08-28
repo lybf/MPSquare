@@ -5,23 +5,19 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Process;
 import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.Paths;
+
 import static net.lybf.chat.system.Utils.print;
 public class CrashHandler implements UncaughtExceptionHandler
   {

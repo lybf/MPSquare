@@ -1,23 +1,27 @@
 package net.lybf.chat.utils;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import net.lybf.chat.system.Paths;
-import static net.lybf.chat.system.Utils.*;
 import java.util.Date;
+import net.lybf.chat.system.Paths;
+
+import static net.lybf.chat.system.Utils.getClassName;
+import static net.lybf.chat.system.Utils.print;
 public class Logcat
   {
+    //单例
     private static Logcat INSTANCE;
 
+    //路径
     private static String path;
 
+    //日志文件
     private static File file;
 
     private static FileOutputStream out;
 
     private Logcat(){
-    //  init();
+        //  init();
       }
 
     public static Logcat getInstance(){
@@ -50,7 +54,7 @@ public class Logcat
 
 
     public synchronized void println(Object thisz,Object object){
-        String str=print(thisz.getClass(),object);
+        String str="message:"+object+"    on "+getClassName(thisz);
         write(str);
       }
 
@@ -61,15 +65,13 @@ public class Logcat
 
     public synchronized void printWithTime(Object object){
         print(object);
-        String time=DateTools.format(System.currentTimeMillis(),"yyy/MM/dd HH:mm:ss:SSS");
-        write(time+" "+object.toString());
+        write(object.toString());
       }
 
     public synchronized void write(String string){
         try{
-            String time=DateTools.format(System.currentTimeMillis(),"yyy/MM/dd HH:mm:ss:SSS");
             if(out!=null)
-              out.write((time+"   "+string+"\n").getBytes());
+              out.write(("at "+getTime()+"    "+string+"\n").getBytes());
             else
               newWrite();
           }catch(Exception e){
@@ -77,6 +79,12 @@ public class Logcat
           }
       }
 
+    public static String getTime(){
+        String time=DateTools.format(System.currentTimeMillis(),"yyy/MM/dd HH:mm:ss:SSS");
+        return time;
+      }
+
+    
     public synchronized void close() throws IOException{
         out.write("###########End##########\n\n\n".getBytes());
         out.close();

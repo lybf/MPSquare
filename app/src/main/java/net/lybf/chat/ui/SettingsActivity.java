@@ -2,14 +2,14 @@ package net.lybf.chat.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import java.util.HashMap;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
-import net.lybf.chat.flagment.SettingsFlagment;
+import net.lybf.chat.activity.MPSActivity;
+import net.lybf.chat.fragment.SettingsFragment;
 import net.lybf.chat.system.ActivityResultCode;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
@@ -27,7 +27,7 @@ public class SettingsActivity extends MPSActivity
 
     private settings set;
 
-    private SettingsFlagment sf;
+    private SettingsFragment sf;
 
     private HashMap<String,Object> hash;
 
@@ -42,7 +42,7 @@ public class SettingsActivity extends MPSActivity
         hash=(HashMap<String,Object>) getLastCustomNonConfigurationInstance();
 
         if(hash==null)
-          hash=(HashMap<String, Object>) onRetainCustomNonConfigurationInstance();
+          hash=onRetainCustomNonConfigurationInstance();
         initView();
 
       }
@@ -63,7 +63,7 @@ public class SettingsActivity extends MPSActivity
 
 
     @Override
-    public Object onRetainCustomNonConfigurationInstance(){
+    public HashMap<String,Object> onRetainCustomNonConfigurationInstance(){
         super.onRetainCustomNonConfigurationInstance();
         HashMap<String,Object> hm=new HashMap<String,Object>();
         hm.put("theme",set.isDark());
@@ -102,11 +102,11 @@ public class SettingsActivity extends MPSActivity
         ab.setDisplayHomeAsUpEnabled(true);
         try{
             fm=(FrameLayout)findViewById(R.id.settings_framelayout);
-            sf=new SettingsFlagment();
+            sf=new SettingsFragment();
             //getFragmentManager().beginTransaction().hide(sf);
             getFragmentManager().beginTransaction().replace(R.id.settings_framelayout,sf).commit();
             sf.setContext(this);
-            sf.setThemeChangeListener(new SettingsFlagment.ThemeChange(){
+            sf.setThemeChangeListener(new SettingsFragment.ThemeChange(){
                 public void change(boolean bool){
                     try{
                         set.setDarkTheme(bool);

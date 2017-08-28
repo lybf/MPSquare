@@ -41,7 +41,7 @@ public class BitmapTools
         return bitmaptools;
       }
 
-    public static Bitmap load(int resourceId){
+    public Bitmap load(int resourceId){
         return Drawable2Bitmap(context.getResources().getDrawable(resourceId));
       }
 
@@ -176,20 +176,14 @@ public class BitmapTools
         return bm;
       }
 
-    public static void setColor(int[] colors,int[] instead,List<Bitmap> bitmaps){
-        if(colors.length<=0)
-          return;
-        if(instead.length<=0)
-          return;
-        if(bitmaps.size()<=0)
+    public static void setColors(int[] colors,int[] instead,List<Bitmap> bitmaps){
+        if(colors.length<=0 || instead.length<=0 || bitmaps.size()<=0)
           return;
         int i=0;
         int j=colors.length;
 
         for(;i<j;i++){
-            if(i>=instead.length)
-              break;
-            if(i>=bitmaps.size())
+            if(i>=instead.length || i>=bitmaps.size())
               break;
             bitmaps.set(i,setColor(colors[i],instead[i],bitmaps.get(i)));
           }
@@ -202,12 +196,12 @@ public class BitmapTools
         return result;
       }
 
-    public static Bitmap compressImage(Bitmap image,int percent){
+    public static Bitmap compress(Bitmap image,int percent){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int options = percent;
-        image.compress(Bitmap.CompressFormat.JPEG,options,baos);//这里压缩options%，把压缩后的数据存放到baos中
-        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
-        Bitmap bitmap = BitmapFactory.decodeStream(isBm,null,null);//把ByteArrayInputStream数据生成图片
+        image.compress(Bitmap.CompressFormat.JPEG,options,baos);
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm,null,null);
         return bitmap;
       }
 

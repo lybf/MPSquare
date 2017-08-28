@@ -1,20 +1,18 @@
 package net.lybf.chat.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
+import cn.bmob.v3.listener.FindListener;
 import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
-import net.lybf.chat.MainApplication;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.system.Paths;
 import net.lybf.chat.system.Utils;
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.listener.FindListener;
-import java.util.List;
 
 public class UserManager
   {

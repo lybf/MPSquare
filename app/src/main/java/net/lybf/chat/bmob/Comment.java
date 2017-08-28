@@ -1,5 +1,7 @@
 package net.lybf.chat.bmob;
 import cn.bmob.v3.BmobObject;
+import java.util.ArrayList;
+import java.util.List;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.bmob.images;
 public class Comment extends BmobObject
@@ -55,20 +57,37 @@ public class Comment extends BmobObject
         image=f;
       }
 
-
     public images getImage2(){
         return image2;
       }
+
     public void setImage2(images f){
         image2=f;
       }
 
-
     public images getImage3(){
         return image3;
       }
+
     public void setImage3(images f){
         image3=f;
+      }
+
+    public List<images> getImages(){
+        List<images> list=new ArrayList<images>();
+        list.add(image);
+        list.add(image2);
+        list.add(image3);
+        try{
+            for(int c=list.size()-1;c>0;c--){
+                if(list.get(c)==null){
+                    list.remove(c);
+                  }  
+              }
+          }catch(Exception e){
+            e.printStackTrace();
+          }
+        return list;
       }
 
   }

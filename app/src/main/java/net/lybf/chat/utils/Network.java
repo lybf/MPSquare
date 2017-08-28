@@ -2,25 +2,18 @@ package net.lybf.chat.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Message;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.maps.Robot;
-import net.lybf.chat.maps.RobotList;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class Network
   {
-	private Context ctx
-    ;
+	private Context ctx;
 	public Network(Context c){
 		ctx=c;
 	  }

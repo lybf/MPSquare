@@ -4,12 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import net.lybf.chat.activity.MPSActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,30 +14,33 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
+import com.gc.materialdesign.widgets.ProgressDialog;
+import java.util.Date;
 import java.util.List;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
+import net.lybf.chat.activity.MPSActivity;
 import net.lybf.chat.adapter.CommentAdapter;
 import net.lybf.chat.bmob.Comment;
 import net.lybf.chat.bmob.ErrorMessage;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.bmob.Post;
+import net.lybf.chat.system.BmobUtils;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 import net.lybf.chat.utils.CommonUtil;
 import net.lybf.chat.utils.DateTools;
 import net.lybf.chat.utils.Network;
-import net.lybf.chat.system.BmobUtils;
-import java.util.Date;
-import cn.bmob.v3.datatype.BmobDate;
-import com.gc.materialdesign.widgets.ProgressDialog;
 
 public class PostActivity extends MPSActivity
   {
@@ -61,7 +61,9 @@ public class PostActivity extends MPSActivity
 
     private DateTools DTools;
 
-    private FloatingActionButton fab;
+    private EditText edittext;
+
+    private Button send;
 
     private SwipeRefreshLayout refresh;
 
@@ -128,13 +130,14 @@ public class PostActivity extends MPSActivity
 
 
         try{
-            fab=(FloatingActionButton)findViewById(R.id.comment_writeComment);
-            fab.setOnClickListener(new OnClickListener(){
+            edittext=(EditText)findViewById(R.id.activity_post_comment_edittext);
+            send=(Button)findViewById(R.id.activity_post_comment_send);
+            send.setOnClickListener(new OnClickListener(){
                 @Override
                 public void onClick(View p1){
-                    if(use!=null)
-                      WriteComment();
-                    else
+                    if(use!=null){
+                        sendComment();
+                      }else
                       new AlertDialog.Builder(PostActivity.this)
                       .setTitle("失败")
                       .setMessage("你需要登录后才能发言")
@@ -151,6 +154,9 @@ public class PostActivity extends MPSActivity
               }
             );
             listview=(RecyclerView)findViewById(R.id.comment_content);
+            listview.addItemDecoration(new RecyclerView.ItemDecoration(){
+
+              });
             listview.setAdapter((adapter=new CommentAdapter(this)));
             linearLayoutManager=new LinearLayoutManager(this);         
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -176,18 +182,13 @@ public class PostActivity extends MPSActivity
                         if(progress==null)
                           PostActivity.this.progress=new ProgressDialog(ctx,"加载评论中..");
                         if(adapter.commentCount()==cn){
-                            final Snackbar s= Snackbar.make(bar,"已经到达地球底端了啦",Snackbar.LENGTH_SHORT);
-                            s.setAction("确定",new OnClickListener(){
-                                public void onClick(View v){
-                                    s.dismiss();
-                                  }
-                              }).show();
+                          Toast.makeText(PostActivity.this,"已经到达地球底端了啦",Toast.LENGTH_SHORT).show();
                           }else if(!progress.isShowing()){
                             PostActivity.this. progress.show();
                             readMore();
                           }
                       }
-                      lastPosition=lastItemPosition;
+                    lastPosition=lastItemPosition;
                   }
 
               });
@@ -250,13 +251,49 @@ public class PostActivity extends MPSActivity
       }
 
 
+    private void sendComment(){
+        if(edittext==null)
+          return;
+        String msg=edittext.getText().toString();
+        if(msg.equals("")||msg==null){
+            Toast.makeText(this,"内容不能为空哦",Toast.LENGTH_SHORT).show();
+            return;
+          }
+        Comment c=new Comment();
+        c.setUser(use);
+        c.setPost(post);
+        c.setMessage(msg);
+        c.save(new SaveListener<String>(){
+            @Override
+            public void done(String p1,BmobException p2){
+                if(p2==null){
+                    read();
+                    edittext.setText("");
+                  }else if(p2!=null){                    
+                    String m=null;
+                    ErrorMessage msg=new ErrorMessage();
+                    m=msg.getMessage(p2.getErrorCode());
+                    new AlertDialog.Builder(PostActivity.this)
+                    .setTitle("发送失败")
+                    .setMessage("发送失败\n状态码："+p2.getErrorCode()+"\n\n错误信息:\n"+m==null?p2.getMessage():m+"\n重新试试吧")
+                    .setPositiveButton("确定",null)
+                    .setCancelable(false)
+                    .show();
+                  }
+              }
+          }
+        );
+      }
+
+
+
     private  Handler runing=new Handler();
     private int i=0;
     private Runnable run=new Runnable(){
         public void run(){
             i++;
             if(i==5&&refresh.isRefreshing()){
-                final Snackbar b=Snackbar.make(fab,"啊哦，失败了",Snackbar.LENGTH_LONG);
+                final Snackbar b=Snackbar.make(edittext,"啊哦，失败了",Snackbar.LENGTH_LONG);
                 b.setAction("确定",new OnClickListener(){
                     @Override
                     public void onClick(View p1){
@@ -264,6 +301,7 @@ public class PostActivity extends MPSActivity
                       }
                   }
                 );
+
                 b.show();
                 refresh.setRefreshing(false);
               }        
@@ -279,51 +317,6 @@ public class PostActivity extends MPSActivity
 
 
 
-    private void WriteComment(){
-
-        print("打开评论发送界面成功!!");
-        final EditText e=new EditText(this);
-        e.setHint("输入你要评论的内容");
-        TextInputLayout te=new TextInputLayout(this);
-        te.addView(e);
-        AlertDialog.Builder a=new AlertDialog.Builder(this);
-        a.setTitle("评论");
-        a.setView(te);
-        a.setPositiveButton("发送",new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface p1,int p2){
-                String str=e.getText().toString();
-                if(str!=null){
-                    Comment c=new Comment();
-                    c.setUser(use);
-                    c.setPost(post);
-                    c.setMessage(str);
-                    c.save(new SaveListener<String>(){
-                        @Override
-                        public void done(String p1,BmobException p2){
-                            if(p2==null){
-                                read();
-                              }else if(p2!=null){                    
-                                String m=null;
-                                ErrorMessage msg=new ErrorMessage();
-                                m=msg.getMessage(p2.getErrorCode());
-                                new AlertDialog.Builder(PostActivity.this)
-                                .setTitle("发送失败")
-                                .setMessage("发送失败\n状态码："+p2.getErrorCode()+"\n\n错误信息:\n"+m==null?p2.getMessage():m)
-                                .setPositiveButton("确定",null)
-                                .setCancelable(false)
-                                .show();
-                              }
-                          }
-                      }
-                    );
-                  }
-              }
-          }
-        );
-        a.show();
-      }
-
     //用户(只存储发布者用户)
     private MyUser user;
     //帖子
@@ -332,8 +325,8 @@ public class PostActivity extends MPSActivity
     private void readMore(){
         Comment last=adapter.getComment(adapter.commentCount()-1);
         if(last==null){
-          return;
-        }
+            return;
+          }
         String date = null;
         if(last!=null){
             date=last.getCreatedAt();
@@ -360,12 +353,7 @@ public class PostActivity extends MPSActivity
                     adapter.notifyDataSetChanged();
                     if(progress.isShowing()){
                         progress.dismiss();
-                        final Snackbar snack=Snackbar.make(bar,"本次更新了:"+p1.size()+"条评论",Snackbar.LENGTH_SHORT);
-                        snack.setAction("确定",new OnClickListener(){
-                            public void onClick(View v){
-                                snack.dismiss();
-                              }
-                          }).show();
+                        Toast.makeText(PostActivity.this,"本次更新了:"+p1.size()+"条评论",Toast.LENGTH_SHORT).show();
                       }
                   }else{
                     print("错误编码:"+p2.getErrorCode()+"\n错误信息:"+p2.getMessage());

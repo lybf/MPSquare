@@ -1,4 +1,4 @@
-package net.lybf.chat.flagment;
+package net.lybf.chat.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import net.lybf.chat.system.settings;
 import net.lybf.chat.ui.SettingsActivity;
 import org.json.JSONException;
 
-public class SettingsFlagment extends PreferenceFragment
+public class SettingsFragment extends PreferenceFragment
   {
 
     //设置类/配置类
@@ -33,7 +33,7 @@ public class SettingsFlagment extends PreferenceFragment
     //夜间主题
     private CheckBoxPreference checkbox_darktheme;
 
-    private SettingsFlagment.ThemeChange listener;
+    private SettingsFragment.ThemeChange listener;
 
     private MainApplication app;
     @Override
@@ -47,7 +47,7 @@ public class SettingsFlagment extends PreferenceFragment
       }
 
     private Context ctx;
-    public SettingsFlagment(){
+    public SettingsFragment(){
         app=new MainApplication();
         this.ctx=SettingsActivity.ctx;
         set=app.getSettings();

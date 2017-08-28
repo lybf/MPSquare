@@ -253,13 +253,13 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
     public int count(){
         return mData.size();
       }
+      
     private void print(Object... obj){
         for(Object o:obj){
             System.out.println("MainTieAdapter.class:"+o+"\n");
           }
       }
 
-    //自定义的ViewHolder，持有每个Item的的所有界面元素
     public  class ViewHolder extends RecyclerView.ViewHolder
       {
         /*
@@ -279,7 +279,6 @@ public class MainTieAdapter extends RecyclerView.Adapter<MainTieAdapter.ViewHold
             lookAllComments=(TextView)view.findViewById(R.id.item_post_lookAllComments);
             go=(RelativeLayout)view.findViewById(R.id.item_post_go);
             hader=(ImageButton)view.findViewById(R.id.item_post_header);
-
           }
       }
   }

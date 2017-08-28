@@ -9,57 +9,76 @@ import com.squareup.picasso.LruCache;
 import java.io.File;
 import java.util.Map;
 import net.lybf.chat.R;
+import java.util.List;
+import java.util.ArrayList;
 
-public class PhotosPickerAdapter extends RecyclerView.Adapter<PhotosPickerAdapter.ViewHolder>{
-      
-   
-   private Context ctx;
-   private LruCache cache;
-   
-   public PhotosPickerAdapter(Context ctx){
-      ctx=ctx;
-      //cache=new LinkedHashMap<String, Bitmap>();
-   }
-   
-   public PhotosPickerAdapter(Context ctx,File[] photos){
-      ctx=ctx;
-   }
-   public void addItem(int position,Map map){
-         //   mData.add(position,map);
-         notifyItemInserted(position);
-         }
-
-      public void removeItem(int position){
-        // mData.remove(position);
-         notifyItemRemoved(position);
-         }
-
-      //创建新View，被LayoutManager所调用
-      @Override
-      public ViewHolder onCreateViewHolder(ViewGroup viewGroup,int viewType){
-         View view = LayoutInflater.from(ctx).inflate(R.layout.item_main_post,viewGroup,false);
-         ViewHolder vh = new ViewHolder(view);
-         return vh;
-         }
-      //将数据与界面进行绑定的操作
-      @Override
-      public void onBindViewHolder(ViewHolder viewHolder,int p2){
+public class PhotosPickerAdapter extends RecyclerView.Adapter<PhotosPickerAdapter.ViewHolder>
+  {
 
 
-         }
-      //  viewHolder.mTextView.setText(datas[position]);
-      //获取数据的数量
-      @Override
-      public int getItemCount(){
-         return 0;
-         }
+    private Context ctx;
+    //缓存
+    private LruCache cache;
+    //图片
+    private List<File> list;
 
-      //自定义的ViewHolder，持有每个Item的的所有界面元素
-      public  class ViewHolder extends RecyclerView.ViewHolder{
-            public ImageView hader;
-            public ViewHolder(View view){
-               super(view);
-               }
-         }
+    public PhotosPickerAdapter(Context ctx){
+        this. ctx=ctx;
+        this.list=new ArrayList<File>();
+        //cache=new LinkedHashMap<String, Bitmap>();
+      }
 
-   }
+    public PhotosPickerAdapter(Context ctx,List<File> photos){
+        this.ctx=ctx;
+        this.list=photos;
+      }
+
+    public void addItem(int position,File file){
+        list.add(position,file);
+        notifyItemInserted(position);
+      }
+
+    public void removeItem(int position){
+        list.remove(position);
+        notifyItemRemoved(position);
+      }
+
+    public void clear(){
+        list.clear();
+      }
+    
+    public File getFile(int position){
+        return list.get(position);
+      }
+
+    public List<File> getList(){
+        return this.list;
+      }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup,int viewType){
+        View view = LayoutInflater.from(ctx).inflate(R.layout.item_main_post,viewGroup,false);
+        ViewHolder vh = new ViewHolder(view);
+        return vh;
+      }
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder,int p2){
+
+
+      }
+
+    @Override
+    public int getItemCount(){
+        return 0;
+      }
+
+    public  class ViewHolder extends RecyclerView.ViewHolder
+      {
+        public ImageView image;
+        public ViewHolder(View view){
+            super(view);
+          }
+      }
+
+  }

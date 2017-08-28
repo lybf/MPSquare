@@ -1,8 +1,7 @@
 package net.lybf.chat.bmob;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
-import java.io.File;
-import cn.bmob.v3.BmobInstallation;
 
 //用户类
 public class MyUser extends BmobUser

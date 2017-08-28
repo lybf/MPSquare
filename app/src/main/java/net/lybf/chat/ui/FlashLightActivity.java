@@ -2,23 +2,23 @@ package net.lybf.chat.ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
-import android.hardware.Camera.Parameters;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
-import com.gc.materialdesign.views.ButtonRectangle;
 import net.lybf.chat.R;
 import net.lybf.chat.activity.MPSActivity;
 import net.lybf.chat.system.Colors;
 import net.lybf.chat.utils.BitmapTools;
-import android.widget.ImageButton;
-import android.widget.RadioGroup;
-import android.os.Handler;
-import android.os.Message;
 public class FlashLightActivity extends MPSActivity
   {
     //Created by lybf on 2017/8/2 21:03
+    
+    //相机
     private static Camera camera;
 
     private static boolean isOpen=false;
@@ -40,7 +40,7 @@ public class FlashLightActivity extends MPSActivity
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        AutoDark(true);
+        super.autoDark(true);
         setContentView(R.layout.activity_flashlight);
         ctx=this;
         bm=new BitmapTools();
@@ -58,9 +58,6 @@ public class FlashLightActivity extends MPSActivity
                   }
                 FlashLightActivity.this.id=id;
               }
-
-
-
           });
         mswitch=(ImageButton)findViewById(R.id.flashlight_switchMode);
         closeIcon();
@@ -71,7 +68,6 @@ public class FlashLightActivity extends MPSActivity
                     case R.id.flashlight_mode_common:
                       flashlight.common();
                       break;
-
                     case R.id.flashlight_mode_sos:
                       if(!isOpen){
                           isOpen=true;
@@ -88,7 +84,6 @@ public class FlashLightActivity extends MPSActivity
                       // flashlight.common();
                       break;
                   }
-
               }
           });
         init();
@@ -211,7 +206,6 @@ public class FlashLightActivity extends MPSActivity
       }
 
     private void openFlashLight(){
-
         if(camera==null)
           camera=camera.open();
         if(par==null)

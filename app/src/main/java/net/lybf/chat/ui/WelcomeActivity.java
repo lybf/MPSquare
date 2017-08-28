@@ -1,16 +1,12 @@
 package net.lybf.chat.ui;
 import android.content.Intent;
 import android.os.Bundle;
-import net.lybf.chat.activity.MPSActivity;
-import net.lybf.chat.system.settings;
-import android.os.Process;
+import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
+import net.lybf.chat.MainApplication;
 import net.lybf.chat.activity.MPSActivity;
 import net.lybf.chat.bmob.MyUser;
-import cn.bmob.v3.BmobUser;
-import net.lybf.chat.MainApplication;
-import cn.bmob.v3.BmobInstallation;
-import cn.bmob.v3.listener.UpdateListener;
-import cn.bmob.v3.exception.BmobException;
 
 public class WelcomeActivity extends MPSActivity /*AppCompatActivity*/
   {
