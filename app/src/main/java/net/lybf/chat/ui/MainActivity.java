@@ -61,6 +61,7 @@ import net.lybf.chat.utils.Logcat;
 import net.lybf.chat.utils.Network;
 import net.lybf.chat.utils.UserManager;
 import net.lybf.chat.widget.CircleImageView;
+import android.view.WindowManager;
 
 public class MainActivity extends MPSActivity/*AppCompatActivity*/
   {
@@ -173,7 +174,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
         initViews();
       }
 
-  
+
     @Override
     protected void onPause(){
         super.onPause();
@@ -199,12 +200,23 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
     public void initViews(){
         if(set.isDark()){
-            setTheme(R.style.DarkTheme);
+            setTheme(R.style.DarkThemeMain);
           }else{
-            setTheme(R.style.LightTheme);
+            setTheme(R.style.LightThemeMain);
           }
         setContentView(R.layout.activity_main);
         initView();
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();    
+            localLayoutParams.flags=(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS|localLayoutParams.flags);
+            if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
+                //将侧边栏顶部延伸至status bar
+                mDrawerLayout.setFitsSystemWindows(true);        
+                //将主页面顶部延伸至status bar;
+                mDrawerLayout.setClipToPadding(false);
+              }
+          }
+        
       }
 
 
@@ -293,8 +305,8 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                   break;
 
               }
-              
-              
+
+
           }
 
         super.onActivityResult(requestCode,resultCode,data);
@@ -657,7 +669,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                       startActivityForResult(new Intent(ctx,SettingsActivity.class),0);
                       break;
                   }
-                  mDrawerLayout.closeDrawer(mNav);
+                mDrawerLayout.closeDrawer(mNav);
                 return true;
               }
           });

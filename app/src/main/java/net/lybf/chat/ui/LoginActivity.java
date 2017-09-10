@@ -1,10 +1,12 @@
 package net.lybf.chat.ui;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import com.gc.materialdesign.views.ButtonRectangle;
@@ -32,20 +35,26 @@ import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.system.Colors;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
+import android.widget.Button;
+import android.os.Build;
+import android.view.WindowManager;
 public class LoginActivity extends MPSActivity
   {
+    private static Context ctx;
     private Toolbar bar;
-    private EditText Name, Pass;
-    private TextInputLayout mtextInputlayout,mname;
+    private EditText name,pass;
+
     private ButtonRectangle LOGIN;
-    private ButtonRectangle SIGNUP;
+    private Button SIGNUP;
     private RelativeLayout root;
     private settings set;
 
     private MainApplication app;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        ctx=this;
         app=getMainApplication();
         set=app.getSettings();
         if(set.isDark()){
@@ -53,12 +62,17 @@ public class LoginActivity extends MPSActivity
           }else{
             setTheme(R.style.LightTheme);
           }
+        if(set.getRandomBackground())
+          if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+              WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
+              localLayoutParams.flags=(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS|localLayoutParams.flags);
+            }
 
         setContentView(R.layout.activity_login);
         initView();
         if(set.getRandomBackground()){
-          Name.setHintTextColor(Colors.white);
-          Pass.setHintTextColor(Colors.white);
+            /*  name.setHintTextColor(Colors.white);
+             pass.setHintTextColor(Colors.white);*/
             try{
                 String[] as=this.getAssets().list("RandomBackground");
                 int i=new Random().nextInt(as.length);
@@ -102,21 +116,17 @@ public class LoginActivity extends MPSActivity
             ab. setDisplayHomeAsUpEnabled(true);
 
             LOGIN=(ButtonRectangle)findViewById(R.id.login);
-            SIGNUP=(ButtonRectangle)findViewById(R.id.login_signup);
+            SIGNUP=(Button)findViewById(R.id.login_signup);
             LOGIN.setOnClickListener(new OnClickListener(){
                 public void onClick(View v){
-                    String name=Name.getText().toString();
-                    String pass=Pass.getText().toString();
-                    if(TextUtils.isEmpty(pass)){
-                        mtextInputlayout.setError("密码不能为空");
-                        mtextInputlayout.setErrorEnabled(true);
-                      }else if(TextUtils.isEmpty(name)){
-                        mtextInputlayout.setErrorEnabled(false);
-                        mname.setErrorEnabled(true);
-                        mname.setError("用户名不能为空");
+                    String mName=name.getText().toString();
+                    String mPass=pass.getText().toString();
+                    if(TextUtils.isEmpty(mPass)){
+                        Toast.makeText(ctx,"密码不能为空",Toast.LENGTH_SHORT).show();
+                      }else if(TextUtils.isEmpty(mName)){
+                        Toast.makeText(ctx,"用户名不能为空",Toast.LENGTH_SHORT).show();
                       }else{
-                        mname.setErrorEnabled(false);
-                        logIn(name,pass);
+                        logIn(mName,mPass);
                       }
                   }
               }
@@ -131,24 +141,16 @@ public class LoginActivity extends MPSActivity
               }
             );
 
-            Pass=(EditText)findViewById(R.id.login_password);
-            Name=(EditText)findViewById(R.id.login_name);
-            mtextInputlayout=(TextInputLayout)findViewById(R.id.tip_login_password);
-
-            mtextInputlayout.setCounterMaxLength(18);
-            mtextInputlayout.setCounterEnabled(true);
-
-            mname=(TextInputLayout)findViewById(R.id.tip_login_name);
-            mname.setCounterMaxLength(8);
-            mname.setCounterEnabled(true);
+            pass=(EditText)findViewById(R.id.login_password);
+            name=(EditText)findViewById(R.id.login_name);
 
             ((CheckBox)findViewById(R.id.canseepassword)).setOnCheckedChangeListener(new OnCheckedChangeListener(){
                 @Override
                 public void onCheckedChanged(CompoundButton p1,boolean p2){
                     if(p2)
-                      Pass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                      pass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     else
-                      Pass.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                      pass.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
                   }
               }
             );

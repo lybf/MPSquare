@@ -36,17 +36,21 @@ public class BitmapTools
         this.context=context;
       }
 
+    public static BitmapTools build(Context context){
+        return with(context);
+      }
+
     public static BitmapTools with(Context ctx){
         BitmapTools bitmaptools=new BitmapTools(ctx);
         return bitmaptools;
       }
 
-    public Bitmap load(int resourceId){
-        return Drawable2Bitmap(context.getResources().getDrawable(resourceId));
+    public static Bitmap load(int resourceId){
+        return BitmapFactory.decodeResource(context.getResources(),resourceId);
       }
 
     public static Bitmap load(Resources res,int id){
-        return Drawable2Bitmap(res.getDrawable(id));
+        return BitmapFactory.decodeResource(res,id);
       }
 
     public static Bitmap load(String path){
@@ -177,13 +181,13 @@ public class BitmapTools
       }
 
     public static void setColors(int[] colors,int[] instead,List<Bitmap> bitmaps){
-        if(colors.length<=0 || instead.length<=0 || bitmaps.size()<=0)
+        if(colors.length<=0||instead.length<=0||bitmaps.size()<=0)
           return;
         int i=0;
         int j=colors.length;
 
         for(;i<j;i++){
-            if(i>=instead.length || i>=bitmaps.size())
+            if(i>=instead.length||i>=bitmaps.size())
               break;
             bitmaps.set(i,setColor(colors[i],instead[i],bitmaps.get(i)));
           }

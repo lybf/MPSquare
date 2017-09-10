@@ -93,11 +93,13 @@ public class ErrorActivity extends MPSActivity
         send.setOnClickListener(new OnClickListener(){
             public void onClick(View view){
                 CrashMessage crash=new CrashMessage();
-                BmobInstallation install=BmobInstallation.getCurrentInstallation();
+                /*BmobInstallation install=BmobInstallation.
+                 getCurrentInstallation();*/
+                String id=new BmobInstallation().getInstallationId();
                 MyUser user=BmobUser.getCurrentUser(MyUser.class);
                 crash.setUser(user);
-                crash.setDeviceId(install.getObjectId());
-                crash.setInstalltionId(install.getInstallationId());
+                crash.setDeviceId(null);//install.getObjectId());
+                crash.setInstalltionId(id);
                 crash.setDeviceInfo(new Utils().getDeviceInfo(ErrorActivity.this));
                 crash.setCrashMessage(crashMsg);
                 crash.setSetps(setps.getText().toString());

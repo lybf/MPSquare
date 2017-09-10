@@ -19,7 +19,8 @@
 	<string name="error">很抱歉，《冒泡社区》在运行时出现了严重的错误.如果方便，请填写一些可能是重要的细节，列如应用出错前，你正在做什么(操作)等</string>
     <string name="error_us">Please fill in any details that may be important:setps to reproduce,what were you doing when problem occurred ,etc.</string>
 	<string name="user_describe">这个人很懒，什么也没留下</string>
-
+    <string name="email">邮箱</string>
+    
     <!--注册 signup Activity-->
 	<string name="sign_title">注册</string>
 	<string name="sign_name">输入你想要的昵称</string>
@@ -27,8 +28,11 @@
 	<string name="sign_Password">请输入你的密码</string>
 	<string name="sign_aginEnterPassword">再次输入你的密码</string>
 
+    <!--用户-->
+    <string name="user_describe">这个人太懒了，什么也没留下</string>
     <string name="signup">注册</string>
 
+    
 
     
     <string name="device_admin_description">此应用用于管理您的手机，开启后更好地管理您的手机</string>

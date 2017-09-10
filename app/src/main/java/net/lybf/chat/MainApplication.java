@@ -102,7 +102,7 @@ public class MainApplication extends Application
 
     private void initBmob(){
         user=BmobUser.getCurrentUser(MyUser.class);
-        device=BmobInstallation.getCurrentInstallation();
+        /*device=BmobInstallation.getCurrentInstallation();
         device.save(new SaveListener<String>(){
             @Override
             public void done(String p,BmobException e){
@@ -113,7 +113,7 @@ public class MainApplication extends Application
                     //    Utils.print(this.getClass(),"Installation info save failed:"+e.getMessage());
                   }
               }    
-          });
+          });*/
       }
 
     public BmobInstallation getDevice(){

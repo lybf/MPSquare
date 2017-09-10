@@ -1,11 +1,11 @@
 package net.lybf.chat.utils;
-import android.view.View;
-import android.text.TextUtils;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.text.TextUtils;
 import net.lybf.chat.MainApplication;
+import net.lybf.chat.system.Utils;
 
 public class SignaTure
   {
@@ -53,7 +53,7 @@ public class SignaTure
 			  }catch(Exception e){
 				StackTraceMessage stm=new StackTraceMessage();
 				stm.init(e);
-				new CommonUtil().print(this.getClass(),stm.getMessage().toString());
+                Utils.print(this.getClass(),stm.getMessage().toString());
 			  }
 		  }
 		return builder.toString();

@@ -40,6 +40,7 @@ import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 import net.lybf.chat.utils.BitmapTools;
 import net.lybf.chat.utils.UserManager;
+import android.content.res.Resources;
 
 public class UserActivity extends MPSActivity
   {
@@ -107,7 +108,9 @@ public class UserActivity extends MPSActivity
                     @Override
                     public void done(MyUser user,BmobException p1){
                         Utils.print(this.getClass(),p1.getMessage());
+                        // Utils.print(this.getClass(),
                         if(p1==null){
+                            use=BmobUser.getCurrentUser(MyUser.class);
                             refreshData();
                             Snackbar.make(UserEmail,"刷新成功",Snackbar.LENGTH_SHORT).show();
                           }else{
@@ -185,7 +188,8 @@ public class UserActivity extends MPSActivity
 
             if(set.isDark()){
                 BitmapTools m=BitmapTools.with(this);
-                Bitmap p=BitmapTools.setColor(Colors.gray,Colors.white,m.load(getResources(),R.drawable.ic_email));
+                Resources res=this.getResources();
+                Bitmap p=BitmapTools.setColor(Colors.gray,Colors.white,m.load(res,R.drawable.ic_email));
                 email.setBackgroundDrawable(m.Bitmap2Drawable(p));
               }else{
                 email.setBackgroundResource(R.drawable.ic_email);
@@ -255,22 +259,32 @@ public class UserActivity extends MPSActivity
                             .setPositiveButton("确定",new DialogInterface.OnClickListener(){
                                 @Override
                                 public void onClick(DialogInterface p1,int p2){
-                                    use.requestEmailVerify(in.getText().toString(),new UpdateListener(){
+                                    use.setEmail(in.getText().toString());
+                                    use.update(new UpdateListener(){
                                         @Override
                                         public void done(BmobException p1){
-                                            if(p1==null){
-                                                Snackbar.make(UserEmail,"请查收邮件",Snackbar.LENGTH_SHORT).show();
-                                              }else{
-                                                new AlertDialog.Builder(ctx).setMessage("错误信息:"+new ErrorMessage().getMessage(p1.getErrorCode()))
-                                                .setPositiveButton("确定",null)
-                                                .show();
-                                              }
-                                          }  
-                                      });
+                                            getLogcat().println(this,p1==null?"更新用户信息成功":"更新用户信息失败");
+                                            if(p1==null)
+                                              use.requestEmailVerify(in.getText().toString(),new UpdateListener(){
+                                                  @Override
+                                                  public void done(BmobException p1){
+                                                      if(p1==null){
+                                                          Snackbar.make(UserEmail,"请查收邮件",Snackbar.LENGTH_SHORT).show();
+                                                        }else{
+                                                          String p = p1.toString();
+                                                          getLogcat().println(this,"验证邮箱失败,错误信息:"+p);
+                                                          new AlertDialog.Builder(ctx).setMessage("错误信息:"+(new ErrorMessage().getMessage(p1.getErrorCode())))
+                                                          .setPositiveButton("确定",null)
+                                                          .show();
+                                                        }
+                                                    }
+                                                });
+                                          }});
                                   }
                               }).show();
                           }
                       });
+
 
                   }
 
@@ -285,7 +299,7 @@ public class UserActivity extends MPSActivity
                     else
                       Picasso.with(this).load(R.drawable.ic_launcher).into(UserHeader);
                   }else{
-                    UserHeader.setImageBitmap(BitmapTools.load(R.drawable.ic_account_circle));
+                    UserHeader.setImageBitmap(BitmapTools.with(this).load(R.drawable.ic_account_circle));
                   }
               }else{
                 UserName.setText("未登录");
