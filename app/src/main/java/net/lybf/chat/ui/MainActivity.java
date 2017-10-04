@@ -28,27 +28,34 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
+import com.gc.materialdesign.widgets.ProgressDialog;
 import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
 import net.lybf.chat.activity.MPSActivity;
 import net.lybf.chat.adapter.MainPagerAdaptet;
-import net.lybf.chat.adapter.MainTieAdapter;
 import net.lybf.chat.adapter.MainToolsAdapter;
+import net.lybf.chat.adapter.PostAdapter;
 import net.lybf.chat.bmob.ErrorMessage;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.bmob.Post;
 import net.lybf.chat.maps.MainTools;
 import net.lybf.chat.system.ActivityResultCode;
+import net.lybf.chat.system.BmobUtils;
 import net.lybf.chat.system.Colors;
 import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
@@ -57,11 +64,11 @@ import net.lybf.chat.ui.SettingsActivity;
 import net.lybf.chat.utils.BitmapTools;
 import net.lybf.chat.utils.CommentCount;
 import net.lybf.chat.utils.CommonUtil;
+import net.lybf.chat.utils.DateTools;
 import net.lybf.chat.utils.Logcat;
 import net.lybf.chat.utils.Network;
 import net.lybf.chat.utils.UserManager;
 import net.lybf.chat.widget.CircleImageView;
-import android.view.WindowManager;
 
 public class MainActivity extends MPSActivity/*AppCompatActivity*/
   {
@@ -90,7 +97,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
     private Context ctx;
 
     //适配器
-    private MainTieAdapter MTA;
+    private PostAdapter MTA;
 
     //用户信息
     private MyUser use;
@@ -149,6 +156,8 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
     private static Logcat logcat;
 
     private static UserManager userManager;
+
+    public ProgressDialog progress;
     @Override
     public void onCreate(Bundle save){
         super.onCreate(save);
@@ -206,6 +215,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
           }
         setContentView(R.layout.activity_main);
         initView();
+        /*
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
             WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();    
             localLayoutParams.flags=(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS|localLayoutParams.flags);
@@ -216,7 +226,8 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                 mDrawerLayout.setClipToPadding(false);
               }
           }
-        
+          */
+
       }
 
 
@@ -371,11 +382,40 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
             LinearLayoutManager Manager = new LinearLayoutManager(this);         
             Manager.setOrientation(LinearLayoutManager.VERTICAL);
             mRecyclerview.setLayoutManager(Manager); 
-            mRecyclerview.setAdapter((MTA=new MainTieAdapter(this)));
+            mRecyclerview.setAdapter((MTA=new PostAdapter(this)));
             mRecyclerview.setItemAnimator(new DefaultItemAnimator());
+            mRecyclerview.setOnScrollListener(new RecyclerView.OnScrollListener(){
+                private int lastPosition=0;
+                public void onScrolled(RecyclerView recyclerView,int dx,int dy){
+                    super.onScrolled(recyclerView,dx,dy);
+                  }
 
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView,int newState){
+                    super.onScrollStateChanged(recyclerView,newState);
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+                    int lastItemPosition = linearManager.findLastVisibleItemPosition();
+                    Utils.print(this.getClass(),"lastPosition:"+lastItemPosition);
+                    int cn=MTA.getPostCount();
+                    
+                    if(lastItemPosition==MTA.count()&&lastItemPosition!=lastPosition){
+                        //当滑动到最后一个评论时(评论数>0)，加载剩余评论(10条)
+                        if(progress==null)
+                          MainActivity.this.progress=new ProgressDialog(ctx,"加载更多贴子中...");
+                        if(MTA.count()==cn){
+                            Toast.makeText(MainActivity.this,"已经到达地球底端了啦",Toast.LENGTH_SHORT).show();
+                          }else if(!progress.isShowing()){
+                            MainActivity.this. progress.show();
+                            readMore();
+                          }
+                      }
+                    lastPosition=lastItemPosition;
+                  }
+
+              });
             try{
-                MTA.setOnItemClickListener(new MainTieAdapter.OnItemClickListener(){
+                MTA.setOnItemClickListener(new PostAdapter.OnItemClickListener(){
                     @Override
                     public void onClick(View view,int index){
                         Post m=MTA.getPost(index);
@@ -496,7 +536,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
             //refresh.setColorSchemeResources(android.R.colorholo_blue_ligh,android.R.color.holo_red_light,android.R.color.holo_orange_light,android.R.color.holo_green_light);
             //refresh.setRefreshing(true);
             refresh.setSize(SwipeRefreshLayout.DEFAULT);
-            read(false);
+            read();
 
           }catch(Exception e){
             print("\nError:"+e);
@@ -599,14 +639,14 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                 i=0;
                 refreshing.postDelayed(run,1000);
                 加载信息条数+=10;
-                read(true);    
+                read();    
               }else{
-                read(false);
+                read();
                 refresh.setRefreshing(false);
                 if(REFRESH_HINT){
                     new AlertDialog.Builder(ctx)
                     .setTitle("没网了")
-                    .setMessage("你必须连接网络才能刷新最新数据，无网将从缓存读取(不耗流量)")
+                    .setMessage("你必须连接网络才能刷新最新数据")
                     .setPositiveButton("知道了",null)
                     .setNeutralButton("隐藏",new DialogInterface.OnClickListener(){
                         @Override
@@ -683,34 +723,38 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
 
 
+    private void refreshPostCount(){
+        BmobQuery<Post> query=new BmobQuery<Post>();
+        query.count(Post.class,new CountListener(){
+            @Override
+            public void done(Integer count,BmobException e){
+                if(e==null){
+                    MTA.updatePostCount(count);
+                    getLogcat().println(this,"贴子总数:"+count);
+                  }else{
+                    getLogcat().println(this,"获取贴子总数错误:"+e);
+                  }
+              }   
+          });
+      }
 
-    private void read(boolean b){
+    private void read(){
         synchronized(this){
-            print("扫描…………");
+            refreshPostCount();
             BmobQuery<Post> query = new BmobQuery<Post>();
-            query.addWhereEqualTo("type","0");
+            //   query.addWhereEqualTo("type","0");
             query.order("-createdAt");
             query.include("user,image,image2,image3");
-            query.setLimit(加载信息条数);
+            query.setLimit(10);
             boolean isCache = query.hasCachedResult(Post.class);
-            if(!b||!net.isConnectedOrConnecting()){//离线阅读
-                if(isCache){
-                    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
-                  }else{
-                    query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
-                    print("无缓存");
-                  }
+            if(net.isConnectedOrConnecting()){
+                query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ONLY);
+              }else
+            if(isCache){
+                query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
               }else{
-                if(FIRST_READ|!b){
-                    FIRST_READ=false;
-                    if(isCache){
-                        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-                      }else{
-                        query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
-                      }
-                  }else{
-                    query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
-                  }
+                query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+                print("无缓存");
               }
 
             query.findObjects(new FindListener<Post>() {
@@ -718,19 +762,19 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                 public void done(List<Post> obj,BmobException er){
                     MTA.clearAll();
                     MTA.notifyDataSetChanged();
+
                     if(er==null){
                         int le=obj.size();
                         print("QuerySuccess,count:"+le);
                         for(int i=0;i<le;i++){
                             final Post m=obj.get(i);
+                            MTA.additem(m);
                             new CommentCount().setPost(m).count(new CommentCount.CommentCountListener(){
                                 @Override
                                 public void done(int i,BmobException e){
                                     if(e==null){
                                         MTA.addPostCommentCount(m.getObjectId(),i);
-                                        MTA.additem(m);
                                       }else{
-                                        MTA.additem(m);
                                       }
                                   }                              
                               });
@@ -749,6 +793,74 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
       }
 
+
+    private void readMore(){
+        synchronized(this){
+            refreshPostCount();
+            Post last=MTA.getPost(MTA.getItemCount()-2);
+            if(last==null){
+                return;
+              }
+            String date = null;
+            if(last!=null){
+                date=last.getCreatedAt();
+              }
+            Date dat=DateTools.getDate(date,BmobUtils.BMOB_DATE_TYPE);
+            print("加载更多贴子…………");
+            BmobQuery<Post> query = new BmobQuery<Post>();
+            query.addWhereLessThan("createdAt",new BmobDate(dat));
+            // query.addWhereEqualTo("type","0");
+            query.order("-createdAt");
+            query.include("user,image,image2,image3");
+            query.setLimit(10);
+            boolean isCache = query.hasCachedResult(Post.class);
+            if(net.isConnectedOrConnecting()){
+                query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ONLY);
+              }else
+            if(isCache){
+                query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
+              }else{
+                query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+                print("无缓存");
+              }
+
+            query.findObjects(new FindListener<Post>() {
+                @Override
+                public void done(List<Post> obj,BmobException er){
+                    if(er==null){
+                        int le=obj.size();
+                        print("QuerySuccess,count:"+le);
+                        for(int i=0;i<le;i++){
+                            final Post m=obj.get(i);
+                            MTA.additem(m);
+                            new CommentCount().setPost(m).count(new CommentCount.CommentCountListener(){
+                                @Override
+                                public void done(int i,BmobException e){
+                                    if(e==null){
+                                        MTA.addPostCommentCount(m.getObjectId(),i);
+                                      }else{
+                                      }
+                                  }                              
+                              });
+                          }
+
+
+                        if(refresh.isRefreshing()&&refresh!=null)
+                          refresh.setRefreshing(false);
+                        if(progress.isShowing())
+                          progress.dismiss();
+                      }else{
+                        if(progress.isShowing())
+                          progress.dismiss();
+                        ErrorMessage msg=new ErrorMessage();
+                        print("QueryFailed:"+er.getErrorCode()+"  "+msg.getMessage(er.getErrorCode())+"\n"+er.getMessage());
+                      }
+                  }
+              });
+
+          }
+
+      }
 
     private void print(Object o){
         Utils.print(this.getClass(),o);

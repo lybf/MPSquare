@@ -7,10 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.squareup.picasso.LruCache;
 import java.io.File;
-import java.util.Map;
-import net.lybf.chat.R;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import net.lybf.chat.R;
 
 public class PhotosPickerAdapter extends RecyclerView.Adapter<PhotosPickerAdapter.ViewHolder>
   {

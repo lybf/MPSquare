@@ -7,20 +7,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import cn.bmob.v3.BmobUser;
+import com.squareup.picasso.Picasso;
+import java.io.File;
 import java.util.ArrayList;
 import net.lybf.chat.R;
+import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.maps.Robot;
+import net.lybf.chat.system.Utils;
 import net.lybf.chat.utils.BitmapTools;
 import net.lybf.chat.utils.DateTools;
-import net.lybf.chat.widget.CircleImageView;
 import net.lybf.chat.utils.UserManager;
-import net.lybf.chat.bmob.MyUser;
-import cn.bmob.v3.BmobUser;
-import java.io.File;
-import net.lybf.chat.system.Paths;
-import com.squareup.picasso.Picasso;
-import net.lybf.chat.system.Utils;
-import cn.bmob.v3.datatype.BmobFile;
+import net.lybf.chat.widget.CircleImageView;
 
 public class RobotAdapter extends RecyclerView.Adapter<RobotAdapter.ViewHolder>
   {

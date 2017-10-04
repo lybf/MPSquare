@@ -19,7 +19,7 @@ public class FlashLightActivity extends MPSActivity
     //Created by lybf on 2017/8/2 21:03
     
     //相机
-    private static Camera camera;
+    private static Camera camera=null;
 
     private static boolean isOpen=false;
 
@@ -93,7 +93,8 @@ public class FlashLightActivity extends MPSActivity
     protected void onDestroy(){
         if(camera!=null){
             isOpen=false;
-            camera.release();
+            closeFlashLight();
+            //camera.release();
           }
         camera=null;
         Toast.makeText(this,"已经为你自动关闭手电筒",Toast.LENGTH_SHORT).show();

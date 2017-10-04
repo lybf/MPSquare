@@ -1,34 +1,27 @@
 package net.lybf.chat.adapter;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.DownloadFileListener;
 import com.squareup.picasso.Picasso;
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
 import net.lybf.chat.bmob.Comment;
 import net.lybf.chat.bmob.MyUser;
 import net.lybf.chat.bmob.Post;
 import net.lybf.chat.system.BmobUtils;
-import net.lybf.chat.system.Paths;
-import net.lybf.chat.system.Utils;
-import net.lybf.chat.utils.DateTools;
-import net.lybf.chat.widget.CircleImageView;
-import net.lybf.chat.utils.UserManager;
-import android.graphics.Bitmap;
 import net.lybf.chat.utils.CommentCount;
-import java.text.ParseException;
+import net.lybf.chat.utils.DateTools;
+import net.lybf.chat.utils.UserManager;
+import net.lybf.chat.widget.CircleImageView;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>
   {

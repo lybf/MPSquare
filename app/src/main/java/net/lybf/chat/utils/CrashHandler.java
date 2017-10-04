@@ -92,7 +92,7 @@ public class CrashHandler implements UncaughtExceptionHandler
         if(ex==null){
             return false;
           }else{
-            StackTraceMessage msg=new StackTraceMessage();
+            StackTraceInfo msg=new StackTraceInfo();
             msg.init(ex);
             StringBuilder builder=msg.getMessage();
             if(listener!=null){

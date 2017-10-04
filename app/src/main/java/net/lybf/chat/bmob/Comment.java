@@ -15,6 +15,21 @@ public class Comment extends BmobObject
     //用户
     private MyUser user;
 
+
+    public Comment(){
+
+      }
+
+    public Comment(String content,images image,images image2, 
+    images image3,Post post,MyUser user){
+        this.content=content;
+        this.image=image;
+        this.image2=image2;
+        this.image3=image3;
+        this.post=post;
+        this.user=user;
+      }
+    
     //获取内容
     public String getMessage(){
         return content;

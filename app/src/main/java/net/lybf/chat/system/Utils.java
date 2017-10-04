@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.lybf.chat.utils.StackTraceMessage;
+import net.lybf.chat.utils.StackTraceInfo;
 public class Utils
   {
 
@@ -256,7 +256,7 @@ public class Utils
 
     public static String print(java.lang.Class mclass,Exception e){
         String pkg=mclass.getName();
-        String p=format(pkg,new StackTraceMessage().init(e).getMessage().toString());
+        String p=format(pkg,new StackTraceInfo().init(e).getMessage().toString());
         print(p);
         return p;
       }
@@ -286,7 +286,7 @@ public class Utils
             String pkg=thisz.getClass().getName();
             print();
             print("\n\n-----------"+pkg+"---------");
-            print(String.format("\n    %s\n",new StackTraceMessage().init(e).getMessage().toString()));
+            print(String.format("\n    %s\n",new StackTraceInfo().init(e).getMessage().toString()));
             print("\n-----------"+pkg+"---------\n");
             print();
           }

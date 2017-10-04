@@ -5,37 +5,47 @@ public class ChatException extends Exception
   {
     public static final int REFRESH_FAILED=1;
     public static final int COUNT_FAILED=2;
-    private int code=0;
-    private String msg="其他错误";
+
+    private int code;
+
+    private String msg;
 
     private String TAG="ChatException";
 
-    public ChatException(String msg){
-        super(msg);
-        if(msg!=null)
-          this.msg=msg;
+    public ChatException(String info){
+        super(info);
+        if(info!=null)
+          this.msg=info;
+        this.code=0;
       }
 
-      public ChatException(String msg,int code){
-        super(msg);
-        this.msg=msg;
-        this.code=code;
-      }
-      
+
     public ChatException(Exception e){
         super(e);
+        this.msg="其他错误";
+        this.code=0;
       }
-      
+
+
+    public ChatException(String info,int code){
+        super(info);
+        this.msg=info;
+        this.code=code;
+      }
+    
+
     public ChatException(Exception e,String msg){
         super(msg,e);
         if(msg!=null)
           this.msg=msg;
+        this.code=0;
       }
-      
+
     public ChatException(Throwable e,String msg){
         super(msg,e);
         if(msg!=null)
           this.msg=msg;
+        this.code=0;
       }
 
     public ChatException(Exception e,int code,String message){
@@ -47,11 +57,11 @@ public class ChatException extends Exception
       }
 
     public int getCode(){
-        return code;
+        return this.code;
       }
 
     public String getMessage(){
-        return msg;
+        return this.msg;
       }
 
     public String toString(){
@@ -61,11 +71,7 @@ public class ChatException extends Exception
     @Override
     public void printStackTrace(){
         StringBuilder build=new StringBuilder();
-        build.append("\n");
-        build.append(((Exception)this).toString());
-        build.append("\n");
-        build.append(new StackTraceMessage().init(this).getMessage().toString());
-        build.append("\n");
+        build.append(new StackTraceInfo().init(this).getMessage().toString());
         Log.e(TAG,build.toString());
       }
 

@@ -9,4 +9,5 @@ public class chat
 
     public native String getKey();
     public native boolean BmobInitialize(Context context);
+    
   }

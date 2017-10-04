@@ -209,4 +209,38 @@ public class BitmapTools
         return bitmap;
       }
 
+
+    public static ImageLoader getImageLoader(Context context){
+        return ImageLoader.with(context);
+      }
+
+    public static class ImageLoader
+      {
+        private static ImageLoader INSTANCE;
+        private static Context context;
+
+        private ImageLoader(){
+          
+        }
+        
+        public static ImageLoader with(Context context){
+            if(INSTANCE==null)
+              INSTANCE=new ImageLoader();
+            INSTANCE.context=context;
+            return INSTANCE;
+          }
+        public static Bitmap load(int resourceId){
+            return BitmapFactory.decodeResource(context.getResources(),resourceId);
+          }
+
+        public static Bitmap load(Resources res,int id){
+            return BitmapFactory.decodeResource(res,id);
+          }
+
+        public static Bitmap load(String path){
+            Bitmap bitmap=BitmapFactory.decodeFile(path);
+            return bitmap;
+          }
+
+      }
   }

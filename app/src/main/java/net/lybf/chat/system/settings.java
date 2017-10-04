@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.util.Date;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.utils.Logcat;
-import net.lybf.chat.utils.StackTraceMessage;
+import net.lybf.chat.utils.StackTraceInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -130,7 +130,7 @@ public class settings
             root.put(key,object);
           }catch(JSONException e){
             e.printStackTrace();
-            logcat.println(this,StackTraceMessage.getMessage(e).toString());
+            logcat.println(this,StackTraceInfo.getMessage(e).toString());
           }
       }
 
@@ -140,7 +140,7 @@ public class settings
             result=root.opt(key);
           }catch(Exception e){
             e.printStackTrace();
-            logcat.println(this,StackTraceMessage.getMessage(e).toString());
+            logcat.println(this,StackTraceInfo.getMessage(e).toString());
           }
         return result;
       }

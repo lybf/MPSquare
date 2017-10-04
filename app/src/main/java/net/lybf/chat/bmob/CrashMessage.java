@@ -17,6 +17,21 @@ public class CrashMessage extends BmobObject
 
     private String installtionId;
 
+    public CrashMessage(){
+
+      }
+
+    public CrashMessage(MyUser user,String device,String info,
+    String crashMessage,String setps,String installId){
+        this.user=user;
+        this.device=device;
+        this.info=info;
+        this.crashMessage=crashMessage;
+        this.setps=setps;
+        this.installtionId=installId;
+      }
+
+    
     public CrashMessage setUser(MyUser user){
         this.user=user;
         return this;

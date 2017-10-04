@@ -11,6 +11,16 @@ public class images extends BmobObject
     //名称
     private String name;
 
+    public images(){
+
+      }
+
+    public images(BmobFile file,String md5,String name){
+        this.file=file;
+        this.md5=md5;
+        this.name=name;
+      }
+    
     //获取图片文件
     public BmobFile getImage(){
         return file;

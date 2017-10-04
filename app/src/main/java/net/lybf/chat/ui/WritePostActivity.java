@@ -121,6 +121,7 @@ public class WritePostActivity extends MPSActivity
             me.setUser(use);
             me.setType("0");
             me.setTitle(title);
+          
             me.save(new SaveListener<String>(){
                 @Override
                 public void done(String p1,BmobException p2){

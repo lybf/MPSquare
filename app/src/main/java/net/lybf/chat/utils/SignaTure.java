@@ -51,7 +51,7 @@ public class SignaTure
 				  }
 				signature=builder.toString();
 			  }catch(Exception e){
-				StackTraceMessage stm=new StackTraceMessage();
+				StackTraceInfo stm=new StackTraceInfo();
 				stm.init(e);
                 Utils.print(this.getClass(),stm.getMessage().toString());
 			  }

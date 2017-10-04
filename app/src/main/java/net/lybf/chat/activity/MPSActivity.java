@@ -1,4 +1,5 @@
 package net.lybf.chat.activity;
+import android.app.ActionBar;
 import android.os.Bundle;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 import net.lybf.chat.MainApplication;
@@ -7,7 +8,6 @@ import net.lybf.chat.system.settings;
 import net.lybf.chat.utils.Logcat;
 
 import static net.lybf.chat.system.Utils.print;
-import android.app.ActionBar;
 public class MPSActivity extends SwipeBackActivity/* AppCompatActivity*/
   {
     //Created by lybf on 2017/7/23 13:34

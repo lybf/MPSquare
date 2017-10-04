@@ -16,6 +16,7 @@ public class CommentCount
       {
         void done(int i,BmobException e);
       }
+      
     public CommentCount setPost(Post postid){
         id=postid;
         return this;

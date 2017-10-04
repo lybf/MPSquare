@@ -30,14 +30,14 @@ public class DateTools
       }
 
 
-	public Date String2Date(String date,String type){
+	public static Date String2Date(String date,String type){
 		SimpleDateFormat f=new SimpleDateFormat();
 		f.applyPattern(type);
 		Date dat = null;
 		try{
 			dat=f.parse(date);
 		  }catch(Exception e){
-            Utils.print(this.getClass(),e);
+            Utils.print("DateTools.class",e);
 		  }
 		return dat;
 	  }

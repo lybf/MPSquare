@@ -97,9 +97,13 @@ public class PostActivity extends MPSActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ctx=this;
-        Intent i=getIntent();
-        Bundle b=i.getBundleExtra("Mydata");
-        postId=(String) b.get("帖子");
+        try{
+            Intent i=getIntent();
+            Bundle b=i.getBundleExtra("Mydata");
+            postId=(String) b.get("帖子");
+          }catch(Exception e){
+            e.printStackTrace();
+          }
         initView();
       }
 
@@ -182,7 +186,7 @@ public class PostActivity extends MPSActivity
                         if(progress==null)
                           PostActivity.this.progress=new ProgressDialog(ctx,"加载评论中..");
                         if(adapter.commentCount()==cn){
-                          Toast.makeText(PostActivity.this,"已经到达地球底端了啦",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PostActivity.this,"已经到达地球底端了啦",Toast.LENGTH_SHORT).show();
                           }else if(!progress.isShowing()){
                             PostActivity.this. progress.show();
                             readMore();

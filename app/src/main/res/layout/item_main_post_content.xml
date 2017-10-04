@@ -1,0 +1,88 @@
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
+
+    <RelativeLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_post_go">
+
+        <net.lybf.chat.widget.CircleImageView
+            android:id="@+id/item_post_header"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_launcher"
+            android:layout_margin="8dp"/>
+
+        <TextView
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="net.lybf.chat"
+            android:layout_weight="1"
+            android:layout_toRightOf="@id/item_post_header"
+            android:id="@+id/item_post_name"/>
+
+        <TextView
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:text="1分钟前"
+            android:layout_below="@id/item_post_name"
+            android:layout_toRightOf="@id/item_post_header"
+            android:id="@+id/item_post_time"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:lineSpacingExtra="1dp"
+        android:lineSpacingMultiplier="1.1"
+        android:id="@+id/item_post_title"
+        android:layout_below="@id/item_post_go"
+        android:textColor="#000000"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:maxHeight="300dp"
+        android:id="@+id/item_post_content"
+        android:layout_below="@id/item_post_title"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="40dp"
+        android:autoLink="web|email"
+        android:textIsSelectable="true"/>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/item_post_lookAllComments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="查看全部24条评论"
+            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:textIsSelectable="true"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

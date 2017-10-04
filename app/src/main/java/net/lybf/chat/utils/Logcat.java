@@ -45,7 +45,7 @@ public class Logcat
           }
         try{
             out=new FileOutputStream(file,true);
-            out.write("############Start##########\n".getBytes());
+        //    out.write("############Start##########\n".getBytes());
           }catch(Exception e){
             e.printStackTrace();
           }
@@ -54,24 +54,21 @@ public class Logcat
 
 
     public synchronized void println(Object thisz,Object object){
-        String str="message:"+object+"    on "+getClassName(thisz);
+        String str="@date="+getTime()+"|||||@class="+getClassName(thisz)+"|||||@info="+object.toString();
         write(str);
       }
 
     public synchronized void println(Object object){
-        print(object);
-        write(object.toString());
+        String str="@date="+getTime()+"|||||@info="+object.toString();
+        print(str);
+        write(str);
       }
 
-    public synchronized void printWithTime(Object object){
-        print(object);
-        write(object.toString());
-      }
 
     public synchronized void write(String string){
         try{
             if(out!=null)
-              out.write(("at "+getTime()+"    "+string+"\n").getBytes());
+              out.write((string+"\n").getBytes());
             else
               newWrite();
           }catch(Exception e){
@@ -84,7 +81,7 @@ public class Logcat
         return time;
       }
 
-    
+
     public synchronized void close() throws IOException{
         out.write("###########End##########\n\n\n".getBytes());
         out.close();

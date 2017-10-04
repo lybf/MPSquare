@@ -5,17 +5,22 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import java.util.Locale;
+import android.app.Activity;
 
 public class ResUtils
   {
     /*
-       CreatedAt 2017/5/31 23:31
-    */
+     CreatedAt 2017/5/31 23:31
+     */
     private Resources resources;
 
     private Configuration config;
 
     private DisplayMetrics dm;
+
+
+    private ResUtils(){
+      }
 
     public ResUtils(Resources res){
         this.resources=res;
@@ -23,6 +28,14 @@ public class ResUtils
 
     public ResUtils(Context context){
         this.resources=context.getResources();
+      }
+
+    public static ResUtils with(Resources resources){
+        return new ResUtils(resources);
+      }
+
+    public static ResUtils with(Context context){
+        return new ResUtils(context);
       }
 
     public AssetManager getAssets(){

@@ -5,12 +5,13 @@ public class ErrorMessage
   {
     //BmobSDK错误码列表
     private static Map<String,String> msg=new HashMap<String,String>();
-
     public ErrorMessage(){
         init();
       }
-    
+
     private void init(){
+        if(!msg.isEmpty())
+          return;
         msg.put("9001","Application Id为空，请初始化.");
         msg.put("9002","解析返回数据出错");
         msg.put("9003","上传文件出错");

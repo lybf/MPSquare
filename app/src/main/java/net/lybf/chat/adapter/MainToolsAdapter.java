@@ -12,8 +12,6 @@ import net.lybf.chat.R;
 import net.lybf.chat.maps.MainTools;
 import net.lybf.chat.utils.BitmapTools;
 import net.lybf.chat.utils.DateTools;
-import cn.bmob.push.a.which;
-import com.squareup.picasso.Picasso;
 
 public class MainToolsAdapter extends RecyclerView.Adapter<MainToolsAdapter.ViewHolder>
   {

@@ -1,23 +1,18 @@
 package net.lybf.chat;
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
+import cn.bmob.push.BmobPush;
 import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.BmobInstallationManager;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.UpdateListener;
-import net.lybf.chat.bmob.ErrorMessage;
 import net.lybf.chat.bmob.MyUser;
-import net.lybf.chat.system.BmobUtils;
 import net.lybf.chat.system.settings;
 import net.lybf.chat.utils.CrashHandler;
-import net.lybf.chat.utils.DateTools;
-import cn.bmob.v3.Bmob;
-import net.lybf.chat.system.Utils;
 import net.lybf.chat.utils.Logcat;
-import cn.bmob.v3.listener.SaveListener;
 import net.lybf.chat.utils.chat;
-import cn.bmob.push.BmobPush;
+import cn.bmob.v3.InstallationListener;
+import cn.bmob.v3.exception.BmobException;
+import java.util.List;
 
 /*
  @author: lybf
@@ -44,9 +39,10 @@ public class MainApplication extends Application
     //用户
     private static MyUser user;
 
-    //
-    private static BmobInstallation device;
+    //InstallationManager
+    private static BmobInstallationManager device;
 
+    private static BmobInstallation Installation;
     //JNI
     private static chat jni;
 
@@ -102,23 +98,28 @@ public class MainApplication extends Application
 
     private void initBmob(){
         user=BmobUser.getCurrentUser(MyUser.class);
-        /*device=BmobInstallation.getCurrentInstallation();
-        device.save(new SaveListener<String>(){
+        device=BmobInstallationManager.getInstance();
+        Installation=device.getCurrentInstallation();
+        device.initialize(new InstallationListener<BmobInstallation>(){
             @Override
-            public void done(String p,BmobException e){
-                Utils.print(this.getClass(),"Installation :"+p);
+            public void done(BmobInstallation installation,BmobException e){
                 if(e==null){
-                    //  Utils.print(this.getClass(),"Installation save success");
+                    Installation=installation;
+                    logcat.println(this,"Installation init success:"+installation.getInstallationId());
                   }else{
-                    //    Utils.print(this.getClass(),"Installation info save failed:"+e.getMessage());
+                    logcat.println(this,"Installation init failed:"+e.toString());
                   }
-              }    
-          });*/
+              }
+          });
       }
 
     public BmobInstallation getDevice(){
         if(device==null)
           initBmob();
+        return this.Installation;
+      }
+
+    public BmobInstallationManager getInstallationManager(){
         return this.device;
       }
 

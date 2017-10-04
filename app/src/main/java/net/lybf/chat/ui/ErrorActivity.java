@@ -54,6 +54,7 @@ public class ErrorActivity extends MPSActivity
         Utils.print("接收到错误信息");
         this.ctx=this;
         super.onCreate(savedInstanceState);
+        setSwipeBackEnable(false);
         app=getMainApplication();
         set=app.getSettings();
         logcat=getLogcat();

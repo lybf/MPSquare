@@ -21,6 +21,29 @@ public class MyUser extends BmobUser
     //设备 绑定设备
     private BmobInstallation device;
 
+
+    public MyUser(){
+
+      }
+
+    public MyUser(BmobFile icon,String objectId,String name,
+   
+    String describe,boolean BlackName,
+    Integer vip,boolean op,boolean superop,
+    BmobInstallation device,String updatedAt,String createdAt){
+        setObjectId(objectId);
+        setUsername(name);
+        setUpdatedAt(updatedAt);
+        setCreatedAt(createdAt);
+        this.icon=icon;
+        this.describe=describe;
+        this.BlackName=BlackName;
+        this.vip=vip;
+        this.op=op;
+        this.superop=superop;
+        this.device=device;
+      }
+
     //获取vip级别
     public Integer getVipLevel(){
         return this.vip;
