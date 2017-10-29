@@ -69,6 +69,8 @@ import net.lybf.chat.utils.Logcat;
 import net.lybf.chat.utils.Network;
 import net.lybf.chat.utils.UserManager;
 import net.lybf.chat.widget.CircleImageView;
+import cn.bmob.v3.datatype.BmobFile;
+import net.lybf.chat.system.Paths;
 
 public class MainActivity extends MPSActivity/*AppCompatActivity*/
   {
@@ -195,7 +197,8 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
         logcat.println(this,"退出应用");
         try{
             logcat.close();
-          }catch(IOException e){
+          }
+        catch(IOException e){
             e.printStackTrace();
           }
         super.onDestroy();
@@ -215,19 +218,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
           }
         setContentView(R.layout.activity_main);
         initView();
-        /*
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
-            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();    
-            localLayoutParams.flags=(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS|localLayoutParams.flags);
-            if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
-                //将侧边栏顶部延伸至status bar
-                mDrawerLayout.setFitsSystemWindows(true);        
-                //将主页面顶部延伸至status bar;
-                mDrawerLayout.setClipToPadding(false);
-              }
-          }
-          */
-
+        super.fitsSystemWindow(mDrawerLayout,true);
       }
 
 
@@ -351,7 +342,8 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                     Picasso.with(ctx).load(R.drawable.ic_account_circle).into(nv_header);
                   }    
               }
-          }catch(Exception e){
+          }
+        catch(Exception e){
             e.printStackTrace();
           }
       }
@@ -398,7 +390,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                     int lastItemPosition = linearManager.findLastVisibleItemPosition();
                     Utils.print(this.getClass(),"lastPosition:"+lastItemPosition);
                     int cn=MTA.getPostCount();
-                    
+
                     if(lastItemPosition==MTA.count()&&lastItemPosition!=lastPosition){
                         //当滑动到最后一个评论时(评论数>0)，加载剩余评论(10条)
                         if(progress==null)
@@ -426,7 +418,8 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                         ctx.startActivity(i);
                       }
                   });
-              }catch(Exception e){
+              }
+            catch(Exception e){
                 print(e);
               }
 
@@ -471,7 +464,8 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                                 Intent i=new Intent(ctx,obj);
                                 try{
                                     ctx.startActivity(i);
-                                  }catch(Exception e){
+                                  }
+                                catch(Exception e){
                                     e.printStackTrace();
                                   }
                               }else{
@@ -483,16 +477,38 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                               }
                           }
                       });
-                  }catch(Exception e){
+                  }
+                catch(Exception e){
                     print(e);
                   }
-              }catch(Exception e){
+              }
+            catch(Exception e){
                 print("工具初始化错误");
                 print(e);
               }
             mDrawerLayout=(DrawerLayout) findViewById(R.id.drawerlayout);
             mToolbar=(Toolbar) findViewById(R.id.toolbar);
-            mToolbar.setSubtitle("version:"+ctx.getPackageManager().getPackageInfo(getPackageName(),0).versionName);
+            try{
+                if(use!=null){
+                    BmobFile file=use.getIcon();
+                    if(file!=null){
+                        Bitmap bitmap=BitmapTools.load(Paths.USER_PATH+"/"+use.getObjectId()+"/"+
+                        file.getFilename());
+                        if(bitmap!=null){
+                            mToolbar.setLogo(BitmapTools.Bitmap2Drawable(bitmap));
+                          }else{
+                            mToolbar.setLogo(R.drawable.ic_account_circle);
+                          }   
+                      }else{
+                        mToolbar.setLogo(R.drawable.ic_account_circle);
+                      }
+                  }
+
+              }
+            catch(Exception e){
+                e.printStackTrace();
+              }
+            //  mToolbar.setSubtitle("version:"+ctx.getPackageManager().getPackageInfo(getPackageName(),0).versionName);
             mNavigationView=(NavigationView) findViewById(R.id.navigationview);
             mNavigationView.inflateHeaderView(R.layout.activity_main_nv_menu);
             mNavigationView.inflateMenu(R.menu.menu_main_nav);
@@ -538,7 +554,8 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
             refresh.setSize(SwipeRefreshLayout.DEFAULT);
             read();
 
-          }catch(Exception e){
+          }
+        catch(Exception e){
             print("\nError:"+e);
           }
         try{
@@ -552,13 +569,15 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                           MainActivity.this.startActivityForResult(new Intent(ctx,UserActivity.class),0);
                         else
                           MainActivity.this.startActivityForResult(new Intent(ctx,LoginActivity.class),0);
-                      }catch(Exception e){
+                      }
+                    catch(Exception e){
                         print(e);
                       }
                   }
               });
             refreshUser();
-          }catch(Exception e){
+          }
+        catch(Exception e){
             print("Error:"+e);
           }
         try{
@@ -608,7 +627,8 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
 
             mTabLayout.setupWithViewPager(mViewPager);
             mTabLayout.setTabsFromPagerAdapter(mViewPagerAdapter);
-          }catch(Exception e){
+          }
+        catch(Exception e){
             print(e+"  initTabLayout&ViewPager");
           }
 

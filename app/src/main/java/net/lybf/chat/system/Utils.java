@@ -71,6 +71,7 @@ public class Utils
             sb.append("\n设置参数："+Build.DEVICE);
             sb.append("\n硬件制造商："+Build.MANUFACTURER);
             sb.append("\n硬件序列号："+Build.SERIAL);
+            sb.append("\nUser:"+Build.USER);
             sb.append("\n编译时间:"+Long2Date(Build.TIME));
             sb.append("".format("\n安装空间：%s/%s",getInstallationAvailableSize(ctx),getInstallationTotalSize(ctx)));
             sb.append("".format("\n内置存储：%s/%s",getRomAvailableSize(ctx),getRomTotalSize(ctx)));

@@ -5,11 +5,14 @@ public class ErrorMessage
   {
     //BmobSDK错误码列表
     private static Map<String,String> msg=new HashMap<String,String>();
-    public ErrorMessage(){
+    static{
+      init();
+    }
+  /*  public ErrorMessage(){
         init();
       }
-
-    private void init(){
+*/
+    private static void init(){
         if(!msg.isEmpty())
           return;
         msg.put("9001","Application Id为空，请初始化.");
@@ -53,7 +56,7 @@ public class ErrorMessage
       }
 
     //获取错误信息
-    public String getMessage(int ErrorCode){
+    public static String getMessage(int ErrorCode){
         if(ErrorCode>-1)
           return msg.get(String.valueOf(ErrorCode));
         else

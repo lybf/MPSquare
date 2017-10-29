@@ -12,7 +12,7 @@ public class ResUtils
     /*
      CreatedAt 2017/5/31 23:31
      */
-    private Resources resources;
+    private static Resources resources;
 
     private Configuration config;
 

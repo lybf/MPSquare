@@ -161,7 +161,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>
         Post hm = null;
         try{
             hm=mData.get(i);
-          }catch(Exception e){
+          }
+        catch(Exception e){
             Utils.print(this.getClass(),e);
           }
         return hm;
@@ -218,6 +219,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>
             if(viewHolder.name!=null)
               viewHolder.name.setText(""+user.getUsername());
             String ct =""+comments.get(m.getObjectId());
+
             if(viewHolder.lookAllComments!=null)
               viewHolder.lookAllComments.setText(!ct.equals("")||!ct.equals("null")||ct.equals("0")?"共"+ct+"条评论":"");
             SimpleDateFormat dat=new SimpleDateFormat(BmobUtils.BMOB_DATE_TYPE);
@@ -225,7 +227,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>
             Date d = null;
             try{
                 d=dat.parse(""+m.getCreatedAt());
-              }catch(Exception e){
+              }
+            catch(Exception e){
                 print("dateFormat:"+e);
               }
             if(viewHolder.date!=null)
@@ -237,6 +240,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>
 
             if(viewHolder.hader!=null)
               Picasso.with(ctx).load((File)userIcon.get(user.getObjectId())).into(viewHolder.hader);
+
             if(t!=null)
               t.setText(""+m.getMessage());
             if(onClicklistener!=null){
@@ -279,9 +283,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>
                 if(viewHolder.lastPosition!=null)
                   viewHolder.lastPosition.setText("已经到达地球底端了啦，什么也没有了");
               }else{
-                if(POST_COUNT==0&&viewHolder.lastPosition==null){
-                    if(viewHolder.lastPosition!=null)
-                      viewHolder.lastPosition.setText("到底了？");
+                if(POST_COUNT==0&&viewHolder.lastPosition!=null){
+                    viewHolder.lastPosition.setText("到底了？");
                   }else
                 if(viewHolder.lastPosition!=null)
                   viewHolder.lastPosition.setText("");

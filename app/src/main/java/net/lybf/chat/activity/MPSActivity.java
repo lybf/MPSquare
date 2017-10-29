@@ -1,6 +1,9 @@
 package net.lybf.chat.activity;
 import android.app.ActionBar;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.WindowManager;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 import net.lybf.chat.MainApplication;
 import net.lybf.chat.R;
@@ -53,6 +56,18 @@ public class MPSActivity extends SwipeBackActivity/* AppCompatActivity*/
         init();
       }
 
+      public void fitsSystemWindow(DrawerLayout view,boolean bool){
+          if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+              WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();    
+              localLayoutParams.flags=(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS|localLayoutParams.flags);
+              if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
+                  //将侧边栏顶部延伸至status bar
+                  view.setFitsSystemWindows(bool);        
+                  //将主页面顶部延伸至status bar;
+                  view.setClipToPadding(false);
+                }
+            }
+      }
 
     protected void autoDark(boolean bool){
         this.autoDark=bool;

@@ -7,6 +7,7 @@ import net.lybf.chat.system.Paths;
 
 import static net.lybf.chat.system.Utils.getClassName;
 import static net.lybf.chat.system.Utils.print;
+import java.io.FileNotFoundException;
 public class Logcat
   {
     //单例
@@ -40,13 +41,15 @@ public class Logcat
         file=d;
         try{
             d.createNewFile();
-          }catch(IOException e){
+          }
+        catch(IOException e){
             e.printStackTrace();
           }
         try{
             out=new FileOutputStream(file,true);
-        //    out.write("############Start##########\n".getBytes());
-          }catch(Exception e){
+            //    out.write("############Start##########\n".getBytes());
+          }
+        catch(Exception e){
             e.printStackTrace();
           }
 
@@ -55,23 +58,34 @@ public class Logcat
 
     public synchronized void println(Object thisz,Object object){
         String str="@date="+getTime()+"|||||@class="+getClassName(thisz)+"|||||@info="+object.toString();
-        write(str);
+        write(this.out,str);
       }
 
     public synchronized void println(Object object){
         String str="@date="+getTime()+"|||||@info="+object.toString();
         print(str);
-        write(str);
+        write(this.out,str);
       }
 
 
-    public synchronized void write(String string){
+    public synchronized void println(File file,Object thiz,Object info){
+        String str="@date="+getTime()+"|||||@info="+getClassName(thiz)+info.toString();
         try{
-            if(out!=null)
-              out.write((string+"\n").getBytes());
-            else
-              newWrite();
-          }catch(Exception e){
+            write(new FileOutputStream(file),str);
+          }
+        catch(FileNotFoundException e){
+            e.printStackTrace();
+          }
+      }
+
+    private synchronized void write(FileOutputStream out,String string){
+        try{
+            if(out!=null){
+                out.write((string+"\n").getBytes());
+                out.close();
+              }else return;
+          }
+        catch(Exception e){
             e.printStackTrace();
           }
       }

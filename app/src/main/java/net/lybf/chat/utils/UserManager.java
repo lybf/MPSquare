@@ -21,6 +21,9 @@ public class UserManager
     private Context ctx;
 
 
+    private UserManager(){
+
+      }
 
     public UserManager(Context ctx){
         this.ctx=ctx;
@@ -31,16 +34,16 @@ public class UserManager
         this.use=user;
       }
 
-    public UserManager with(Context context){
+    public static UserManager with(Context context){
         return new UserManager(context);
       }
 
-    public UserManager with(Context context,MyUser user){
+    public static UserManager with(Context context,MyUser user){
         return new UserManager(context,user);
       }
 
 
-    public MyUser getCurrentUser(){
+    public static MyUser getCurrentUser(){
         MyUser user=BmobUser.getCurrentUser(MyUser.class);
         return user;
       }
@@ -107,7 +110,8 @@ public class UserManager
         if(f.exists()){
             try{
                 mp=Picasso.with(ctx).load(f).get();
-              }catch(IOException e){
+              }
+            catch(IOException e){
                 e.printStackTrace();
               }
           }
@@ -139,7 +143,7 @@ public class UserManager
     /*
      邮箱是否验证过
      */
-    public boolean isEmailVerified(MyUser user){
+    public static boolean isEmailVerified(MyUser user){
         boolean verify=false;
         if(!(user.getEmail()==null))
           if(user.getEmailVerified())
@@ -150,21 +154,21 @@ public class UserManager
     /*
      以用户名查询用户信息
      */
-    public void queryUserByName(String name,FindListener<MyUser> listener){
+    public static void queryUserByName(String name,FindListener<MyUser> listener){
         queryUserByKeyValue("username",name,listener);
       }
 
     /*
      以用户唯一id查询用户信息
      */
-    public void queryUserById(String id,FindListener<MyUser> listener){
+    public static  void queryUserById(String id,FindListener<MyUser> listener){
         queryUserByKeyValue("objectid",id,listener);
       }
-
+    
     /*
      以key-value形式查询用户信息
      */
-    public void queryUserByKeyValue(String key,String value,FindListener<MyUser> listener){
+    public static void queryUserByKeyValue(String key,String value,FindListener<MyUser> listener){
         BmobQuery<MyUser> query=new BmobQuery<MyUser>();
         query.addWhereEqualTo(key,value);
         query.findObjects(listener);
