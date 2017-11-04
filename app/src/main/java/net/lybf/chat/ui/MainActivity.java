@@ -488,6 +488,8 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
               }
             mDrawerLayout=(DrawerLayout) findViewById(R.id.drawerlayout);
             mToolbar=(Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             try{
                 if(use!=null){
                     BmobFile file=use.getIcon();
@@ -724,6 +726,7 @@ public class MainActivity extends MPSActivity/*AppCompatActivity*/
                       startActivity(new Intent(ctx,AboutActivity.class));
                       break;
                     case R.id.反馈:
+                      startActivityForResult(new Intent(ctx,FeedbackActivity.class),0);
                       break;
                     case R.id.设置:
                       startActivityForResult(new Intent(ctx,SettingsActivity.class),0);

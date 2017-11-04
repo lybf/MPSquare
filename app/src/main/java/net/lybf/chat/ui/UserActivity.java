@@ -2,6 +2,7 @@ package net.lybf.chat.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -40,7 +41,6 @@ import net.lybf.chat.system.Utils;
 import net.lybf.chat.system.settings;
 import net.lybf.chat.utils.BitmapTools;
 import net.lybf.chat.utils.UserManager;
-import android.content.res.Resources;
 
 public class UserActivity extends MPSActivity
   {
@@ -203,7 +203,8 @@ public class UserActivity extends MPSActivity
                     boolean emailverify = false;
                     try{
                         emailverify=use.getEmailVerified();
-                      }catch(Exception e){
+                      }
+                    catch(Exception e){
                         new Utils().print(this.getClass(),e);
                       }
                     if(emailverify){
@@ -313,7 +314,8 @@ public class UserActivity extends MPSActivity
                 ));
               }
 
-          }catch(Exception e){
+          }
+        catch(Exception e){
             new Utils().print("错误。"+e);
           }
       }
@@ -325,7 +327,8 @@ public class UserActivity extends MPSActivity
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         try{
             startActivityForResult(Intent.createChooser(intent,"选择图片"),1000);
-          }catch(android.content.ActivityNotFoundException ex){}
+          }
+        catch(android.content.ActivityNotFoundException ex){}
 
       }
 

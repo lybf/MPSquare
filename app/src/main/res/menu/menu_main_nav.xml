@@ -1,20 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-		<item
-		    android:title="其他">
-				<menu	xmlns:app="http://schemas.android.com/apk/res-auto">
-				<group android:checkableBehavior="single">
-						<item
-								android:id="@+id/反馈"
-								android:icon="@drawable/ic_nav_feedback"
-								android:title="@string/feedback"/>
-					<item
-						android:id="@+id/关于"
-						android:icon="@drawable/ic_nav_about"
-						android:title="@string/about"/>
-					
-				</group>
-				</menu>
-		</item>
+    <item
+        android:title="其他">
+        <menu	xmlns:app="http://schemas.android.com/apk/res-auto">
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/反馈"
+                    android:icon="@drawable/ic_nav_feedback"
+                    android:title="@string/feedback"/>
+                <item
+                    android:id="@+id/关于"
+                    android:icon="@drawable/ic_nav_about"
+                    android:title="@string/about"/>
+
+            </group>
+        </menu>
+    </item>
     <item 
         android:id="@+id/设置"
         android:icon="@drawable/ic_settings"

@@ -39,4 +39,9 @@
     <string name="device_admin">冒泡广场</string>
     
     <string name="chatrobot">聊天机器人</string>
+    
+    <string name="feedbackInfo">请输入您的反馈内容/bug等</string>
+    <string name="feedbackClass">反馈类型</string>
+    <string name="connection">QQ/Email..</string>
+    
 </resources>

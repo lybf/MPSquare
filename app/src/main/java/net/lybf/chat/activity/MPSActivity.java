@@ -11,6 +11,7 @@ import net.lybf.chat.system.settings;
 import net.lybf.chat.utils.Logcat;
 
 import static net.lybf.chat.system.Utils.print;
+import android.graphics.Color;
 public class MPSActivity extends SwipeBackActivity/* AppCompatActivity*/
   {
     //Created by lybf on 2017/7/23 13:34
@@ -56,17 +57,47 @@ public class MPSActivity extends SwipeBackActivity/* AppCompatActivity*/
         init();
       }
 
-      public void fitsSystemWindow(DrawerLayout view,boolean bool){
-          if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
-              WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();    
+    public void fitsSystemWindow(DrawerLayout view,boolean bool){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+            if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
+                //将侧边栏顶部延伸至status bar
+                view.setFitsSystemWindows(bool);        
+                //将主页面顶部延伸至status bar;
+                view.setClipToPadding(false);
+              }
+          }
+      }
+      
+    public void fitsSystemWindow(DrawerLayout view,boolean isTranslucent,boolean bool){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();  
+            if(isTranslucent)
               localLayoutParams.flags=(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS|localLayoutParams.flags);
-              if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
-                  //将侧边栏顶部延伸至status bar
-                  view.setFitsSystemWindows(bool);        
-                  //将主页面顶部延伸至status bar;
-                  view.setClipToPadding(false);
-                }
-            }
+            if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){   
+                //将侧边栏顶部延伸至status bar
+                view.setFitsSystemWindows(bool);        
+                //将主页面顶部延伸至status bar;
+                view.setClipToPadding(false);
+              } 
+          }
+      }
+
+    public void fitsSystemWindow(DrawerLayout view,int color,boolean bool){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+            setStatusBarColor(color);    
+            if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){   
+                //将侧边栏顶部延伸至status bar
+                view.setFitsSystemWindows(bool);        
+                //将主页面顶部延伸至status bar;
+                view.setClipToPadding(false);
+              }
+          }
+      }
+
+    protected void setStatusBarColor(int color){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+            getWindow().setStatusBarColor(color);
+          }
       }
 
     protected void autoDark(boolean bool){
